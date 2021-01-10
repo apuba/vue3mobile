@@ -1,0 +1,67 @@
+/* 圆形盒子 */
+@mixin circle($size: 11px, $bg: #fff) {
+    border-radius: 50%;
+    width: $size;
+    height: $size;
+    line-height: $size;
+    text-align: center;
+    background: $bg;
+}
+
+/*绝对定位  参数顺序：上右下左*/
+@mixin positionAbsolute($top: null, $right: null, $bottom: null, $left: null) {
+    position: absolute;
+    @if ($left!= "" && $left!=null) {
+        left: $left;
+    }
+    @if ($right!= "" && $right!=null) {
+        right: $right;
+    }
+    @if ($top!= "" && $top!=null) {
+        top: $top;
+    }
+    @if ($bottom!= "" && $bottom!=null) {
+        bottom: $bottom;
+    }
+}
+
+/**
+ *定义滚动条样式 圆角和阴影不需要则传入null
+ *	1、$outColor -- 滚动条颜色
+ *	2、$innerColor -- 滑块颜色
+ *	3、$height -- 滚动条宽高、圆角
+ *	4、$width
+ *	5、$radius
+ *	6、$shadow -- 阴影
+*/
+@mixin scrollBar($width: 10px, $height: 10px, $outColor: $bgColor, $innerColor: $bgGrey, $radius: 5px, $shadow: null) {
+    /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+    &::-webkit-scrollbar {
+        width: $width;
+        height: $height;
+        background-color: $outColor;
+    }
+
+    /*定义滚动条轨道 内阴影+圆角*/
+    &::-webkit-scrollbar-track {
+        @if ($shadow!=null) {
+            -webkit-box-shadow: $shadow;
+        }
+        @if ($radius!=null) {
+            border-radius: $radius;
+        }
+        background-color: $outColor;
+    }
+
+    /*定义滑块 内阴影+圆角*/
+    &::-webkit-scrollbar-thumb {
+        @if ($shadow!=null) {
+            -webkit-box-shadow: $shadow;
+        }
+        @if ($radius!=null) {
+            border-radius: $radius;
+        }
+        background-color: $innerColor;
+        border: 1px solid $innerColor;
+    }
+}

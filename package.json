@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve --mode development",
+    "build": "vue-cli-service build -mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.166",
     "core-js": "^3.6.5",
+    "lib-flexible": "^0.3.2",
+    "lodash": "^4.17.20",
+    "vant": "^3.0.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -24,10 +28,17 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
+    "babel-plugin-import": "^1.13.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
-    "node-sass": "^4.12.0",
+    "less": "^4.0.0",
+    "less-loader": "^7.2.1",
+    "node-sass": "^4.14.1",
+    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-px2rem": "^0.3.0",
+    "postcss-pxtorem": "^5.1.1",
     "sass-loader": "^8.0.2",
+    "ts-import-plugin": "^1.6.7",
     "typescript": "~3.9.3"
   }
 }

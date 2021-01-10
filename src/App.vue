@@ -1,30 +1,16 @@
+<!--
+ * @Author: 侯兴章 3603317@qq.com
+ * @Date: 2020-12-24 22:18:17
+ * @LastEditTime: 2021-01-04 23:37:55
+ * @LastEditors: 侯兴章
+ * @Description: 
+-->
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <router-view />
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+<style lang="scss"> 
+@import './style/default.scss';
+// @import './style/iconfont.css';
+@import url('//at.alicdn.com/t/font_2305781_sw3xyff14d.css');
 </style>
