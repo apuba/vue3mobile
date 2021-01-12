@@ -6,35 +6,34 @@
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
 
-import http from '@/common/http/index.ts';
-import { DTOlogin, IModelUserInfo, IModelDict } from '@/service/appModel';
-import { arrayToTreeHelper, MapToTree } from '@/common/helper/arrayToTreeHelper';
-import { mapUserInfo } from '@/mapper/config'; // IModelUserInfo 与后端实际返回的报文数据映射
-import { Menu } from '@/router/types';
-import { ApiAPP } from './api';
-import { appStore } from '@/store/modules/appStore';
-// 登录服务
-export const ServiceLogin = async (params: DTOlogin): Promise<IModelUserInfo> => {
+import http from './http/index';
+import { DTOActivity, RequeryActivity } from '@/service/appModel';
+ 
+
+import { EApi } from './api';
+import { BaseResponseModel, BaseRequestModel } from '@/service/baseModel';
+
+// 活动查询
+
+export const ServGetActivity = async (params: any): Promise<DTOActivity> => {
+    debugger
     // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
-    const res = await http.post(ApiAPP.login, params, mapUserInfo);
+    const res = await http.get(EApi.getActivity, params);
+    console.log(res)
+    return res.data;
+}
+// 登录服务
+/* export const ServiceLogin = async (params: DTOlogin): Promise<IModelUserInfo> => {
+    // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
+    const res = await http.post(EApi.login, params, mapUserInfo);
     return res.data[0];
-}
+} */
 
-// 获取菜单 
-export const ServiceGetMenus = async (): Promise<Array<Menu>> => {
-    const res = await http.post(ApiAPP.getMenuList, {});
-    const mapper: MapToTree = {
-        id: 'menuId',
-        pId: 'menuParentId'
-    }
-    const data: Menu[] = arrayToTreeHelper(res.data, mapper); // 获取树型数据
-    return data
-}
-
+ 
 // 获取数据字典
-export const ServiceGetDict = async () => {
+/* export const ServiceGetDict = async () => {
     const mapper = ['dictType', 'dictSort', 'dictValue', { dictLabel: 'dictLabel' }]
     const res = await http.post(ApiAPP.getDictList, {params:"",pageIndex:1,pageRows: 10000});
  
     appStore.commitAddDictList(res.data);
-}
+}  */

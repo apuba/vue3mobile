@@ -18,8 +18,9 @@ const createProxy = () => {
     return {
       '/api': {
         // target: 'http://localhost:4000',
-        // target: 'http://47.115.141.0:9091/api',
-        target: 'http://localhost:9091/api',
+        // target: 'http://47.115.141.0:9095/api',
+        // target: 'http://localhost:9091/api',
+        target: 'http://47.115.141.0:9095/api',
         secure: false,
         changeOrigin: false, // 开启代理，在本地创建一个虚拟服务端
         // ws: true, // 是否启用websockets

@@ -6,8 +6,9 @@
  * @Description: 
  */
 
-export const ApiAPP = {
-    getMenuList: '/systemServer/sysMenuController/findMenu',
-    login: '/systemServer/baseLogin/login',
-    getDictList: '/systemServer/sysDictDataController/findSysDictData'
+export enum EApi {
+    getActivity = '/wxServer/activity/findPagination',
+    saveActivity = "/wxServer/activity/saveActivity",
+    findDictData = "/wxServer/dict/findDictData"
+
 }

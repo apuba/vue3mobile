@@ -15,7 +15,7 @@ import { isArray } from 'lodash';
  * @param {Array} children 嵌套的节点名
  * @return {*}　返回清洗后映射结果的数据, 只做对象第一层清洗，如果为嵌套的则一起清洗嵌套的数据
  */
-export const mapping = <T>(originData: any | any[], config: any | any[], children: string = 'children', result: Array<T> = [], childrens?: Array<T>): Array<T> => {
+const mapping = <T>(originData: any | any[], config: any | any[], children: string = 'children', result: Array<T> = [], childrens?: Array<T>): Array<T> => {
     let sourceData: any[];
     const originDataIsArray = isArray(originData);
     if (originDataIsArray) {

@@ -6,87 +6,80 @@
  * @Description: 
 -->
 <template>
-  <van-nav-bar
-    title="活动介绍"
-    left-text="返回"
-    left-arrow
-    @click-left="onClickLeft"
-  />
-  <div class="body">
-    <div class="bg"></div>
-    <div class="header">
-      <div class="header-bg">
-        <div class="hongbao">
-          <img src="@public/images/hongbao.png" />
+  <div>
+    <van-nav-bar title="活动介绍" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <div class="body">
+      <div class="bg"></div>
+      <div class="header">
+        <div class="header-bg">
+          <div class="hongbao">
+            <img src="@public/images/hongbao.png" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="container">
-      <fieldset>
-        <legend>活动介绍</legend>
-        <div>
-          <h3>活动用于品牌曝光、吸粉、获客。</h3>
-          <p>
-            商家可以设置自定义主题的列表红包，将红包随机金额设置在1元以上，然后充值发布活动，用户通过红包链接首次添加企业成员的企业微信，成员将会自动给用户回复活动方案和红包链接，用户点击后获取1元以上的随机现金红包。
-            同时，将引导用户通过邀请1~5个好友，再次获得拆红包的机会
-          </p>
-        </div>
-      </fieldset>
+      <div class="container">
+        <fieldset>
+          <legend>活动介绍</legend>
+          <div>
+            <h3>活动用于品牌曝光、吸粉、获客。</h3>
+            <p>
+              商家可以设置自定义主题的列表红包，将红包随机金额设置在1元以上，然后充值发布活动，用户通过红包链接首次添加企业成员的企业微信，成员将会自动给用户回复活动方案和红包链接，用户点击后获取1元以上的随机现金红包。
+              同时，将引导用户通过邀请1~5个好友，再次获得拆红包的机会
+            </p>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>裂变方案</legend>
-        <div class="active-item">
-          <div class="icon">
-            <span class="iconfont icon-7"></span>
+        <fieldset>
+          <legend>裂变方案</legend>
+          <div class="active-item">
+            <div class="icon">
+              <span class="iconfont icon-7"></span>
+            </div>
+            <div class="txt">
+              <h4 class="name">新人红包</h4>
+              <div>首次添加企业微信获取红包</div>
+            </div>
           </div>
-          <div class="txt">
-            <h4 class="name">新人红包</h4>
-            <div>首次添加企业微信获取红包</div>
+          <div class="active-item">
+            <div class="icon">
+              <span class="iconfont icon-fenxiang"></span>
+            </div>
+            <div class="txt">
+              <h4 class="name">邀请N 个好友裂变</h4>
+              <div>生成专属的链接发送给微信好友</div>
+            </div>
           </div>
-        </div>
-        <div class="active-item">
-          <div class="icon">
-            <span class="iconfont icon-fenxiang"></span>
+          <div class="active-item">
+            <div class="icon">
+              <span class="iconfont icon-hongbao"></span>
+            </div>
+            <div class="txt">
+              <h4 class="name">邀请成功再得红包</h4>
+              <div>好友添加后再得红包奖励</div>
+            </div>
           </div>
-          <div class="txt">
-            <h4 class="name">邀请N 个好友裂变</h4>
-            <div>生成专属的链接发送给微信好友</div>
-          </div>
-        </div>
-        <div class="active-item">
-          <div class="icon">
-            <span class="iconfont icon-hongbao"></span>
-          </div>
-          <div class="txt">
-            <h4 class="name">邀请成功再得红包</h4>
-            <div>好友添加后再得红包奖励</div>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-    <div class="create-btn">
-      <van-button block type="primary" round to="/createActive"
-        >新建活动</van-button
-      >
+        </fieldset>
+      </div>
+      <div class="create-btn">
+        <van-button block type="primary" round to="/createActive">新建活动</van-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { Button, NavBar } from 'vant';
+import { defineComponent } from "vue";
+import { Button, NavBar } from "vant";
 
 export default defineComponent({
   components: {
     [Button.name]: Button,
-    [NavBar.name]: NavBar,
+    [NavBar.name]: NavBar
   },
   setup() {
-
-
-    return {}
+    return {};
   }
-})
+});
 </script>
 
 

@@ -9,8 +9,12 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
 // import "lib-flexible/flexible.js"
 // import 'vant/lib/index.css';
 // import 'vant/lib/index.less';
+const app = createApp(App);
 
-createApp(App).use(store).use(router).mount('#app')
+app.use(store);
+app.use(router);
+app.mount('#app')

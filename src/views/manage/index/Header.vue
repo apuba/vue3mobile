@@ -8,7 +8,7 @@
 <template>
   <div class="header">
     <div class="header-bg">
-      <h2>公司名称标题</h2>
+      <h2>{{ title }}</h2>
       <div class="small">企业头像与名称将用于对外展示</div>
 
       <span class="logo">
@@ -19,15 +19,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, onMounted } from "vue";
+import { mapState } from "vuex";
+import { Notify } from 'vant';
 export default defineComponent({
-  setup() {
-
-
-    return {}
-  }
-})
+  computed: {
+    ...mapState(["title"])
+  },
+  setup(props, context) {
+    return {};
+   
+  },
+  mounted() {
+    // Notify('另圆圆中')
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -51,7 +57,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   text-align: center;
- 
 }
 .header-bg:after {
   width: 140%;

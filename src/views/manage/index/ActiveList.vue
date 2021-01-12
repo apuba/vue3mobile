@@ -7,86 +7,87 @@
 -->
 
 <template>
-  <van-tabs v-model:active="activeName" color="#007aff">
-    <van-tab
-      :title="item.title"
-      :name="item.key"
-      v-for="item in activeList"
-      :key="item.key"
-    ></van-tab>
-  </van-tabs>
-  <div class="pt10">
-    <div class="active-item">
-      <div class="progres">
-        <van-progress :percentage="50" />
+  <div>
+    <van-tabs v-model:active="activeName" color="#007aff">
+      <van-tab :title="item.title" :name="item.key" v-for="item in activeList" :key="item.key"></van-tab>
+    </van-tabs>
+    <div class="pt10">
+      <div class="active-item">
+        <div class="progres">
+          <van-progress :percentage="50" />
+        </div>
+        <ul class="active-detail">
+          <li>
+            <span class="title">活动标题</span>
+            <span>粉丝活动福利红包来啦</span>
+          </li>
+          <li>
+            <span class="title">活动金额</span>
+            <span>5400.00元</span>
+          </li>
+          <li>
+            <span class="title">活动时间</span>
+            <span>2020-12-10 至 2020-12-11</span>
+          </li>
+        </ul>
+        <div class="active-btn-list">
+          <span class="active-btn">
+            <span class="iconfont icon-ai23"></span>
+          </span>
+          <span class="active-btn">
+            <span class="iconfont icon-xiangqing"></span>
+          </span>
+          <span class="active-btn">
+            <span class="iconfont icon-shuju"></span>
+          </span>
+          <span class="active-btn active">
+            <span class="iconfont icon-fenxiang"></span>
+          </span>
+        </div>
       </div>
-      <ul class="active-detail">
-        <li>
-          <span class="title">活动标题</span>
-          <span>粉丝活动福利红包来啦</span>
-        </li>
-        <li>
-          <span class="title">活动金额</span>
-          <span>5400.00元</span>
-        </li>
-        <li>
-          <span class="title">活动时间</span>
-          <span>2020-12-10 至 2020-12-11</span>
-        </li>
-      </ul>
-      <div class="active-btn-list">
-        <span class="active-btn">
-          <span class="iconfont icon-ai23"></span>
-        </span>
-        <span class="active-btn">
-          <span class="iconfont icon-xiangqing"></span>
-        </span>
-        <span class="active-btn">
-          <span class="iconfont icon-shuju"></span>
-        </span>
-        <span class="active-btn active">
-          <span class="iconfont icon-fenxiang"></span>
-        </span>
-      </div>
-    </div><div class="active-item">
-      <div class="progres">
-        <van-progress :percentage="50" />
-      </div>
-      <ul class="active-detail">
-        <li>
-          <span class="title">活动标题</span>
-          <span>粉丝活动福利红包来啦</span>
-        </li>
-        <li>
-          <span class="title">活动金额</span>
-          <span>5400.00元</span>
-        </li>
-        <li>
-          <span class="title">活动时间</span>
-          <span>2020-12-10 至 2020-12-11</span>
-        </li>
-      </ul>
-      <div class="active-btn-list">
-        <span class="active-btn">
-          <span class="iconfont icon-ai23"></span>
-        </span>
-        <span class="active-btn">
-          <span class="iconfont icon-xiangqing"></span>
-        </span>
-        <span class="active-btn">
-          <span class="iconfont icon-shuju"></span>
-        </span>
-        <span class="active-btn active">
-          <span class="iconfont icon-fenxiang"></span>
-        </span>
+      <div class="active-item">
+        <div class="progres">
+          <van-progress :percentage="50" />
+        </div>
+        <ul class="active-detail">
+          <li>
+            <span class="title">活动标题</span>
+            <span>粉丝活动福利红包来啦</span>
+          </li>
+          <li>
+            <span class="title">活动金额</span>
+            <span>5400.00元</span>
+          </li>
+          <li>
+            <span class="title">活动时间</span>
+            <span>2020-12-10 至 2020-12-11</span>
+          </li>
+        </ul>
+        <div class="active-btn-list">
+          <span class="active-btn">
+            <span class="iconfont icon-ai23"></span>
+          </span>
+          <span class="active-btn">
+            <span class="iconfont icon-xiangqing"></span>
+          </span>
+          <span class="active-btn">
+            <span class="iconfont icon-shuju"></span>
+          </span>
+          <span class="active-btn active">
+            <span class="iconfont icon-fenxiang"></span>
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
-import { Tabs, Tab, Progress } from 'vant';
+import { defineComponent, reactive, toRefs, onMounted } from "vue";
+import { Tabs, Tab, Progress } from "vant";
+import { ServGetActivity } from "@/service/appService";
+// import { RequeryActivity, DTOActivity } from "@/service/appModel";
+
 export default defineComponent({
   components: {
     [Tabs.name]: Tabs,
@@ -95,17 +96,27 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({
-      activeName: 'all',
+      activeName: "all",
       activeList: [
-        { title: '全部', key: 'all' },
-        { title: '进行中', key: 'underway' },
-        { title: '已结束', key: 'finished' }
+        { title: "全部", key: "all" },
+        { title: "进行中", key: "underway" },
+        { title: "已结束", key: "finished" }
       ]
-    })
+    });
 
-    return { ...toRefs(state) }
+    onMounted(() => {
+      const params = {
+        params: { },
+        pageIndex: 1,
+        pageRows: 10
+      };
+
+      ServGetActivity(params);
+    });
+
+    return { ...toRefs(state) };
   }
-})
+});
 </script>
 
 <style scoped lang="scss">
@@ -126,16 +137,15 @@ export default defineComponent({
     background-color: #0dbadd;
     color: #fff;
 
-     &:active {
-    background-color: darken($color: #0dbadd, $amount: 3);
-  }
+    &:active {
+      background-color: darken($color: #0dbadd, $amount: 3);
+    }
   }
   &:active {
     background-color: #dff8fd;
   }
 }
 .active-item {
-  
   border-radius: 8px;
   border: solid 1px #eeeeee;
   margin: 0 16px;

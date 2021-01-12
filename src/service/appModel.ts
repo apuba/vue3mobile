@@ -5,7 +5,42 @@
  * @LastEditors: 侯兴章
  * @Description: 
  */
+import { BaseResponseModel, BaseRequestModel } from '@/service/baseModel';
+export interface DTOActivity {
+    activityId: number;
+    appId: number;
+    name: string;
+    sub: string;
+    subtitle: string;
+    startTime: string;
+    endTime: string;
+    totalAmount: string;
+    activityStatus: number;
+    banner: string;
+    welcomeMsg: string;
+    newAmountLow: number;
+    newAmountHigh: number;
+    invitationAmountLow: number;
+    invitationAmountHigh: number;
+    activityExplain: string;
+    externalData: number;
+    statusLabel: string;
+    undertaker?: Iundertaker
 
+}
+
+export interface Iundertaker {
+    memberId: number;
+    userId: number;
+    name: string;
+    headUrl: string;
+    phone: string;
+    qyUserId: string;
+    avtivityId: number;
+}
+export interface RequeryActivity {
+    params: any
+}
 
 /* 用户登录对象 */
 export interface DTOlogin {
