@@ -10,8 +10,8 @@
 /* 基础请求参数模型 */
 export interface BaseRequestModel<T = any> {
     params: T; // 
-    pageIndex?: number;
-    pageRows?: number;
+    pageIndex: number;
+    pageRows: number;
 }
 
 /* 基础请求响应报文模型 */
@@ -19,7 +19,7 @@ export interface BaseResponseModel<T = any> {
     msg: string;
     code: number;
     data: T;
-    total?: number;
+
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-17 00:46:00
- * @LastEditTime: 2020-12-08 02:23:55
+ * @LastEditTime: 2021-01-13 21:42:45
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -38,9 +38,7 @@ export interface Iundertaker {
     qyUserId: string;
     avtivityId: number;
 }
-export interface RequeryActivity {
-    params: any
-}
+ 
 
 /* 用户登录对象 */
 export interface DTOlogin {

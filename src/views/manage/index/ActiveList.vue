@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-03 16:44:04
+ * @LastEditTime: 2021-01-14 00:20:50
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -9,7 +9,12 @@
 <template>
   <div>
     <van-tabs v-model:active="activeName" color="#007aff">
-      <van-tab :title="item.title" :name="item.key" v-for="item in activeList" :key="item.key"></van-tab>
+      <van-tab
+        :title="item.title"
+        :name="item.key"
+        v-for="item in activeList"
+        :key="item.key"
+      ></van-tab>
     </van-tabs>
     <div class="pt10">
       <div class="active-item">
@@ -86,7 +91,8 @@
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
 import { Tabs, Tab, Progress } from "vant";
 import { ServGetActivity } from "@/service/appService";
-// import { RequeryActivity, DTOActivity } from "@/service/appModel";
+import { DTOActivity, RequeryActivity } from '@/service/appModel';
+import { BaseResponseModel, BaseRequestModel } from '@/service/baseModel';
 
 export default defineComponent({
   components: {
@@ -105,8 +111,10 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      const params = {
-        params: { },
+      const params: BaseRequestModel = {
+        params: {
+
+        },
         pageIndex: 1,
         pageRows: 10
       };

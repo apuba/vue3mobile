@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-14 18:18:52
- * @LastEditTime: 2020-12-16 15:33:22
+ * @LastEditTime: 2021-01-13 20:23:19
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -33,7 +33,7 @@ const mapping = <T>(originData: any | any[], config: any | any[], children: stri
         let obj: any = {};
         if (isArray(config)) {
             // 如果是数组, 数组形式可以为 ['a','b','c', {d: 'f'}]  其中 d转为f            
-            config.map(keyObje => {
+            config.map((keyObje: any) => {
                 const typ = typeof keyObje; // 获取数组值的类型
                 if (typ === 'string') {
                     obj[keyObje] = item[keyObje];
