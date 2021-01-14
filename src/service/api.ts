@@ -9,6 +9,7 @@
 export enum EApi {
     getActivity = '/wxServer/activity/findPagination',
     saveActivity = "/wxServer/activity/saveActivity",
-    findDictData = "/wxServer/dict/findDictData"
+    findDictData = "/wxServer/dict/findDictData",
+    getAdminList = '/wxServer/sc/getAdminList'
 
 }

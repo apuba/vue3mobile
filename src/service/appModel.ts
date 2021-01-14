@@ -75,4 +75,9 @@ export interface IDictOptions {
     key?: string | number;
     title?: string;
 }
-
+// 管理员
+export interface IAdminModel {
+    name: string,
+    avatar: string,
+    userid: string
+}

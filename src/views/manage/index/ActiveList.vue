@@ -8,7 +8,11 @@
 
 <template>
   <div>
-    <van-tabs v-model:active="activeName" color="#007aff">
+    <van-tabs
+      v-model:active="activeName"
+      color="#007aff"
+      @click="queryActiveStatusHandler(activeName)"
+    >
       <van-tab
         :title="item.title"
         :name="item.key"
@@ -17,81 +21,113 @@
       ></van-tab>
     </van-tabs>
     <div class="pt10">
-      <div class="active-item">
-        <div class="progres">
-          <van-progress :percentage="50" />
+      <van-pull-refresh
+        v-model="isLoading"
+        success-text="刷新成功"
+        @refresh="onRefresh"
+      >
+        <div
+          class="active-item"
+          v-for="(item, index) in activeList"
+          :key="index"
+        >
+          <div class="progres">
+            <van-progress :percentage="50" />
+          </div>
+          <ul class="active-detail">
+            <li>
+              <span class="title">标题 </span>
+              <span>{{ item.sub }}</span>
+            </li>
+            <li>
+              <span class="title">金额</span>
+              <span>{{ item.totalAmount }}元</span>
+            </li>
+            <li>
+              <span class="title">时间</span>
+              <span>{{ item.startTime }} 至 {{ item.endTime }}</span>
+            </li>
+          </ul>
+          <div class="active-btn-list">
+            <span class="active-btn">
+              <span class="iconfont icon-ai23"></span>
+            </span>
+            <span class="active-btn">
+              <span class="iconfont icon-xiangqing"></span>
+            </span>
+            <span class="active-btn">
+              <span class="iconfont icon-shuju"></span>
+            </span>
+            <span class="active-btn active">
+              <span class="iconfont icon-fenxiang"></span>
+            </span>
+          </div>
         </div>
-        <ul class="active-detail">
-          <li>
-            <span class="title">活动标题</span>
-            <span>粉丝活动福利红包来啦</span>
-          </li>
-          <li>
-            <span class="title">活动金额</span>
-            <span>5400.00元</span>
-          </li>
-          <li>
-            <span class="title">活动时间</span>
-            <span>2020-12-10 至 2020-12-11</span>
-          </li>
-        </ul>
-        <div class="active-btn-list">
-          <span class="active-btn">
-            <span class="iconfont icon-ai23"></span>
-          </span>
-          <span class="active-btn">
-            <span class="iconfont icon-xiangqing"></span>
-          </span>
-          <span class="active-btn">
-            <span class="iconfont icon-shuju"></span>
-          </span>
-          <span class="active-btn active">
-            <span class="iconfont icon-fenxiang"></span>
-          </span>
-        </div>
-      </div>
+      </van-pull-refresh>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
-import { Tabs, Tab, Progress } from "vant";
+import { Tabs, Tab, Progress, PullRefresh } from "vant";
 import { ServGetActivity } from "@/service/appService";
-import { DTOActivity } from '@/service/appModel';
-import { BaseRequestModel } from '@/service/baseModel';
+import { DTOActivity } from "@/service/appModel";
+import { BaseRequestModel } from "@/service/baseModel";
 
 export default defineComponent({
   components: {
     [Tabs.name]: Tabs,
     [Tab.name]: Tab,
-    [Progress.name]: Progress
+    [Progress.name]: Progress,
+    [PullRefresh.name]: PullRefresh,
   },
   setup() {
     const state = reactive({
-      activeName: "all",
+      activeName: 0,
       activeTab: [
-        { title: "全部", key: "all" },
-        { title: "进行中", key: "underway" },
-        { title: "已结束", key: "finished" }
+        { title: "全部", key: 0 },
+        { title: "进行中", key: 1 },
+        { title: "已结束", key: 2 },
       ],
-      activeList: [] as Array<DTOActivity>
+      activeList: [] as Array<DTOActivity>,
     });
+
+    const pagination = {
+      pageIndex: 1,
+      pageRows: 2,
+    };
+
+    const methods = {
+      // 切换活动状态
+      queryActiveStatusHandler: (status: number) => {
+        const params = {
+          activityStatus: status,
+        };
+        status ? getActivityData(params) : getActivityData();
+      },
+      onRefresh: () => {
+        // 下拉刷新
+        console.log(state.activeName);
+      },
+    };
+
+    const getActivityData = async (params: object = {}) => {
+      const query: BaseRequestModel = {
+        params,
+        pageIndex: pagination.pageIndex,
+        pageRows: pagination.pageRows,
+      };
+      const res = await ServGetActivity(query);
+      state.activeList = res.records;
+    };
 
     onMounted(() => {
-      const params: BaseRequestModel = {
-        params: {
-
-        },
-        pageIndex: 1,
-        pageRows: 10
-      };
-
-      ServGetActivity(params);
+      getActivityData();
     });
 
-    return { ...toRefs(state) };
-  }
+    return { ...toRefs(state), ...toRefs(methods) };
+  },
 });
 </script>
 

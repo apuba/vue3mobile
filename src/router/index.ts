@@ -12,7 +12,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    redirect: '/index'
+    // component: Home
   },
   {
     path: '/about',

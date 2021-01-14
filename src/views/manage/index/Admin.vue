@@ -10,12 +10,10 @@
     <div class="admin-list">
       <h4>管理员列表</h4>
       <ul class="photo">
-        <li>
-          <img src="@public/images/logo.jpg" />
+        <li v-for="(item, index) in adminList" :key="index">
+          <img :src="item.avatar" :title="item.name" />
         </li>
-        <li>
-          <img src="@public/images/logo.jpg" />
-        </li>
+
         <li class="btn">
           <van-icon name="plus" />
         </li>
@@ -25,17 +23,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { Icon } from 'vant';
+import { defineComponent, reactive, toRefs } from "vue";
+import { Icon } from "vant";
+import { ServGetAdminList } from "@/service/appService";
+import { IAdminModel } from "@/service/appModel";
+
 export default defineComponent({
   components: {
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
   },
   setup() {
+    const state = reactive({
+      adminList: [] as Array<IAdminModel>,
+    });
 
-    return {}
-  }
-})
+    ServGetAdminList().then((res) => {
+      state.adminList = res;
+    });
+    return { ...toRefs(state) };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -69,13 +76,13 @@ export default defineComponent({
         height: 100%;
       }
       &.btn {
-          font-size: 24px;
-          background-color: #fff;
-          border-color: #0dbadd;
-          .van-icon {
-              line-height: 36px;
-              color: #0dbadd;
-          }
+        font-size: 24px;
+        background-color: #fff;
+        border-color: #0dbadd;
+        .van-icon {
+          line-height: 36px;
+          color: #0dbadd;
+        }
       }
     }
   }
