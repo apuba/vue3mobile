@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-14 00:45:49
+ * @LastEditTime: 2021-01-18 01:57:53
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -60,12 +60,14 @@ import { Tabs, Tab, Progress } from "vant";
 import { ServGetActivity } from "@/service/appService";
 import { DTOActivity } from '@/service/appModel';
 import { BaseRequestModel } from '@/service/baseModel';
+import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
 
 export default defineComponent({
   components: {
     [Tabs.name]: Tabs,
     [Tab.name]: Tab,
-    [Progress.name]: Progress
+    [Progress.name]: Progress,
+    ComScrollPage
   },
   setup() {
     const state = reactive({
