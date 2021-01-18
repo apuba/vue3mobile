@@ -1,12 +1,13 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-10 16:28:49
+ * @LastEditTime: 2021-01-19 01:19:21
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 <template>
   <div>
+    {{ formData.newFlag }}
     <van-nav-bar
       title="新增活动"
       left-text="返回"
@@ -18,7 +19,7 @@
         <div class="uploader">
           <van-uploader
             :after-read="uploadHandler"
-            v-model="state.imageList"
+            v-model="formData.imageList"
             multiple
             :max-count="3"
           />
@@ -33,39 +34,40 @@
           placeholder="请输入活动金额"
           value="800"
           is-link
-          v-model="state.totalAmount"
+          v-model="formData.totalAmount"
         />
         <van-field
           label="主标题"
           placeholder="请输入主标题"
           value=""
           is-link
-          v-model="state.title"
+          v-model="formData.sub"
         />
         <van-field
           label="副标题"
           placeholder="请输入副标题"
           value=""
           is-link
-          v-model="state.subtitle"
+          v-model="formData.subtitle"
         />
 
         <van-field name="switch" label="长期有效" input-align="right">
           <template #input>
-            <van-switch v-model="state.efficacious" size="20" />
+            <van-switch v-model="formData.newFlag" size="20" />
           </template>
         </van-field>
         <van-field
           label="截止日期"
-          placeholder="请输入标题"
-          value=""
-          v-model="state.endTime"
+          placeholder="点击选择日期"
+          v-show="formData.newFlag"
+          v-model="formData.endTime"
           is-link
+          @click="showCalendarHandler"
         />
       </van-cell-group>
 
       <van-cell-group class="group">
-        <van-cell title="账户余额" value="50000">
+        <van-cell title="承接人">
           <template #default>
             <van-button type="primary" size="mini"
               ><van-icon name="plus" />请选择人员</van-button
@@ -88,7 +90,7 @@
       <van-cell-group class="group">
         <van-cell title="配置欢迎语"> </van-cell>
         <van-field
-          v-model="state.welcomeMsg"
+          v-model="formData.welcomeMsg"
           rows="2"
           autosize
           type="textarea"
@@ -101,18 +103,18 @@
       <van-cell-group class="group">
         <van-cell title="启用新人红包">
           <template #default>
-            <van-switch v-model="state.efficacious" size="20" />
+            <van-switch v-model="formData.activityEffectiveFlag" size="20" />
           </template>
         </van-cell>
         <van-field
           label="最小红包"
-          v-model="state.newAmountLow"
+          v-model="formData.newAmountLow"
           is-link
           placeholder="新人获取最小红包(元）"
         />
         <van-field
           label="最大红包"
-          v-model="state.newAmountHigh"
+          v-model="formData.newAmountHigh"
           is-link
           placeholder="新人获取最大红包(元）"
         />
@@ -123,13 +125,13 @@
         <van-field
           label="最小红包"
           is-link
-          v-model="state.invitationAmountLow"
+          v-model="formData.invitationAmountLow"
           placeholder="邀请最小红包(元）"
         />
         <van-field
           label="最大红包"
           is-link
-          v-model="state.invitationAmountHigh"
+          v-model="formData.invitationAmountHigh"
           placeholder="邀请最大红包(元）"
         />
       </van-cell-group>
@@ -138,7 +140,7 @@
         <van-field
           label="邀请人门槛"
           is-link
-          v-model="state.invitationNumber"
+          v-model="formData.invitationNumber"
           placeholder="请输入1~5个人"
         />
         <div class="container">
@@ -149,7 +151,7 @@
       <van-cell-group class="group">
         <van-cell title="对外数据">
           <template #default>
-            <van-switch v-model="state.efficacious" size="20" />
+            <van-switch v-model="formData.enabledExternalData" size="20" />
           </template>
         </van-cell>
         <div class="container">
@@ -158,30 +160,31 @@
             可选择关闭，将显示真实数据；发布后不可修改
           </div>
         </div>
+        <div class="externalData" v-show="formData.enabledExternalData">
+          <van-field
+            label="红包总数量"
+            is-link
+            v-model="formData.externalData.hongbaoAmount"
+            placeholder="请输入红包总数量"
+          />
 
-        <van-field
-          label="红包总数量"
-          is-link
-          v-model="state.invitationAmountLow"
-          placeholder="请输入红包总数量"
-        />
-
-        <div class="container">
-          <div class="txt">
-            此数将影响活动页面的剩余红包数量，之后会随
-            红包总数减去已获得红包人数变动
+          <div class="container">
+            <div class="txt">
+              此数将影响活动页面的剩余红包数量，之后会随
+              红包总数减去已获得红包人数变动
+            </div>
           </div>
-        </div>
 
-        <van-field
-          label="初始领取人数"
-          is-link
-          v-model="state.invitationAmountLow"
-          placeholder="请输入初始领取人数"
-        />
-        <div class="container">
-          <div class="txt">
-            此数不宜过大或过小，有利于活动初期启动， 激发用户参与
+          <van-field
+            label="初始领取人数"
+            is-link
+            v-model="formData.externalData.peopleAmount"
+            placeholder="请输入初始领取人数"
+          />
+          <div class="container">
+            <div class="txt">
+              此数不宜过大或过小，有利于活动初期启动， 激发用户参与
+            </div>
           </div>
         </div>
       </van-cell-group>
@@ -189,7 +192,7 @@
       <van-cell-group class="group">
         <van-cell title="活动规则">
           <template #default>
-            <van-button type="primary"  size="mini">使用默认规则</van-button>
+            <van-button type="primary" size="mini">使用默认规则</van-button>
           </template>
         </van-cell>
 
@@ -204,7 +207,7 @@
         </div> -->
 
         <van-field
-          v-model="state.welcomeMsg"
+          v-model="formData.activityExplain"
           rows="2"
           autosize
           type="textarea"
@@ -218,47 +221,11 @@
         />
       </van-cell-group>
     </van-form>
+    <van-calendar v-model:show="showCalendar" @confirm="selectEndTime" />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
-import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image } from 'vant';
-import router from '@/router';
-export default defineComponent({
-  components: {
-    [Uploader.name]: Uploader,
-    [NavBar.name]: NavBar,
-    [Form.name]: Form,
-    [Field.name]: Field,
-    [CellGroup.name]: CellGroup,
-    [Switch.name]: Switch,
-    [Button.name]: Button,
-    [Icon.name]: Icon,
-    [Cell.name]: Cell,
-    [Image.name]: Image
-  },
-  setup() {
-
-    const state = reactive({
-      imageList: [],
-
-    })
-    const methods = {
-      uploadHandler: (file: File) => {
-        // 此时可以自行将文件上传至服务器
-        console.log(file);
-      },
-      onClickLeft: () => {
-        router.go(-1);
-      },
-      onSubmit: () => {
-
-      }
-    }
-    return { ...toRefs(methods), state }
-  }
-})
+<script lang="ts" src="./CreateActive">
 </script>
 
 <style lang="scss" scoped>

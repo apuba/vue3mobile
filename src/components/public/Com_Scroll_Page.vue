@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-17 22:14:16
- * @LastEditTime: 2021-01-18 01:55:06
+ * @LastEditTime: 2021-01-19 00:20:21
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -10,23 +10,30 @@
 <template>
   <div>
     <slot></slot>
+    <div class="loading" v-show="!value">
+      <Loading size="18px">数据加载中...</Loading>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 
-/**　监听滚动事件
-   *  @param stopCondition 停计算条件,当为true时就会停
-   *  @param callback　运行的回调
-   * 　*/
 
 
-import { defineComponent, onMounted, onUnmounted, reactive } from 'vue'
+import { defineComponent, onMounted, onUnmounted, reactive, toRaw } from 'vue'
+import { Loading } from 'vant';
 
 export default defineComponent({
-  name: 'comScrollPage',
+  name: 'ComScrollPage',
+  components: {
+    Loading
+  },
   props: {
-    isStop: {
+    value: { // 是否可以加载数据
+      type: Boolean,
+      default: true
+    },
+    reload: { // 重置参数
       type: Boolean,
       default: false
     },
@@ -35,7 +42,17 @@ export default defineComponent({
       default: 100
     }
   },
-  emits: ['loadData'],
+  emits: ['loadData', 'update:value', 'update:reload'],
+  //   computed: {
+  //     isVisible: {
+  //       get(): boolean {
+  //         return this.value;
+  //       },
+  //       set(value: boolean) {
+  //         this.$emit('update:value', value);
+  //       }
+  //     }
+  //   },
   setup(props, context) {
 
     const originState = {
@@ -44,12 +61,21 @@ export default defineComponent({
       inBottomCount: 0, // 到底的次数
       isBottom: true // 是否已经到底
     }
-    const state = reactive(originState)
+    let state = reactive({...originState})
 
     const onScroll = () => {
-      if (props.isStop === true) return;
+      if (!props.value) return;
+
+      if (props.reload) {
+          state = reactive({...originState});
+          context.emit('update:reload', false);
+
+      }
+
+      const app = document.querySelector('#app');
+      if (!app) return;
       // 可滚动容器的高度
-      const pageHeight = document.querySelector('#app').clientHeight;
+      const pageHeight = app.clientHeight
       // 屏幕尺寸高度
       const screenHeight = document.documentElement.clientHeight;
       // 可滚动容器超出当前窗口显示范围的高度
@@ -75,6 +101,7 @@ export default defineComponent({
         state.isBottom = true;
         // if (onBottom && typeof onBottom === 'function') onBottom(state);
         context.emit('loadData', state);
+        context.emit('update:value', false);
       }
     }
 
@@ -90,4 +117,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.loading {
+  text-align: center;
+  padding: 8px;
+}
 </style>
