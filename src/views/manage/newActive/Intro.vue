@@ -1,13 +1,18 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-03 16:37:14
- * @LastEditTime: 2021-01-05 01:02:30
+ * @LastEditTime: 2021-01-18 19:54:49
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 <template>
   <div>
-    <van-nav-bar title="活动介绍" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar
+      title="活动介绍"
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <div class="body">
       <div class="bg"></div>
       <div class="header">
@@ -61,15 +66,18 @@
         </fieldset>
       </div>
       <div class="create-btn">
-        <van-button block type="primary" round to="/createActive">新建活动</van-button>
+        <van-button block type="primary" round to="/createActive"
+          >新建活动</van-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 import { Button, NavBar } from "vant";
+import router from '@/router';
 
 export default defineComponent({
   components: {
@@ -77,7 +85,13 @@ export default defineComponent({
     [NavBar.name]: NavBar
   },
   setup() {
-    return {};
+    
+    const methods = {
+      onClickLeft: () => {
+        router.go(-1);
+      },
+    }
+    return { ...toRefs(methods) };
   }
 });
 </script>

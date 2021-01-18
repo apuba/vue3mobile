@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-14 00:45:49
+ * @LastEditTime: 2021-01-19 00:29:52
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -21,59 +21,62 @@
       ></van-tab>
     </van-tabs>
     <div class="pt10">
-      <van-pull-refresh
-        v-model="isLoading"
-        success-text="刷新成功"
-        @refresh="onRefresh"
+      <ComScrollPage
+        v-model:value="inBottom" 
+        v-model:reload="scrollReload"       
+        @loadData="onRefresh"
       >
-        <div
-          class="active-item"
-          v-for="(item, index) in activeList"
-          :key="index"
-        >
-          <div class="progres">
-            <van-progress :percentage="50" />
-          </div>
-          <ul class="active-detail">
-            <li>
-              <span class="title">标题 </span>
-              <span>{{ item.sub }}</span>
-            </li>
-            <li>
-              <span class="title">金额</span>
-              <span>{{ item.totalAmount }}元</span>
-            </li>
-            <li>
-              <span class="title">时间</span>
-              <span>{{ item.startTime }} 至 {{ item.endTime }}</span>
-            </li>
-          </ul>
-          <div class="active-btn-list">
-            <span class="active-btn">
-              <span class="iconfont icon-ai23"></span>
-            </span>
-            <span class="active-btn">
-              <span class="iconfont icon-xiangqing"></span>
-            </span>
-            <span class="active-btn">
-              <span class="iconfont icon-shuju"></span>
-            </span>
-            <span class="active-btn active">
-              <span class="iconfont icon-fenxiang"></span>
-            </span>
+        <div class="active-list">
+          <div
+            class="active-item"
+            v-for="(item, index) in activeList"
+            :key="index"
+          >
+            <div class="progres">
+              <van-progress :percentage="50" />
+            </div>
+            <ul class="active-detail">
+              <li>
+                <span class="title">标题 </span>
+                <span>{{ item.sub }}</span>
+              </li>
+              <li>
+                <span class="title">金额</span>
+                <span>{{ item.totalAmount }}元</span>
+              </li>
+              <li>
+                <span class="title">时间</span>
+                <span>{{ item.startTime }} 至 {{ item.endTime }}</span>
+              </li>
+            </ul>
+            <div class="active-btn-list">
+              <span class="active-btn">
+                <span class="iconfont icon-ai23"></span>
+              </span>
+              <span class="active-btn">
+                <span class="iconfont icon-xiangqing"></span>
+              </span>
+              <span class="active-btn">
+                <span class="iconfont icon-shuju"></span>
+              </span>
+              <span class="active-btn active">
+                <span class="iconfont icon-fenxiang"></span>
+              </span>
+            </div>
           </div>
         </div>
-      </van-pull-refresh>
+      </ComScrollPage>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, onMounted } from "vue";
+import { defineComponent, reactive, toRefs, onMounted, unref, toRaw } from "vue";
 import { Tabs, Tab, Progress, PullRefresh } from "vant";
 import { ServGetActivity } from "@/service/appService";
 import { DTOActivity } from "@/service/appModel";
 import { BaseRequestModel } from "@/service/baseModel";
+import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
 
 export default defineComponent({
   components: {
@@ -81,10 +84,13 @@ export default defineComponent({
     [Tab.name]: Tab,
     [Progress.name]: Progress,
     [PullRefresh.name]: PullRefresh,
+    ComScrollPage
   },
   setup() {
     const state = reactive({
       activeName: 0,
+      inBottom: true, // 是否到底加载数据
+      scrollReload: false, // 是否重载scroolPage组件
       activeTab: [
         { title: "全部", key: 0 },
         { title: "进行中", key: 1 },
@@ -95,7 +101,30 @@ export default defineComponent({
 
     const pagination = {
       pageIndex: 1,
-      pageRows: 2,
+      pageRows: 5,
+    };
+
+    // 获取活动列表
+    const getActivityData = async (params: object = {}, inBottom?: boolean) => {
+
+      if (inBottom) {
+        pagination.pageIndex++
+      }
+      const query: BaseRequestModel = {
+        params,
+        pageIndex: pagination.pageIndex,
+        pageRows: pagination.pageRows,
+      };
+      const res = await ServGetActivity(query);
+      // state.activeList = res.records;
+
+      if (inBottom) {
+        state.activeList = [...toRaw(state.activeList), ...res.records];
+        console.log(state.activeList)
+      } else {
+        state.activeList = res.records;
+      }
+      state.inBottom = true;
     };
 
     const methods = {
@@ -104,23 +133,24 @@ export default defineComponent({
         const params = {
           activityStatus: status,
         };
+
+        state.activeList = [];
+        pagination.pageIndex = 1; // 重置分页大小
+        state.scrollReload = true;
+
         status ? getActivityData(params) : getActivityData();
       },
+
       onRefresh: () => {
         // 下拉刷新
-        console.log(state.activeName);
+        const params = {
+          activityStatus: state.activeName,
+        };
+        state.activeName ? getActivityData(params, true) : getActivityData({}, true);
       },
     };
 
-    const getActivityData = async (params: object = {}) => {
-      const query: BaseRequestModel = {
-        params,
-        pageIndex: pagination.pageIndex,
-        pageRows: pagination.pageRows,
-      };
-      const res = await ServGetActivity(query);
-      state.activeList = res.records;
-    };
+
 
     onMounted(() => {
       getActivityData();
