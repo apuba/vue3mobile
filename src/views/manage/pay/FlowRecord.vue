@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-22 00:56:00
- * @LastEditTime: 2021-01-22 03:00:02
+ * @LastEditTime: 2021-01-22 03:40:35
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -133,7 +133,7 @@ export default defineComponent({
   line-height: 40px;
 }
 .green {
-  color: seagreen;
+  color: rgb(16, 197, 95);
 }
 .red {
   color: tomato;

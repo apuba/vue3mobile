@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-21 21:25:26
- * @LastEditTime: 2021-01-22 03:04:35
+ * @LastEditTime: 2021-01-22 03:39:36
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -93,7 +93,7 @@
     }
   }
   .main-bottom1 {
-    background: #59d2f0;
+    background: #9fe3f3;
     height: 10px;
     width: 85%;
     margin: 0 auto;
