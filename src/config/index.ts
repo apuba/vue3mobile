@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-24 14:49:06
- * @LastEditTime: 2020-12-13 14:16:59
+ * @LastEditTime: 2021-01-20 23:16:17
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -18,5 +18,7 @@ export const COMPONENT_SETTING: any = { // 全局组件配置
 }
 
 export const RETENTION_STORE: boolean = true; // 刷新页面时是否保留状态
+// form-data  upload
+export const FORM_DATA = 'multipart/form-data;charset=UTF-8';
 
 export const REQUEST_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=UTF-8'; // 请求参数类型  'application/json;charset=UTF-8'

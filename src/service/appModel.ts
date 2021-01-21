@@ -81,3 +81,8 @@ export interface IAdminModel {
     avatar: string,
     userid: string
 }
+
+export interface IcreateOrder {
+    actualAmt: number,
+    num: number
+}

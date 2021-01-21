@@ -15,7 +15,7 @@ import { AxiosRequest, CustomResponse } from './types';
 import { Notify } from 'vant';
 import storage from '@/common/storage';
 import { mapperHelper } from '@/service/mapperHelper';
-import { REQUEST_CONTENT_TYPE } from '@/config';
+import { REQUEST_CONTENT_TYPE, FORM_DATA } from '@/config';
 
 var qs = require('qs');
 
@@ -30,15 +30,15 @@ class Abstract {
     }
 
     private apiAxios({ baseURL = this.baseURL, headers = this.headers, method, url, data, params, responseType, mapper }: AxiosRequest): Promise<CustomResponse> {
-        const token = storage().get('token');
+        const token = storage().get('token')  || 'asdasdasdasdasdasdasdasd';
         //  Authorization
         if (token) {
             headers.Authorization = token
         }
 
         if (headers['Content-Type'] === 'application/x-www-form-urlencoded;charset=UTF-8') {
-             // 把params的对象转为字符串
-             if (data && data.params && typeof data.params === 'object') {
+            // 把params的对象转为字符串
+            if (data && data.params && typeof data.params === 'object') {
                 data.params = JSON.stringify(data.params)
             }
             data = qs.stringify(data); // 参数转换
@@ -92,12 +92,21 @@ class Abstract {
     getReq({ headers, url, data, params, responseType, mapper }: AxiosRequest) {
         return this.apiAxios({ headers, method: 'GET', url, data, params, mapper, responseType });
     }
+
+    // 文件上传
+    uploadFiles(url: string, data: FormData) {
+        const headers = {
+            'Content-type': FORM_DATA,
+        }
+        return this.apiAxios({ headers, method: 'POST', url, data });
+    }
+
     /**
      * POST类型的网络请求
      */
     post(obj: string | AxiosRequest, data: any, mapper?: any, headers?: any) {
         let url;
-        if (typeof obj === 'object') {           
+        if (typeof obj === 'object') {
             return this.postReq(obj);
         } else {
             url = obj;
@@ -120,6 +129,8 @@ class Abstract {
     del({ baseURL, headers, url, data, params, responseType }: AxiosRequest) {
         return this.apiAxios({ baseURL, headers, method: 'DELETE', url, data, params, responseType });
     }
+
+
 }
 
 

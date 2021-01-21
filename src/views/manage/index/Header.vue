@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 20:41:40
- * @LastEditTime: 2021-01-05 00:25:48
+ * @LastEditTime: 2021-01-21 23:26:13
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -43,9 +43,10 @@ export default defineComponent({
   position: relative;
   text-align: center;
   h2 {
-    padding-top: 60px;
+    padding-top: 50px;
     margin: 0;
-    line-height: 30px;
+    line-height: 40px;
+    font-size: 24px;
   }
   .small {
     opacity: 0.66;

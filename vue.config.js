@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-13 01:19:23
- * @LastEditTime: 2021-01-03 14:56:27
+ * @LastEditTime: 2021-01-22 02:48:13
  * @LastEditors: 侯兴章
  * @Description: 配置
  */
@@ -18,9 +18,9 @@ const createProxy = () => {
     return {
       '/api': {
         // target: 'http://localhost:4000',
+        target: 'http://qywx001.966006.com:9095/api',
+        // target: 'http://192.168.100.6:9095/api',
         // target: 'http://47.115.141.0:9095/api',
-        // target: 'http://localhost:9091/api',
-        target: 'http://47.115.141.0:9095/api',
         secure: false,
         changeOrigin: false, // 开启代理，在本地创建一个虚拟服务端
         // ws: true, // 是否启用websockets
@@ -71,7 +71,7 @@ module.exports = {
             unitToConvert: 'px',  // 需要转换的单位，默认为"px"
             viewportWidth: 375, //  设计稿的视口宽度 ，根据不同的设计稿进行转换
             unitPrecision: 5, // 单位转换后保留的精度
-            propList: ['*'], // 能转化为vw的属性列表
+            propList: ['*'], // 能转化为vw的属性列表， ！ 为排除的属性 '!box-shadow'
             viewportUnit: 'vw', //  希望使用的视口单位
             fontViewportUnit: 'vw', // 字体使用的视口单位
             selectorBlackList: [".van", "van", 'van-col'], // 需要忽略的CSS选择器

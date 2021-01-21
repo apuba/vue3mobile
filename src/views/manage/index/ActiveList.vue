@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-19 00:29:52
+ * @LastEditTime: 2021-01-22 02:21:45
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -46,7 +46,7 @@
               </li>
               <li>
                 <span class="title">时间</span>
-                <span>{{ item.startTime }} 至 {{ item.endTime }}</span>
+                <span>{{ item.startTime.split(' ')[0] }} 至 {{ item.endTime.split(' ')[0]  }}</span>
               </li>
             </ul>
             <div class="active-btn-list">

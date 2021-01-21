@@ -1,13 +1,12 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-19 01:19:21
+ * @LastEditTime: 2021-01-22 02:35:23
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 <template>
   <div>
-    {{ formData.newFlag }}
     <van-nav-bar
       title="新增活动"
       left-text="返回"
@@ -69,7 +68,7 @@
       <van-cell-group class="group">
         <van-cell title="承接人">
           <template #default>
-            <van-button type="primary" size="mini"
+            <van-button type="primary" size="mini" @click="showPeoplePop = true"
               ><van-icon name="plus" />请选择人员</van-button
             >
           </template>
@@ -222,6 +221,15 @@
       </van-cell-group>
     </van-form>
     <van-calendar v-model:show="showCalendar" @confirm="selectEndTime" />
+
+    <!-- <van-popup v-model:show="showPeoplePop" position="rigth" :style="{width: '50%'}">内s fsa sadf safsa容</van-popup> -->
+    <van-popup
+      v-model:show="showPeoplePop"
+      position="right"
+      :style="{ width: '90%', height: '100vh' }"
+    >
+      <EmployeeList />
+    </van-popup>
   </div>
 </template>
 
@@ -233,16 +241,31 @@
   background-color: #f5f5f5;
 }
 .banner {
+  position: relative;
   text-align: center;
   height: 220px;
-  background-color: #0dbadd;
+  // background-color: #0dbadd;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   .uploader {
     margin: 0 auto;
+    z-index: 1;
   }
+}
+
+.banner::after {
+  width: 140%;
+  height: 100%;
+  position: absolute;
+  left: -20%;
+  top: 0;
+  // z-index: -1;
+  content: "";
+  border-radius: 0 0 50% 50%;
+  // background-image: linear-gradient(-270deg, #2af598 0%, #009efd 100%);
+  background: #0dbadd;
 }
 .group {
   margin: 16px;

@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 21:22:40
- * @LastEditTime: 2021-01-04 22:39:35
+ * @LastEditTime: 2021-01-22 02:15:49
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -15,11 +15,11 @@
           <div class="btn">
             <van-row gutter="8">
               <van-col span="12">
-                <van-button type="primary" size="mini " round block>充值</van-button>
+                <van-button type="primary" size="small " round block to="/pay">充值</van-button>
                  
               </van-col>
               <van-col span="12">
-                <van-button type="default" plain size="mini " block round>明细</van-button>
+                <van-button type="default" plain size="small " block round to="/flowRecord?type=1">明细</van-button>
               </van-col>
             </van-row>
           </div>
@@ -30,7 +30,7 @@
           <div class="name">活动总数</div>
           <div class="count">20</div>
           <div class="btn">
-            <van-button type="primary" size="mini " round block to="/intro">创建活动</van-button
+            <van-button type="primary" size="small " round block to="/intro">创建活动</van-button
             >
           </div>
         </div>

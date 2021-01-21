@@ -1,18 +1,21 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-18 19:57:07
- * @LastEditTime: 2021-01-19 01:26:57
+ * @LastEditTime: 2021-01-22 02:24:31
  * @LastEditors: 侯兴章
  * @Description: 
  */
 
 
-import { defineComponent, reactive, toRefs } from 'vue'
-import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image, Calendar } from 'vant';
+import { defineComponent, onMounted, reactive, toRaw, toRefs } from 'vue'
+import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image, Calendar, Popup } from 'vant';
 import router from '@/router';
 import moment from 'moment';
+import EmployeeList from './EmployeeList.vue';
+import { ServfileUpload, ServSinge } from '@/service/appService';
 export default defineComponent({
     components: {
+        EmployeeList,
         [Uploader.name]: Uploader,
         [NavBar.name]: NavBar,
         [Form.name]: Form,
@@ -23,33 +26,35 @@ export default defineComponent({
         [Icon.name]: Icon,
         [Cell.name]: Cell,
         [Image.name]: Image,
-        [Calendar.name]: Calendar
+        [Calendar.name]: Calendar,
+        [Popup.name]: Popup
     },
     setup() {
 
         const state = reactive({
             imageList: [],
             showCalendar: false,
+            showPeoplePop: false,
             formData: {
                 // name: "活动名称",
                 // startTime: "2020-01-14 20:00:00",
-                endTime: "2020-02-14 20:01:22",
-                totalAmount: 500,
+                endTime: "",
+                totalAmount: null,
                 newAmountLow: 1.2,
                 newAmountHigh: 2.0,
                 invitationAmountLow: 1.2,
                 invitationAmountHigh: 3,
-                sub: "标题",
-                subtitle: "副标题",
+                sub: "",
+                subtitle: "",
                 newFlag: true,
                 activityEffectiveFlag: true,
-                banner: "http://www.baidu.com",
-                welcomeMsg: "欢迎语",
+                banner: "",
+                welcomeMsg: "",
                 invitationNumber: 3,
                 activityExplain: "",
                 externalData: {
-                    hongbaoAmount: 1888,
-                    peopleAmount: 298
+                    hongbaoAmount: null,
+                    peopleAmount: null,
                 },
                 undertaker: [{
                     "userid": "123456",
@@ -63,9 +68,15 @@ export default defineComponent({
 
         })
         const methods = {
-            uploadHandler: (file: File) => {
+            uploadHandler: (file: any) => {
                 // 此时可以自行将文件上传至服务器
+                let formData = new FormData();      
+                formData.append("files", toRaw(file.file)); // files为 后端参数名
                 console.log(file);
+                debugger
+                ServfileUpload(formData).then(res => {
+                     
+                })
             },
             onClickLeft: () => {
                 router.go(-1);
@@ -82,6 +93,12 @@ export default defineComponent({
                 state.showCalendar = true;
             }
         }
+
+        onMounted(() => {
+            ServSinge().then(res => {
+                debugger
+            })
+        })
         return { ...toRefs(methods), ...toRefs(state) }
     }
 })

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-05 00:22:50
+ * @LastEditTime: 2021-01-22 01:21:16
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -37,7 +37,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/createActive',
     name: 'createActive',
     component: () => import('../views/manage/newActive/CreateActive.vue')
-  }
+  },
+  {
+    path: '/pay',
+    name: 'pay',
+    component: () => import('../views/manage/pay/Pay.vue')
+  },
+  {
+    path: '/FlowRecord',
+    name: 'flowRecord',
+    component: () => import('../views/manage/pay/FlowRecord.vue')
+  },
 ]
 
 const router = createRouter({
