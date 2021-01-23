@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-23 22:06:17
- * @LastEditTime: 2021-01-23 22:54:02
+ * @LastEditTime: 2021-01-24 01:59:29
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -18,11 +18,7 @@ spinner.start();
 client.scp(
   "./dist/", // 本地打包文件的位置
   {
-    host: "106.75.217.29", // 服务器的IP地址
-    port: "22", // 服务器端口， 一般为 22
-    username: "root", // 用户名
-    password: "NQQGh+M^8`_#", // 密码
-    path: "/usr/local/nginx/html", // 项目部署的服务器目标位置
+ 
   },
   (err) => {
     spinner.stop();
