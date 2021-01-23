@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-13 01:19:23
- * @LastEditTime: 2021-01-22 02:48:13
+ * @LastEditTime: 2021-01-23 21:50:31
  * @LastEditors: 侯兴章
  * @Description: 配置
  */
@@ -17,8 +17,8 @@ const createProxy = () => {
   if (enablePro === 'yes') {
     return {
       '/api': {
-        // target: 'http://localhost:4000',
-        target: 'http://qywx001.966006.com:9095/api',
+        target: 'http://localhost:9095/api',
+        // target: 'http://qywx001.966006.com:9095/api',
         // target: 'http://192.168.100.6:9095/api',
         // target: 'http://47.115.141.0:9095/api',
         secure: false,
@@ -30,7 +30,7 @@ const createProxy = () => {
       }
     };
   } else {
-    return {};
+    return null;
   }
 };
 
@@ -67,6 +67,7 @@ module.exports = {
           //   propList: ["*"],
           //   exclude: /(\/|\\)(node_modules)(\/|\\)/,
           // })
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           require('postcss-px-to-viewport')({
             unitToConvert: 'px',  // 需要转换的单位，默认为"px"
             viewportWidth: 375, //  设计稿的视口宽度 ，根据不同的设计稿进行转换

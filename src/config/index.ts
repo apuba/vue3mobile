@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-24 14:49:06
- * @LastEditTime: 2021-01-20 23:16:17
+ * @LastEditTime: 2021-01-24 00:45:52
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -16,6 +16,7 @@ export const COMPONENT_SETTING: any = { // 全局组件配置
     popupType: 'modal', //  弹窗方法有两种，modal \ drawer 
     drawerPlacement: 'right', // 弹窗出现的位置  top \ left \ right \ bottom
 }
+export const ROUTER_MODEL = 'history'; // 路由模式 hash 或是  history
 
 export const RETENTION_STORE: boolean = true; // 刷新页面时是否保留状态
 // form-data  upload

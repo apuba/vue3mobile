@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-22 03:37:05
+ * @LastEditTime: 2021-01-22 03:53:49
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -12,7 +12,10 @@
   >
     <router-view class="routerStyle" />
   </transition> -->
-  <router-view />
+
+  <transition>
+    <router-view />
+  </transition>
 </template>
 
 <style lang="scss">

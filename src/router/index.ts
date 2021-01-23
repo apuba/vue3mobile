@@ -1,19 +1,29 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-22 01:21:16
+ * @LastEditTime: 2021-01-23 23:23:35
  * @LastEditors: 侯兴章
  * @Description: 
  */
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
+import { ROUTER_MODEL } from '@/config/index'
+
+// 路由模式
+const historyModel = {
+  hash: createWebHashHistory,
+  history: createWebHistory
+}
+
+const routeHistory = historyModel[ROUTER_MODEL];
+
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    redirect: '/index'
-    // component: Home
+    // redirect: '/index'
+    component: () => import('../views/manage/index/Index.vue')
   },
   {
     path: '/about',
@@ -51,7 +61,8 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  // history: createWebHistory(process.env.BASE_URL),
+  history: routeHistory(process.env.BASE_URL),
   routes
 })
 

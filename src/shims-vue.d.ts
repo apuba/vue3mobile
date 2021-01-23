@@ -5,7 +5,7 @@ declare module '*.vue' {
 }
 declare interface Window {
   __app__: any,
-
+  wx: any
 }
 
  

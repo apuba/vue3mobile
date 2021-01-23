@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-22 02:35:23
+ * @LastEditTime: 2021-01-23 18:22:35
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -219,6 +219,14 @@
           show-word-limit
         />
       </van-cell-group>
+      <div class="btnlist">
+        <div class="btnlist-item">
+          <van-button type="default"  round block>查看样式</van-button>
+        </div>
+         <div class="btnlist-item">
+          <van-button type="primary" round block >确定创建</van-button>
+        </div>
+      </div>
     </van-form>
     <van-calendar v-model:show="showCalendar" @confirm="selectEndTime" />
 
@@ -237,8 +245,18 @@
 </script>
 
 <style lang="scss" scoped>
+.btnlist{
+  background: #fff;
+  display: flex;
+  padding: 8px;
+  .btnlist-item {
+    flex: 1;
+    padding: 0 8px;
+  }
+}
 .form {
   background-color: #f5f5f5;
+  overflow-x: hidden;
 }
 .banner {
   position: relative;

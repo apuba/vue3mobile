@@ -1,18 +1,26 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
+ * @Date: 2021-01-19 01:39:07
+ * @LastEditTime: 2021-01-23 21:05:36
+ * @LastEditors: 侯兴章
+ * @Description: 
+ */
+/*
+ * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-18 19:57:07
- * @LastEditTime: 2021-01-22 02:24:31
+ * @LastEditTime: 2021-01-23 20:44:03
  * @LastEditors: 侯兴章
  * @Description: 
  */
 
 
-import { defineComponent, onMounted, reactive, toRaw, toRefs } from 'vue'
+import { defineComponent, onMounted, reactive, toRaw, toRefs, withCtx } from 'vue'
 import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image, Calendar, Popup } from 'vant';
 import router from '@/router';
 import moment from 'moment';
 import EmployeeList from './EmployeeList.vue';
 import { ServfileUpload, ServSinge } from '@/service/appService';
+ 
 export default defineComponent({
     components: {
         EmployeeList,
@@ -70,12 +78,12 @@ export default defineComponent({
         const methods = {
             uploadHandler: (file: any) => {
                 // 此时可以自行将文件上传至服务器
-                let formData = new FormData();      
+                let formData = new FormData();
                 formData.append("files", toRaw(file.file)); // files为 后端参数名
                 console.log(file);
                 debugger
                 ServfileUpload(formData).then(res => {
-                     
+
                 })
             },
             onClickLeft: () => {
@@ -95,9 +103,7 @@ export default defineComponent({
         }
 
         onMounted(() => {
-            ServSinge().then(res => {
-                debugger
-            })
+  
         })
         return { ...toRefs(methods), ...toRefs(state) }
     }
