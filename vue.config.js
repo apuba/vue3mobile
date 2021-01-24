@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-13 01:19:23
- * @LastEditTime: 2021-01-23 21:50:31
+ * @LastEditTime: 2021-01-24 23:25:50
  * @LastEditors: 侯兴章
  * @Description: 配置
  */
@@ -17,9 +17,9 @@ const createProxy = () => {
   if (enablePro === 'yes') {
     return {
       '/api': {
-        target: 'http://localhost:9095/api',
+        // target: 'http://localhost:9095/api',
         // target: 'http://qywx001.966006.com:9095/api',
-        // target: 'http://192.168.100.6:9095/api',
+        target: 'http://192.168.100.6:9095/api',
         // target: 'http://47.115.141.0:9095/api',
         secure: false,
         changeOrigin: false, // 开启代理，在本地创建一个虚拟服务端

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-21 21:25:30
- * @LastEditTime: 2021-01-22 01:22:02
+ * @LastEditTime: 2021-01-24 23:59:05
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -17,7 +17,7 @@ export default defineComponent({
     },
     setup() {
         const state = reactive({
-            priceList: [1000, 2000, 3000, 5000, 10000, 50000],
+            priceList: [0.01, 2000, 3000, 5000, 10000, 50000],
             choosePrice: 5000
         })
         const methods = {
@@ -28,12 +28,13 @@ export default defineComponent({
                 state.choosePrice = price;
             },
             createOrderHandler: () => {
+                // 订单支付
                 const params: IcreateOrder = {
                     actualAmt: state.choosePrice,
                     num: 1
                 }
                 ServcreateOrder(params).then(res => {
-                    debugger
+                    window.location.href = res.data.mweb_url;
                 })
             },
             goto: (url: string) => {

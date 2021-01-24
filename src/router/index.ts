@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-23 23:23:35
+ * @LastEditTime: 2021-01-25 02:25:36
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -54,10 +54,16 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/manage/pay/Pay.vue')
   },
   {
+    path: '/paySuccess',
+    name: 'paySuccess',
+    component: () => import('../views/manage/pay/PaySuccess.vue')
+  },
+  {
     path: '/FlowRecord',
     name: 'flowRecord',
     component: () => import('../views/manage/pay/FlowRecord.vue')
   },
+  // { path: '*', component: NotFoundComponent }
 ]
 
 const router = createRouter({

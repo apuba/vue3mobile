@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-01-24 01:34:53
+ * @LastEditTime: 2021-01-24 22:48:48
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -97,7 +97,7 @@ export const ServSinge = async (url: string = window.location.href.split('#')[0]
 
     window.wx.error(function (res: any) {
         // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        console.log('微信签名失败', res)
+        console.log('微信签名失败------------------------------------', res)
     });
 
     window.wx.agentConfig({
@@ -115,7 +115,7 @@ export const ServSinge = async (url: string = window.location.href.split('#')[0]
             if (res.errMsg.indexOf('function not exist') > -1) {
                 alert('版本过低请升级')
             }
-            console.log('agentConfig 签名 失败 ', res)
+            console.log('agentConfig签名失败----------------------------', res)
         }
     });
 
