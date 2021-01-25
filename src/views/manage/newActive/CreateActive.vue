@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-23 18:22:35
+ * @LastEditTime: 2021-01-26 01:41:15
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -68,7 +68,10 @@
       <van-cell-group class="group">
         <van-cell title="承接人">
           <template #default>
-            <van-button type="primary" size="mini" @click="showPeoplePop = true"
+            <van-button
+              type="primary"
+              size="mini"
+              @click="selectExternalContact"
               ><van-icon name="plus" />请选择人员</van-button
             >
           </template>
@@ -77,11 +80,16 @@
           <div class="txt">可设置添加指定成员才有奖励，最多可选100人</div>
 
           <div class="people-list">
-            <van-image
+            <span
               class="people-img"
-              round
-              src="https://img.yzcdn.cn/vant/cat.jpeg"
-            />
+              v-for="(item) in externalContact"
+              :key="item.id"
+              @click="activeContactHandler(item.id)"
+              :class="{ active: activeContactList.indexOf(item.id) > -1 }"
+            >
+              <span class="mask" @click="deleContactHandler(item.id)">X</span>
+              <van-image width="36" height="36" :src="item.avatar" />
+            </span>
           </div>
         </div>
       </van-cell-group>
@@ -221,10 +229,10 @@
       </van-cell-group>
       <div class="btnlist">
         <div class="btnlist-item">
-          <van-button type="default"  round block>查看样式</van-button>
+          <van-button type="default" round block>查看样式</van-button>
         </div>
-         <div class="btnlist-item">
-          <van-button type="primary" round block >确定创建</van-button>
+        <div class="btnlist-item">
+          <van-button type="primary" round block>确定创建</van-button>
         </div>
       </div>
     </van-form>
@@ -245,7 +253,7 @@
 </script>
 
 <style lang="scss" scoped>
-.btnlist{
+.btnlist {
   background: #fff;
   display: flex;
   padding: 8px;
@@ -306,8 +314,34 @@
 .people-list {
 }
 .people-img {
+  display: inline-block;
   width: 36px;
   height: 36px;
   margin: 6px;
+  position: relative;
+  overflow: hidden;
+  line-height: 36px;
+  text-align: center;
+  border-radius: 18px;
+  .mask {
+    display: none;
+  }
+  &.active {
+    .mask {
+      display: inline-block;
+      color: rgb(255, 0, 0);
+      background: rgba($color: rgb(0, 0, 0), $alpha: 0.6);
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      font-size: 22px;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

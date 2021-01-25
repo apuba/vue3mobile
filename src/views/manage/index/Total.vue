@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 21:22:40
- * @LastEditTime: 2021-01-22 02:15:49
+ * @LastEditTime: 2021-01-25 23:10:15
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -11,15 +11,24 @@
       <van-col span="12">
         <div class="total-item balance">
           <div class="name">余额（元）</div>
-          <div class="count">58000.00</div>
+          <div class="count">{{ baseInfo.balance }}</div>
           <div class="btn">
             <van-row gutter="8">
               <van-col span="12">
-                <van-button type="primary" size="small " round block to="/pay">充值</van-button>
-                 
+                <van-button type="primary" size="small " round block to="/pay"
+                  >充值</van-button
+                >
               </van-col>
               <van-col span="12">
-                <van-button type="default" plain size="small " block round to="/flowRecord?type=1">明细</van-button>
+                <van-button
+                  type="default"
+                  plain
+                  size="small "
+                  block
+                  round
+                  to="/flowRecord?type=1"
+                  >明细</van-button
+                >
               </van-col>
             </van-row>
           </div>
@@ -28,15 +37,15 @@
       <van-col span="12">
         <div class="total-item">
           <div class="name">活动总数</div>
-          <div class="count">20</div>
+          <div class="count">{{ baseInfo.activityTotal }}</div>
           <div class="btn">
-            <van-button type="primary" size="small " round block to="/intro">创建活动</van-button
+            <van-button type="primary" size="small " round block to="/intro"
+              >创建活动</van-button
             >
           </div>
         </div>
       </van-col>
     </van-row>
-     
   </div>
 </template>
 
@@ -44,12 +53,16 @@
 import { defineComponent } from 'vue'
 import { Col, Row } from 'vant';
 import { Button } from 'vant';
+import { mapState } from 'vuex';
 // import 'vant/lib/Col/style/less';
 export default defineComponent({
   components: {
     [Col.name]: Col,
     [Row.name]: Row,
     [Button.name]: Button
+  },
+  computed: {
+    ...mapState(['baseInfo'])
   },
   setup() {
 

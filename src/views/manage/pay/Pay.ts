@@ -1,11 +1,11 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-21 21:25:30
- * @LastEditTime: 2021-01-24 23:59:05
+ * @LastEditTime: 2021-01-25 20:58:04
  * @LastEditors: 侯兴章
  * @Description: 
  */
-import { defineComponent, reactive, toRef, toRefs } from 'vue';
+import { defineComponent, onMounted, reactive, toRef, toRefs } from 'vue';
 import { NavBar, Button } from 'vant';
 import router from '@/router';
 import { ServcreateOrder } from '@/service/appService';
@@ -34,13 +34,19 @@ export default defineComponent({
                     num: 1
                 }
                 ServcreateOrder(params).then(res => {
-                    window.location.href = res.data.mweb_url;
+                    debugger;
+                    const url =`${res.data.mweb_url}&redirect_url=${location.origin}/paySuccess?orderCode=${res.data.orderCode}`;
+                    console.log(url);
+                    window.location.href = url ;
                 })
             },
             goto: (url: string) => {
                 router.push('/flowRecord?type=0')
             }
         }
+        onMounted(() => {
+            // console.log(router.options.to)
+        })
         return { ...toRefs(state), ...toRefs(methods) }
     }
 })

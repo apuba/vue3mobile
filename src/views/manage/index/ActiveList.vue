@@ -22,8 +22,8 @@
     </van-tabs>
     <div class="pt10">
       <ComScrollPage
-        v-model:value="inBottom" 
-        v-model:reload="scrollReload"       
+        v-model:value="inBottom"
+        v-model:reload="scrollReload"
         @loadData="onRefresh"
       >
         <div class="active-list">
@@ -46,7 +46,10 @@
               </li>
               <li>
                 <span class="title">时间</span>
-                <span>{{ item.startTime.split(' ')[0] }} 至 {{ item.endTime.split(' ')[0]  }}</span>
+                <span
+                  >{{ item.startTime.split(" ")[0] }} 至
+                  {{ item.endTime.split(" ")[0] }}</span
+                >
               </li>
             </ul>
             <div class="active-btn-list">
@@ -77,6 +80,7 @@ import { ServGetActivity } from "@/service/appService";
 import { DTOActivity } from "@/service/appModel";
 import { BaseRequestModel } from "@/service/baseModel";
 import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
+import { mapState, mapMutations, useStore } from 'vuex';
 
 export default defineComponent({
   components: {
@@ -86,7 +90,14 @@ export default defineComponent({
     [PullRefresh.name]: PullRefresh,
     ComScrollPage
   },
+  computed: {
+    ...mapState(['title', 'baseInfo'])
+  },
+  /*  methods: {
+     ...mapMutations(['setBaseInfo'])
+   }, */
   setup() {
+    const store = useStore(); // 使用vuex
     const state = reactive({
       activeName: 0,
       inBottom: true, // 是否到底加载数据
@@ -125,6 +136,7 @@ export default defineComponent({
         state.activeList = res.records;
       }
       state.inBottom = true;
+      store.commit('setBaseInfo', { activityTotal: res.total })
     };
 
     const methods = {

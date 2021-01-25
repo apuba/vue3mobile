@@ -19,14 +19,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 import { mapState } from "vuex";
-import { Notify } from 'vant';
+// import { Notify } from 'vant';
 export default defineComponent({
   computed: {
     ...mapState(["title"])
   },
-  setup(props, context) {
+  setup() {
     return {};
    
   },
