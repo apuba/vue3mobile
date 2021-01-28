@@ -1,13 +1,15 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-25 02:25:36
+ * @LastEditTime: 2021-01-28 01:57:56
  * @LastEditors: 侯兴章
  * @Description: 
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import { ROUTER_MODEL } from '@/config/index'
+import storage from '@/common/storage';
+import { ROUTER_WIHITELIST } from '@/config';
 
 // 路由模式
 const historyModel = {
@@ -64,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/manage/pay/FlowRecord.vue')
   },
   // { path: '*', component: NotFoundComponent }
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/login/Login.vue')
+  },
 ]
 
 const router = createRouter({
@@ -72,4 +79,19 @@ const router = createRouter({
   routes
 })
 
+
+router.beforeEach(async (to, from, next) => {
+
+  const token = storage().get('token') || storage('localstorage').get('token');
+  // 判断是否登录
+  if (token) {
+    next();
+  } else {
+    if (ROUTER_WIHITELIST.includes(to.path)) {
+      next();
+    } else {
+      next({ name: 'login' });
+    }
+  }
+})
 export default router

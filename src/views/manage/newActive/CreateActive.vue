@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-26 01:41:15
+ * @LastEditTime: 2021-01-28 23:51:54
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -13,27 +13,29 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <van-form @submit="onSubmit" class="form">
+    <van-form @submit="onSubmit" class="form" :scroll-to-error="true">
       <div class="banner">
         <div class="uploader">
           <van-uploader
             :after-read="uploadHandler"
-            v-model="formData.imageList"
+            v-model="fileList"
             multiple
             :max-count="3"
+            @delete="deleteBannerHandler"
+            :disabled="disabledUpload"
           />
           <div class="txt">请上传广告活动图最多三张</div>
         </div>
       </div>
-
       <van-cell-group class="group">
-        <van-cell title="账户余额" value="50000" />
+        <van-cell title="账户余额(元)" :value="enteInfo.balance" />
         <van-field
-          label="活动金额"
+          label="活动金额(元)"
           placeholder="请输入活动金额"
-          value="800"
           is-link
           v-model="formData.totalAmount"
+          :rules="validator.totalAmount"
+          type="digit"
         />
         <van-field
           label="主标题"
@@ -41,6 +43,7 @@
           value=""
           is-link
           v-model="formData.sub"
+          :rules="validator.sub"
         />
         <van-field
           label="副标题"
@@ -48,20 +51,27 @@
           value=""
           is-link
           v-model="formData.subtitle"
+          :rules="validator.subtitle"
         />
 
         <van-field name="switch" label="长期有效" input-align="right">
           <template #input>
-            <van-switch v-model="formData.newFlag" size="20" />
+            <van-switch
+              v-model="formData.newFlag"
+              size="20"
+              @change="updateActivityExplain"
+            />
           </template>
         </van-field>
         <van-field
           label="截止日期"
           placeholder="点击选择日期"
-          v-show="formData.newFlag"
+          v-if="!formData.newFlag"
           v-model="formData.endTime"
           is-link
           @click="showCalendarHandler"
+          :rules="validator.endTime"
+          readonly
         />
       </van-cell-group>
 
@@ -77,20 +87,27 @@
           </template>
         </van-cell>
         <div class="people">
-          <div class="txt">可设置添加指定成员才有奖励，最多可选100人</div>
+          <div class="txt" v-show="!errorPeople">
+            可设置添加指定成员才有奖励，最多可选100人
+          </div>
+          <div class="txt red" v-show="errorPeople">至少要选一个承接人</div>
 
-          <div class="people-list">
-            <span
+          <ul class="people-list">
+            <comp-avatar
+              :data-list="externalContact"
+              @delHandler="deleContactHandler"
+            ></comp-avatar>
+            <!-- <span
               class="people-img"
-              v-for="(item) in externalContact"
+              v-for="item in externalContact"
               :key="item.id"
               @click="activeContactHandler(item.id)"
               :class="{ active: activeContactList.indexOf(item.id) > -1 }"
             >
               <span class="mask" @click="deleContactHandler(item.id)">X</span>
               <van-image width="36" height="36" :src="item.avatar" />
-            </span>
-          </div>
+            </span> -->
+          </ul>
         </div>
       </van-cell-group>
 
@@ -118,12 +135,18 @@
           v-model="formData.newAmountLow"
           is-link
           placeholder="新人获取最小红包(元）"
+          :rules="validator.newAmountLow"
+          type="number"
+          v-if="formData.activityEffectiveFlag"
         />
         <van-field
           label="最大红包"
           v-model="formData.newAmountHigh"
           is-link
           placeholder="新人获取最大红包(元）"
+          :rules="validator.newAmountHigh"
+          type="number"
+          v-if="formData.activityEffectiveFlag"
         />
       </van-cell-group>
 
@@ -134,12 +157,16 @@
           is-link
           v-model="formData.invitationAmountLow"
           placeholder="邀请最小红包(元）"
+          :rules="validator.invitationAmountLow"
+          type="number"
         />
         <van-field
           label="最大红包"
           is-link
           v-model="formData.invitationAmountHigh"
+          :rules="validator.invitationAmountHigh"
           placeholder="邀请最大红包(元）"
+          type="number"
         />
       </van-cell-group>
 
@@ -149,6 +176,8 @@
           is-link
           v-model="formData.invitationNumber"
           placeholder="请输入1~5个人"
+          :rules="validator.invitationNumber"
+          type="digit"
         />
         <div class="container">
           <div class="txt">设置每邀请1~5个人可再拆1个红包</div>
@@ -158,7 +187,7 @@
       <van-cell-group class="group">
         <van-cell title="对外数据">
           <template #default>
-            <van-switch v-model="formData.enabledExternalData" size="20" />
+            <van-switch v-model="formData.externalData" size="20" />
           </template>
         </van-cell>
         <div class="container">
@@ -167,12 +196,14 @@
             可选择关闭，将显示真实数据；发布后不可修改
           </div>
         </div>
-        <div class="externalData" v-show="formData.enabledExternalData">
+        <div class="externalData" v-if="formData.externalData">
           <van-field
             label="红包总数量"
             is-link
-            v-model="formData.externalData.hongbaoAmount"
+            v-model="formData.initRedCount"
+            :rules="validator.initRedCount"
             placeholder="请输入红包总数量"
+            type="digit"
           />
 
           <div class="container">
@@ -185,8 +216,10 @@
           <van-field
             label="初始领取人数"
             is-link
-            v-model="formData.externalData.peopleAmount"
+            v-model="formData.initMemberCount"
+            :rules="validator.initMemberCount"
             placeholder="请输入初始领取人数"
+            type="digit"
           />
           <div class="container">
             <div class="txt">
@@ -215,37 +248,30 @@
 
         <van-field
           v-model="formData.activityExplain"
-          rows="2"
+          rows="4"
           autosize
           type="textarea"
-          maxlength="50"
-          placeholder="结束时间：即日起至2021-2-12，红包抢完提 前结束；
-红包规则：首次添加客服企业微信可获得红包；
-邀请规则：邀请好友添加客服企业微信以首次为主，
-之前有添加过则无奖励； 邀请攻略：邀请3个好友可获得1个现金红包，不累
-计产生红包，请及时拆开，否则更多邀请将不会产 生更多红包"
+          maxlength="150"
           show-word-limit
+          :placeholder="activityExplain"
         />
+
+        <!-- <div class="activityExplain">{{ activityExplain }}</div> -->
       </van-cell-group>
       <div class="btnlist">
-        <div class="btnlist-item">
+<!--         <div class="btnlist-item">
           <van-button type="default" round block>查看样式</van-button>
-        </div>
+        </div> -->
         <div class="btnlist-item">
-          <van-button type="primary" round block>确定创建</van-button>
+          <van-button type="primary" round block native-type="submit" :loading="submitBtn.loading"
+          :disabled="submitBtn.disabled" :loading-text="submitBtn.loadingTxt">确定创建</van-button
+          >
         </div>
       </div>
     </van-form>
     <van-calendar v-model:show="showCalendar" @confirm="selectEndTime" />
 
-    <!-- <van-popup v-model:show="showPeoplePop" position="rigth" :style="{width: '50%'}">内s fsa sadf safsa容</van-popup> -->
-    <van-popup
-      v-model:show="showPeoplePop"
-      position="right"
-      :style="{ width: '90%', height: '100vh' }"
-    >
-      <EmployeeList />
-    </van-popup>
+   
   </div>
 </template>
 
@@ -253,10 +279,18 @@
 </script>
 
 <style lang="scss" scoped>
+.activityExplain {
+  padding: 16px;
+  position: absolute;
+  z-index: 1;
+}
 .btnlist {
   background: #fff;
   display: flex;
   padding: 8px;
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
   .btnlist-item {
     flex: 1;
     padding: 0 8px;
@@ -265,6 +299,7 @@
 .form {
   background-color: #f5f5f5;
   overflow-x: hidden;
+  padding-bottom: 60px;
 }
 .banner {
   position: relative;
@@ -297,6 +332,7 @@
   margin: 16px;
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
 }
 
 .people,
@@ -313,7 +349,7 @@
 }
 .people-list {
 }
-.people-img {
+/* .people-img {
   display: inline-block;
   width: 36px;
   height: 36px;
@@ -343,5 +379,8 @@
     width: 100%;
     height: 100%;
   }
+} */
+.red {
+  color: red !important;
 }
 </style>

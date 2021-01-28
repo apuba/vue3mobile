@@ -1,18 +1,18 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 20:41:40
- * @LastEditTime: 2021-01-21 23:26:13
+ * @LastEditTime: 2021-01-28 01:23:46
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 <template>
   <div class="header">
     <div class="header-bg">
-      <h2>{{ title }}</h2>
+      <h2>{{ enteInfo.corpName }}</h2>
       <div class="small">企业头像与名称将用于对外展示</div>
 
       <span class="logo">
-        <img alt="Vue logo" src="@public/images/logo.jpg" />
+        <img :alt="enteInfo.corpFullName" :src="enteInfo.corpSquareLogoUrl" />
       </span>
     </div>
   </div>
@@ -24,11 +24,11 @@ import { mapState } from "vuex";
 // import { Notify } from 'vant';
 export default defineComponent({
   computed: {
-    ...mapState(["title"])
+    ...mapState(["title", 'enteInfo'])
   },
   setup() {
     return {};
-   
+
   },
   mounted() {
     // Notify('另圆圆中')
@@ -81,9 +81,13 @@ export default defineComponent({
   overflow: hidden;
   margin-left: -45px;
   box-shadow: #ccc 0 5px 10px;
+  background-color: #fff;
+  line-height: 90px;
   img {
-    height: 100%;
-    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: middle;
   }
 }
 </style>

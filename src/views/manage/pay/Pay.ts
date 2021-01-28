@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-21 21:25:30
- * @LastEditTime: 2021-01-25 20:58:04
+ * @LastEditTime: 2021-01-28 22:33:38
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -10,12 +10,20 @@ import { NavBar, Button } from 'vant';
 import router from '@/router';
 import { ServcreateOrder } from '@/service/appService';
 import { IcreateOrder } from '@/service/appModel';
+import { mapState, useStore } from 'vuex';
+
 export default defineComponent({
     components: {
         [NavBar.name]: NavBar,
         [Button.name]: Button
     },
+    computed: {
+        ...mapState(['enteInfo'])
+    },
+
     setup() {
+        const store = useStore();
+
         const state = reactive({
             priceList: [0.01, 2000, 3000, 5000, 10000, 50000],
             choosePrice: 5000
@@ -34,10 +42,12 @@ export default defineComponent({
                     num: 1
                 }
                 ServcreateOrder(params).then(res => {
-                    debugger;
-                    const url =`${res.data.mweb_url}&redirect_url=${location.origin}/paySuccess?orderCode=${res.data.orderCode}`;
+                    const url = `${res.data.mweb_url}&redirect_url=${location.origin}/paySuccess?orderCode=${res.data.orderCode}`;
                     console.log(url);
-                    window.location.href = url ;
+                    store.commit('setPayAgainUrl', url);
+                    console.log(store)
+                    debugger
+                    window.location.href = url;
                 })
             },
             goto: (url: string) => {

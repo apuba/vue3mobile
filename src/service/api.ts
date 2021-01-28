@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-22 03:14:17
- * @LastEditTime: 2021-01-25 22:18:00
+ * @LastEditTime: 2021-01-27 20:28:53
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -19,4 +19,7 @@ export enum EApi {
     findCapitalFlow ='/wxServer/capitalFlow/findCapitalFlow', // 资金流水
     getOrderHeader ='/wxServer/order/getOrderHeader', // 订单查询
     getAppJsapiTicket ='/wxServer/sign/getAppJsapiTicket', // 应用签名
+    wechatLogin = '/wxServer/sc/getOauth2', // 授权登录
+    login = '/wxServer/baseLogin/mLogin', // 登录 获取token
+    getEnteInfo = '/wxServer/enter/getEnterInfo', // 获取企业信息
 }

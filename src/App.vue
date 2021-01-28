@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-22 03:53:49
+ * @LastEditTime: 2021-01-28 22:41:31
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -17,6 +17,29 @@
     <router-view />
   </transition>
 </template>
+
+<script lang="ts">
+
+import { defineComponent } from 'vue';
+
+import store from '@/store';
+
+export default defineComponent({
+
+  setup() {
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.setItem('store', JSON.stringify(store.state));
+    });
+
+    const sessionStore: string = sessionStorage.store;
+    if (sessionStore) {
+      store.replaceState(Object.assign({}, store.state, JSON.parse(sessionStore)));
+    }
+
+    return {};
+  }
+});
+</script>
 
 <style lang="scss">
 // @import "./style/animate.css";

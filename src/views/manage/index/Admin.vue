@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:01:45
- * @LastEditTime: 2021-01-02 02:19:07
+ * @LastEditTime: 2021-01-28 03:23:17
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -10,10 +10,14 @@
     <div class="admin-list">
       <h4>管理员列表</h4>
       <ul class="photo">
-        <li v-for="(item, index) in adminList" :key="index">
+        <!--  <li v-for="item in adminList" :key="item.id">
           <img :src="item.avatar" :title="item.name" />
         </li>
-
+ -->
+        <comp-avatar
+          :data-list="adminList"
+          @delHandler="delAdminHandler"
+        ></comp-avatar>
         <li class="btn">
           <van-icon name="plus" />
         </li>
@@ -26,21 +30,28 @@
 import { defineComponent, reactive, toRefs } from "vue";
 import { Icon } from "vant";
 import { ServGetAdminList } from "@/service/appService";
-import { IAdminModel } from "@/service/appModel";
+import { IAvaterModel } from "@/service/appModel";
+import CompAvatar from '@/views/components/CompAvatar.vue';
 
 export default defineComponent({
   components: {
     [Icon.name]: Icon,
+    CompAvatar
   },
   setup() {
     const state = reactive({
-      adminList: [] as Array<IAdminModel>,
+      adminList: [] as Array<IAvaterModel>,
     });
 
     ServGetAdminList().then((res) => {
       state.adminList = res;
     });
-    return { ...toRefs(state) };
+
+    const delAdminHandler = (id: string) => {
+      debugger
+      console.log('----目前还没有真的删除管理员列表哦----')
+    }
+    return { ...toRefs(state), delAdminHandler };
   },
 });
 </script>

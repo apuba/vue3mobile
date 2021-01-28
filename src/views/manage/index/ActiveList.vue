@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-22 02:21:45
+ * @LastEditTime: 2021-01-28 23:48:01
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -41,15 +41,19 @@
                 <span>{{ item.sub }}</span>
               </li>
               <li>
+                <span class="title">副标题 </span>
+                <span>{{ item.subtitle }}</span>
+              </li>
+              <li>
                 <span class="title">金额</span>
                 <span>{{ item.totalAmount }}元</span>
               </li>
               <li>
                 <span class="title">时间</span>
-                <span
+                <span v-if="!item.newFlag"
                   >{{ item.startTime.split(" ")[0] }} 至
                   {{ item.endTime.split(" ")[0] }}</span
-                >
+                ><span v-else>长期有效</span>
               </li>
             </ul>
             <div class="active-btn-list">
@@ -210,7 +214,7 @@ export default defineComponent({
   font-size: 14px;
   font-weight: bold;
   li {
-    line-height: 32px;
+    line-height: 28px;
   }
   .title {
     color: #666;

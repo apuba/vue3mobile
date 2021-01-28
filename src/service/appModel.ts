@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-17 00:46:00
- * @LastEditTime: 2021-01-13 21:42:45
+ * @LastEditTime: 2021-01-27 21:25:58
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -38,7 +38,7 @@ export interface Iundertaker {
     qyUserId: string;
     avtivityId: number;
 }
- 
+
 
 /* 用户登录对象 */
 export interface DTOlogin {
@@ -76,13 +76,34 @@ export interface IDictOptions {
     title?: string;
 }
 // 管理员
-export interface IAdminModel {
+/* export interface IAdminModel {
     name: string,
     avatar: string,
     userid: string
 }
+ */
 
+// 用户头像
+export interface IAvaterModel {
+    name: string,
+    avatar: string,    
+    id: string
+}
 export interface IcreateOrder {
     actualAmt: number,
     num: number
+}
+
+// 用户信息
+export interface IuserInfo {
+    name: string,
+    avatar?: string,
+    memberId: number,
+    enterId: number,
+    inviteesId?: number,
+    qyUserId: number | string,
+    qyMemberType: number,
+    externalUserid: string
+    puserid?: number | string,
+    token: string
 }

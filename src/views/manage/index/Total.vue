@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 21:22:40
- * @LastEditTime: 2021-01-25 23:10:15
+ * @LastEditTime: 2021-01-28 01:22:19
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -11,7 +11,7 @@
       <van-col span="12">
         <div class="total-item balance">
           <div class="name">余额（元）</div>
-          <div class="count">{{ baseInfo.balance }}</div>
+          <div class="count">{{ enteInfo.balance }}</div>
           <div class="btn">
             <van-row gutter="8">
               <van-col span="12">
@@ -62,7 +62,7 @@ export default defineComponent({
     [Button.name]: Button
   },
   computed: {
-    ...mapState(['baseInfo'])
+    ...mapState(['baseInfo', 'enteInfo'])
   },
   setup() {
 

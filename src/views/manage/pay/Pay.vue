@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-21 21:25:26
- * @LastEditTime: 2021-01-22 03:39:36
+ * @LastEditTime: 2021-01-28 01:27:12
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -21,7 +21,7 @@
         <div class="txt">
           <span class="record" @click="goto()"> 充值记录 &gt; </span>
 
-          <span class="price">￥50000.00</span>
+          <span class="price">￥{{ enteInfo.balance }}</span>
         </div>
       </div>
       <div class="main-bottom1"></div>

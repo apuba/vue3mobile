@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-01-26 01:42:01
+ * @LastEditTime: 2021-01-28 23:59:44
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -14,24 +14,27 @@
  */
 
 
-import { defineComponent, onMounted, reactive, toRaw, toRefs, withCtx } from 'vue'
+import { defineComponent, onMounted, reactive, ref, toRaw, toRefs, withCtx } from 'vue'
 import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image, Calendar, Popup } from 'vant';
 import router from '@/router';
 import moment from 'moment';
 import EmployeeList from './EmployeeList.vue';
-import { ServfileUpload, ServAgentSinge } from '@/service/appService';
+import { ServfileUpload, ServAgentSinge, ServSaveActivity } from '@/service/appService';
 import _ from 'lodash';
-
+import { mapState, useStore } from 'vuex';
+import { IAvaterModel } from '@/service/appModel';
 
 // 联系人基础信息
-interface Icontact {
+/* interface Icontact {
     avatar: string,
     id: string,
     name: string
-}
+} */
+import CompAvatar from '@/views/components/CompAvatar.vue';
 
 export default defineComponent({
     components: {
+        CompAvatar,
         EmployeeList,
         [Uploader.name]: Uploader,
         [NavBar.name]: NavBar,
@@ -46,19 +49,34 @@ export default defineComponent({
         [Calendar.name]: Calendar,
         [Popup.name]: Popup
     },
-
+    computed: {
+        ...mapState(['baseInfo', 'enteInfo'])
+    },
     setup() {
+
+        const stoer = useStore();
+        const initRedCount = Math.round(Math.random() * 5000); // 随机红包个数
+        const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
+
         const state = reactive({
-            imageList: [],
+            fileList: [] as Array<any>, // 用于显示上传图片回显
+            imageList: [] as Array<any>, // 用于上传图片的URL结果集，提交到数据的值
             showCalendar: false,
             showPeoplePop: false,
-            externalContact: [] as Array<Icontact>,
+            externalContact: [] as Array<IAvaterModel>,
             activeContactList: [] as Array<string>,
+            disabledUpload: false,
+            errorPeople: false, // 校验承接人是否为空
+            submitBtn: {
+                loading: false,
+                disabled: false,
+                loadingTxt: '创建中...'
+            },
             formData: {
                 // name: "活动名称",
                 // startTime: "2020-01-14 20:00:00",
                 endTime: "",
-                totalAmount: null,
+                totalAmount: 500,
                 newAmountLow: 1.2,
                 newAmountHigh: 2.0,
                 invitationAmountLow: 1.2,
@@ -67,46 +85,115 @@ export default defineComponent({
                 subtitle: "",
                 newFlag: true,
                 activityEffectiveFlag: true,
-                banner: "",
+                banner: [] as Array<string>,
                 welcomeMsg: "",
                 invitationNumber: 3,
                 activityExplain: "",
-                externalData: {
-                    hongbaoAmount: null,
-                    peopleAmount: null,
-                },
-                undertaker: [{
-                    "userid": "123456",
-                    "name": "zs",
-                    "avatar": "http:www.baidu.com",
-                    "open_userid": "open_userid",
-                    "mobile": "18078145791"
-                }]
+                externalData: true,
+                initMemberCount,
+                initRedCount,
+                undertaker: [] as Array<any>
 
             }
 
         })
+
+        const activityExplain = ref(createActivityExplain()); // 活动说明文
+
+        function createActivityExplain() {
+            return `结束时间：${state.formData.newFlag ? '长期有效' : `即日起至${state.formData.endTime}`}，红包抢完提 前结束；
+红包规则：首次添加客服企业微信可获得红包；
+邀请规则：邀请好友添加客服企业微信以首次为主，之前有添加过则无奖励； 邀请攻略：邀请${state.formData.invitationNumber}个好友可获得1个现金红包，不累计产生红包，请及时拆开，否则更多邀请将不会产 生更多红包`
+        }
+
         const methods = {
+            updateActivityExplain: () => {
+                // 更新活动说明
+                activityExplain.value = createActivityExplain();
+            },
+            validoterAmount: (val: string) => {
+                const num = parseInt(val);
+                const r = (num <= stoer.state.enteInfo.balance) && (num >= 500);
+                console.log(r)
+                // 校验活动金额
+                return r
+            },
+            deleteBannerHandler: (file: any, detail: any) => {
+                // 删除已上传的图片
+                if (file.status !== "failed") {
+                    _.remove(state.imageList, (item, index) => index === detail.index);
+                }
+                // console.log(state.imageList);
+            },
             uploadHandler: (file: any) => {
+                state.disabledUpload = true;
                 // 此时可以自行将文件上传至服务器
                 let formData = new FormData();
                 formData.append("files", toRaw(file.file)); // files为 后端参数名
+                formData.append('timestamp', (new Date().getTime()).toString())
                 console.log(file);
-                debugger
+                file.status = 'uploading';
+                file.message = '上传中...';
                 ServfileUpload(formData).then(res => {
-
+                    state.disabledUpload = false;
+                    if (!res.data) {
+                        file.status = 'failed';
+                        file.message = '上传失败';
+                        return
+                    }
+                    file.status = 'done';
+                    file.message = '';
+                    const url = res.data[0].filePath;
+                    state.imageList.push({
+                        url
+                    })
                 })
             },
             onClickLeft: () => {
                 router.go(-1);
             },
-            onSubmit: () => {
+            onSubmit: (values: any) => {
+                console.log('校验结题', values)
+                // const params = _.cloneDeep(state.formData);
+                state.formData.banner = state.imageList.map(item => item.url);
+                const params: any = { ...state.formData }
+                if (!state.externalContact.length) {
+                    state.errorPeople = true;
+                    return;
+                }
+                state.errorPeople = false;
+                params.undertaker = state.externalContact.map(item => {
+                    return {
+                        qyUserid: item.id,
+                        avater: item.avatar,
+                        name: item.name
+                    }
+                })
+                params.newFlag = state.formData.newFlag ? 1 : 0; // 是否长期有效
+                params.activityEffectiveFlag = state.formData.activityEffectiveFlag ? 1 : 0; // 启用新人红包
+                params.externalData = state.formData.externalData ? 1 : 0; // 对外数据 
+                params.activityExplain = params.activityExplain || activityExplain;
+                console.log('提交表单的参数------', params);
+
+                state.submitBtn.disabled = true;
+                state.submitBtn.loading = true;
+                // 提交创建活动
+                ServSaveActivity(params).then(res => {
+                    console.log('创建活动结果 ----- ', res)
+                    state.submitBtn.disabled = false;
+                    state.submitBtn.loading = false;
+                    if(res.data && res.data.id) {
+                        
+                    }
+
+                })
 
             },
             selectEndTime: (date: Date) => {
                 state.formData.endTime = moment(date).format('YYYY-MM-DD');
                 console.log(state.formData.endTime)
                 state.showCalendar = false;
+                methods.updateActivityExplain(); // 更新活动说明
             },
             showCalendarHandler: () => {
                 state.showCalendar = true;
@@ -116,20 +203,7 @@ export default defineComponent({
                 _.remove(state.externalContact, item => item.id === id);
             },
             selectExternalContact: (type = 0) => {
-                /* window.wx.invoke('selectExternalContact', {
-                    "filterType": type, //0表示展示全部外部联系人列表，1表示仅展示未曾选择过的外部联系人。默认值为0；除了0与1，其他值非法。在企业微信2.4.22及以后版本支持该参数
-                }, function (res: any) {
-                    debugger
-                    console.log(res);
-                    if (res.err_msg == "selectExternalContact:ok") {
-                        state.externalContact = res.userIds; //返回此次选择的外部联系人userId列表，数组类型
-                    } else {
-                        //错误处理
-                    }
-                }); */
-
                 const selectedUserIds = state.externalContact.map(item => item.id); // 已选择的成员
-
                 window.wx.invoke("selectEnterpriseContact", {
                     "fromDepartmentId": -1,// 必填，表示打开的通讯录从指定的部门开始展示，-1表示自己所在部门开始, 0表示从最上层开始
                     "mode": "multi",// 必填，选择模式，single表示单选，multi表示多选
@@ -143,9 +217,8 @@ export default defineComponent({
                             res.result = JSON.parse(res.result) //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
                         }
                         state.externalContact = res.result.userList;
-
                         console.log(state.externalContact)
-
+                        state.errorPeople = false;
                     }
                 }
                 );
@@ -156,12 +229,31 @@ export default defineComponent({
                 setTimeout(() => {
                     _.remove(state.activeContactList, item => item === id);
                 }, 2500)
-            }
+            },
+
         }
 
+        const validator = {
+            total: [{ required: true, message: '请输入' }],
+            sub: [{ required: true, message: '请输入标题' }],
+            subtitle: [{ required: true, message: '请输入副标题' }],
+            totalAmount: [{ required: true, message: '请输入活动金额' },
+            { trigger: 'onChange', validator: methods.validoterAmount, message: '活动金额须大于500且小于余额' }],
+            endTime: [{ required: true, message: '请输入结束时间' }],
+            banner: [{ required: true, message: '请上传图片' }],
+            welcomeMsg: [{ required: true, message: '请输入欢迎语' }],
+            newAmountLow: [{ required: true, message: '请输入最低红包' }],
+            newAmountHigh: [{ required: true, message: '请输入最高红包' }],
+            invitationAmountLow: [{ required: true, message: '请输入邀请最低红包' }],
+            baninvitationAmountHighner: [{ required: true, message: '请输入邀请最高红包' }],
+            invitationNumber: [{ required: true, message: '请输入邀请数量' }],
+            initRedCount: [{ required: true, message: '请输入初始化红包数' }],
+            initMemberCount: [{ required: true, message: '请输入初始化会员数' }],
+            undertaker: [{ required: true, message: '承接人至少一个' }],
+        }
         onMounted(() => {
             ServAgentSinge(); // 应用签名
         })
-        return { ...toRefs(methods), ...toRefs(state) }
+        return { ...toRefs(methods), ...toRefs(state), validator, activityExplain }
     }
 })
