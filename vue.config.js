@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-13 01:19:23
- * @LastEditTime: 2021-01-28 21:05:34
+ * @LastEditTime: 2021-01-30 01:47:48
  * @LastEditors: 侯兴章
  * @Description: 配置
  */
@@ -36,7 +36,7 @@ const createProxy = () => {
 
 module.exports = {
   // publicPath: IS_PROD ? process.env.VUE_APP_PUBLIC_PATH : './', // 默认'/'，部署应用包时的基本 URL
-  publicPath: './',
+  publicPath: '/',
   outputDir: process.env.outputDir || 'dist', // 'dist', 生产环境构建文件的目录
   assetsDir: 'public', // 相对于outputDir的静态资源(js、css、img、fonts)目录
   lintOnSave: false,

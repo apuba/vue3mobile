@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-28 23:48:01
+ * @LastEditTime: 2021-01-30 02:44:19
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -66,9 +66,9 @@
               <span class="active-btn">
                 <span class="iconfont icon-shuju"></span>
               </span>
-              <span class="active-btn active">
+              <router-link class="active-btn active" to="/customer/hongbao">
                 <span class="iconfont icon-fenxiang"></span>
-              </span>
+              </router-link>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-28 23:51:54
+ * @LastEditTime: 2021-01-29 21:45:51
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -57,7 +57,7 @@
         <van-field name="switch" label="长期有效" input-align="right">
           <template #input>
             <van-switch
-              v-model="formData.newFlag"
+              v-model="formData.activityEffectiveFlag"
               size="20"
               @change="updateActivityExplain"
             />
@@ -66,7 +66,7 @@
         <van-field
           label="截止日期"
           placeholder="点击选择日期"
-          v-if="!formData.newFlag"
+          v-if="!formData.activityEffectiveFlag"
           v-model="formData.endTime"
           is-link
           @click="showCalendarHandler"
@@ -127,7 +127,7 @@
       <van-cell-group class="group">
         <van-cell title="启用新人红包">
           <template #default>
-            <van-switch v-model="formData.activityEffectiveFlag" size="20" />
+            <van-switch v-model="formData.newFlag" size="20" />
           </template>
         </van-cell>
         <van-field
@@ -137,7 +137,7 @@
           placeholder="新人获取最小红包(元）"
           :rules="validator.newAmountLow"
           type="number"
-          v-if="formData.activityEffectiveFlag"
+          v-if="formData.newFlag"
         />
         <van-field
           label="最大红包"
@@ -146,7 +146,7 @@
           placeholder="新人获取最大红包(元）"
           :rules="validator.newAmountHigh"
           type="number"
-          v-if="formData.activityEffectiveFlag"
+          v-if="formData.newFlag"
         />
       </van-cell-group>
 
