@@ -1,19 +1,25 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-30 00:58:23
- * @LastEditTime: 2021-01-30 02:40:35
+ * @LastEditTime: 2021-01-31 04:21:07
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 
 <template>
-  <div class="page">
+  <!--  <div class="page">
     <div class="contain">
-      <div class="hongbao">
+     
+    </div>
+  </div>-->
+
+  <div>
+    <div class="hongbao">
+      <div class="hongbao-poster" :id="id">
         <div class="hongbao-top hongbao-bg" :style="hongbaoTop">
           <div class="title">
-            <h1 class="mb10">红包的主标题</h1>
-            <h4>红包的可以长一点的副标题</h4>
+            <h1 class="mb10">{{ activity.sub }}</h1>
+            <h4>{{ activity.subtitle }}</h4>
           </div>
         </div>
         <div class="hongbao-bg" :style="hongbaoBottom">
@@ -21,43 +27,49 @@
             <span class="take">拆</span>
           </div>
           <div class="hongbao-bottom">
-            <h4 class="mb10">王小刚领取</h4>
+            <h4 class="mb10 userName">{{ userInfo.name }}已领取</h4>
             <h1>单个1~50元</h1>
             <div class="qr">
-              <img src="@public/images/qr.png" />
+              <img :src="userInfo.qrCode" />
             </div>
             <div class="remark">
-              <span> 已有xxx人领取 </span>
+              <span>{{ activity.initMemberCount }}人领取了红包</span>
               <span>长按识别二维码，加微信领红包</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="remark-bottom">长按海报可保存图片或分享到微信</div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, reactive, ref, toRefs } from 'vue'
+import { useStore } from 'vuex';
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      default: 'poster'
+    },
+    activity: {
+      type: Object,
+      required: true
+    }
+  },
   setup() {
-
+    const store = useStore();
     const state = reactive({
-
-
       hongbaoMiddle: {
         backgroundImage: 'url(' + require('@public/images/hongbaoMiddlePoster.jpg') + ')'
       },
       hongbaoBottom: {
         backgroundImage: ' url(' + require('@public/images/hongbaobgBottom.jpg') + ')'
       },
-
+      userInfo: store.state.userInfo
     })
-
     return { ...toRefs(state) }
-
   }
 })
 </script>
@@ -98,8 +110,8 @@ h4 {
 
 .hongbao-top {
   padding-top: 32px;
+  padding-bottom: 4px;
   background-color: #f00;
-
   .title {
     color: #ff0;
   }
@@ -109,7 +121,6 @@ h4 {
   min-height: 65px;
   text-align: center;
   padding-top: 30px;
-
   .take {
     width: 65px;
     height: 65px;
@@ -148,6 +159,9 @@ h4 {
     padding: 8px;
     display: inline-block;
     margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
     // background-color: #fff;
     img {
       width: 100px;
@@ -155,5 +169,8 @@ h4 {
       display: block;
     }
   }
+}
+.userName {
+  font-weight: normal;
 }
 </style>

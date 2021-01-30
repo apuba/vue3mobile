@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-30 02:44:19
+ * @LastEditTime: 2021-01-31 02:46:09
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -13,35 +13,22 @@
       color="#007aff"
       @click="queryActiveStatusHandler(activeName)"
     >
-      <van-tab
-        :title="item.title"
-        :name="item.key"
-        v-for="item in activeTab"
-        :key="item.key"
-      ></van-tab>
+      <van-tab :title="item.title" :name="item.key" v-for="item in activeTab" :key="item.key"></van-tab>
     </van-tabs>
     <div class="pt10">
-      <ComScrollPage
-        v-model:value="inBottom"
-        v-model:reload="scrollReload"
-        @loadData="onRefresh"
-      >
+      <ComScrollPage v-model:value="inBottom" v-model:reload="scrollReload" @loadData="onRefresh">
         <div class="active-list">
-          <div
-            class="active-item"
-            v-for="(item, index) in activeList"
-            :key="index"
-          >
+          <div class="active-item" v-for="(item, index) in activeList" :key="index">
             <div class="progres">
               <van-progress :percentage="50" />
             </div>
             <ul class="active-detail">
               <li>
-                <span class="title">标题 </span>
+                <span class="title">标题</span>
                 <span>{{ item.sub }}</span>
               </li>
               <li>
-                <span class="title">副标题 </span>
+                <span class="title">副标题</span>
                 <span>{{ item.subtitle }}</span>
               </li>
               <li>
@@ -50,10 +37,11 @@
               </li>
               <li>
                 <span class="title">时间</span>
-                <span v-if="!item.newFlag"
-                  >{{ item.startTime.split(" ")[0] }} 至
-                  {{ item.endTime.split(" ")[0] }}</span
-                ><span v-else>长期有效</span>
+                <span v-if="!item.newFlag">
+                  {{ item.startTime.split(" ")[0] }} 至
+                  {{ item.endTime.split(" ")[0] }}
+                </span>
+                <span v-else>长期有效</span>
               </li>
             </ul>
             <div class="active-btn-list">
@@ -66,7 +54,12 @@
               <span class="active-btn">
                 <span class="iconfont icon-shuju"></span>
               </span>
-              <router-link class="active-btn active" to="/customer/hongbao">
+              <router-link
+                class="active-btn active"
+                :to="'/customer/hongbao?id=' + item.activityId"
+                @click="commitCurrentActivityHandler(item)"
+                v-show="item.activityStatus === 1"
+              >
                 <span class="iconfont icon-fenxiang"></span>
               </router-link>
             </div>
@@ -85,6 +78,10 @@ import { DTOActivity } from "@/service/appModel";
 import { BaseRequestModel } from "@/service/baseModel";
 import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
 import { mapState, mapMutations, useStore } from 'vuex';
+
+interface IqueryParams {
+  activityStatus?: number;
+}
 
 export default defineComponent({
   components: {
@@ -120,7 +117,7 @@ export default defineComponent({
     };
 
     // 获取活动列表
-    const getActivityData = async (params: object = {}, inBottom?: boolean) => {
+    const getActivityData = async (params: IqueryParams = {}, inBottom?: boolean) => {
 
       if (inBottom) {
         pagination.pageIndex++
@@ -140,7 +137,7 @@ export default defineComponent({
         state.activeList = res.records;
       }
       state.inBottom = true;
-      store.commit('setBaseInfo', { activityTotal: res.total })
+      !params.activityStatus && store.commit('setBaseInfo', { activityTotal: res.total })
     };
 
     const methods = {
@@ -149,14 +146,11 @@ export default defineComponent({
         const params = {
           activityStatus: status,
         };
-
         state.activeList = [];
         pagination.pageIndex = 1; // 重置分页大小
         state.scrollReload = true;
-
         status ? getActivityData(params) : getActivityData();
       },
-
       onRefresh: () => {
         // 下拉刷新
         const params = {
@@ -164,6 +158,10 @@ export default defineComponent({
         };
         state.activeName ? getActivityData(params, true) : getActivityData({}, true);
       },
+      commitCurrentActivityHandler: (activity: any) => {
+        // 保存当前活动到Vuex
+        store.commit('setCurrentActivity', activity)
+      }
     };
 
 

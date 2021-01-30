@@ -22,4 +22,7 @@ export enum EApi {
     wechatLogin = '/wxServer/sc/getOauth2', // 授权登录
     login = '/wxServer/baseLogin/mLogin', // 登录 获取token
     getEnteInfo = '/wxServer/enter/getEnterInfo', // 获取企业信息
+    getMemberInfo = '/wxServer/member/findMember', // 获取会员信息
+    isOpen = '/wxServer/red/isOpen',  // 当前进入的会员对当前红包是否有拆过
+    openHongbao = '/wxServer/red/open'  // 拆红包
 }

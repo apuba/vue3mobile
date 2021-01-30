@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-13 20:16:41
- * @LastEditTime: 2021-01-27 20:59:58
+ * @LastEditTime: 2021-01-31 03:08:15
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -18,9 +18,13 @@ export default createStore({
     enteInfo: {
     },
     userInfo: {},
-    payAgainUrl: ''
+    payAgainUrl: '',
+    currentActivity: {}, // 当前查询的活动
   },
   mutations: {
+    setCurrentActivity(state, payload) {
+      state.currentActivity = payload
+    },
     setPayAgainUrl(state, payload: string) {
       state.payAgainUrl = payload;
     },
@@ -49,6 +53,9 @@ export default createStore({
   getters: {
     getTitle(state, payload) {
       return state.title;
+    },
+    getCurrentActivity(state) {
+      return state.currentActivity
     }
   },
   actions: {

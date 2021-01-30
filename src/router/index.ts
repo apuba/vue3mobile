@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-30 01:49:26
+ * @LastEditTime: 2021-01-31 04:34:21
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -86,7 +86,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'hongbao',
         name: 'hongbaoIndex',
-        component: () => import('../views/customer/Hongbao.vue')
+        component: () => import('../views/customer/hongbao/Hongbao.vue')
       }
     ]
   }

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-01-28 01:51:15
+ * @LastEditTime: 2021-01-31 04:28:54
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -152,6 +152,20 @@ export const ServGetEnteInfo = async () => {
 
 }
 
+// 获取会员信息
+export const ServGetMemberInfo = async () => {
+    return await http.get(EApi.getMemberInfo, {});
+}
+
+// 是否打开过红包
+export const ServIsOpenHongbao = async (activityId: number) => {
+    return await http.get(EApi.isOpen, { params: { activityId } });
+}
+
+// 拆红包
+export const ServOpenHongbao = async (activityId: number) => {
+    return await http.post(EApi.openHongbao, { params: { activityId } });
+}
 // 获取数据字典
 /* export const ServiceGetDict = async () => {
     const mapper = ['dictType', 'dictSort', 'dictValue', { dictLabel: 'dictLabel' }]

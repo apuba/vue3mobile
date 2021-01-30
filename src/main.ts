@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 20:21:47
- * @LastEditTime: 2021-01-28 23:33:08
+ * @LastEditTime: 2021-01-31 02:57:38
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -21,3 +21,5 @@ const app = createApp(App);
 app.use(store);
 app.use(router);
 app.mount('#app')
+
+window.__app__ = app

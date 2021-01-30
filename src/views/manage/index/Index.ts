@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-29 23:30:25
- * @LastEditTime: 2021-01-28 03:45:27
+ * @LastEditTime: 2021-01-31 03:07:33
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -10,7 +10,7 @@ import Header from './Header.vue';
 import Total from './Total.vue';
 import Admin from './Admin.vue';
 import ActiveList from './ActiveList.vue';
-import { ServSinge, ServGetEnteInfo, ServAgentSinge } from '@/service/appService';
+import { ServSinge, ServGetEnteInfo, ServAgentSinge, ServGetMemberInfo } from '@/service/appService';
 import router from '@/router';
 import { useStore } from 'vuex';
 
@@ -23,6 +23,14 @@ export default defineComponent({
     },
     setup(props, content) {
         const store = useStore();
+
+        const userInfo = store.state.userInfo;
+
+        if (!userInfo.memberId) {
+            ServGetMemberInfo().then(res => {
+                store.commit('setUserInfo', res.data);
+            })
+        }
         // 获取企业信息
         ServGetEnteInfo().then((res: any) => {
             store.commit('setEnteInfo', res.data) // 把企业信息存到store
