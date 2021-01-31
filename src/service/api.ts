@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-22 03:14:17
- * @LastEditTime: 2021-01-27 20:28:53
+ * @LastEditTime: 2021-01-31 19:43:43
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -10,7 +10,11 @@ export enum EApi {
     getActivity = '/wxServer/activity/findPagination', // 获取活动列表
     saveActivity = "/wxServer/activity/saveActivity", // 创建活动
     findDictData = "/wxServer/dict/findDictData", // 数据字典查询
-    getAdminList = '/wxServer/sc/getAdminList',
+    
+    getAdminList = '/wxServer/enter/getAdmin', // 管理列表
+    addAdminList = '/wxServer/enter/addAdmin', //添加管理员
+    delAdminList = '/wxServer/enter/delAdmin', // 删除管理员
+
     getUndertaker = '/wxServer/member/getUndertaker', // 查询活动承接人
     fileUpload = '/wxServer/fileUpload/imgUpload', // 上传文件
     getFollowUserList = '/wxServer/sc/getFollowUserList', // 查询所有承接人
@@ -24,5 +28,8 @@ export enum EApi {
     getEnteInfo = '/wxServer/enter/getEnterInfo', // 获取企业信息
     getMemberInfo = '/wxServer/member/findMember', // 获取会员信息
     isOpen = '/wxServer/red/isOpen',  // 当前进入的会员对当前红包是否有拆过
-    openHongbao = '/wxServer/red/open'  // 拆红包
+    openHongbao = '/wxServer/red/open',  // 拆红包
+    getBase64Image = '/wxServer/sign/getBase64', // 把图片转为base64
+    updateActivityStatus = '/wxServer/activity/updateActivity', // 更新活动状态
+   
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-28 02:06:13
- * @LastEditTime: 2021-01-28 03:09:51
+ * @LastEditTime: 2021-01-31 20:14:27
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -14,7 +14,7 @@
     @click="activeContactHandler(item.id)"
     :class="{ active: activeList.indexOf(item.id) > -1 }"
   >
-    <span class="mask" @click="deleContactHandler(item.id)">X</span>
+    <span class="mask" @click="deleContactHandler(item)">X</span>
     <van-image width="36" height="36" :src="item.avatar" />
   </li>
 </template>
@@ -41,8 +41,7 @@ export default defineComponent({
   emits: ['delHandler', 'update:dataList'],
   setup(props, content) {
     const state = reactive({
-      activeList: [] as Array<string>,
-
+      activeList: [] as Array<string>
     })
     const activeContactHandler = (id: string) => {
       // 添删除标识
@@ -52,11 +51,11 @@ export default defineComponent({
       }, 2500)
     }
 
-    const deleContactHandler = (id: string) => {
+    const deleContactHandler = (data: IAvaterModel) => {
       // 删除已选择
-      const list = _.remove(props.dataList, item => item.id === id);
-      content.emit('delHandler', id);
-      content.emit('update:dataList', list)
+      // const list = _.remove(props.dataList, item => item.id === admin.id);
+      content.emit('delHandler', data.id);
+      // content.emit('update:dataList', list)
     }
     return { activeContactHandler, ...toRefs(state), deleContactHandler }
   }

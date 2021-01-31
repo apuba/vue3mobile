@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 03:34:40
- * @LastEditTime: 2021-01-31 03:48:09
+ * @LastEditTime: 2021-01-31 16:40:45
  * @LastEditors: 侯兴章
  * @Description:  图片转为base64
  */
@@ -19,16 +19,24 @@ const getBase64Image = (img: HTMLImageElement) => {
 }
 
 export const imgeToBase64 = async (type: string | HTMLImageElement): Promise<String> => {
-    let image: HTMLImageElement
-    if (typeof type === 'string') {
-        image = new Image();
-        image.src = type;
-    } else {
-        image = type
-    }
 
-    image.crossOrigin = '';
     return new Promise((resolve, reject) => {
+
+        if (!type) {
+            reject('没有图片信息')
+            return
+        }
+        let image: HTMLImageElement
+
+        if (typeof type === 'string') {
+            image = new Image();
+            image.src = type + '&' + new Date().getTime();
+            // image.crossOrigin = '';
+        } else {
+            image = type
+        }
+
+
         /* 
         image.onload = function () {
             const base64 = getBase64Image(image);

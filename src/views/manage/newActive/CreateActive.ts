@@ -198,7 +198,7 @@ export default defineComponent({
             showCalendarHandler: () => {
                 state.showCalendar = true;
             },
-            deleContactHandler: (id: string) => {
+            deleContactHandler: (id: number) => {
                 // 删除已选择的联系人
                 _.remove(state.externalContact, item => item.id === id);
             },

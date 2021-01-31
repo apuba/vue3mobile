@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-30 00:58:23
- * @LastEditTime: 2021-01-31 04:21:07
+ * @LastEditTime: 2021-01-31 17:30:15
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -24,7 +24,9 @@
         </div>
         <div class="hongbao-bg" :style="hongbaoBottom">
           <div class="hongbao-middle hongbao-bg" :style="hongbaoMiddle">
-            <span class="take">拆</span>
+            <span class="take">
+              <img :src="userInfo.headUrl" />
+            </span>
           </div>
           <div class="hongbao-bottom">
             <h4 class="mb10 userName">{{ userInfo.name }}已领取</h4>
@@ -44,6 +46,7 @@
 </template>
 
 <script lang="ts">
+import { ServGetBase64Img } from '@/service/appService';
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex';
 
@@ -60,16 +63,26 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const state = reactive({
+    const refState = reactive({
       hongbaoMiddle: {
         backgroundImage: 'url(' + require('@public/images/hongbaoMiddlePoster.jpg') + ')'
       },
       hongbaoBottom: {
         backgroundImage: ' url(' + require('@public/images/hongbaobgBottom.jpg') + ')'
       },
-      userInfo: store.state.userInfo
+      userInfo: { ...store.state.userInfo },
     })
-    return { ...toRefs(state) }
+
+    // 把远程微信的图片转为base64
+    ServGetBase64Img(store.state.userInfo.qrCode).then(res => {
+      refState.userInfo.qrCode = res.data.base64;
+    })
+
+    ServGetBase64Img(store.state.userInfo.headUrl).then(res => {
+      refState.userInfo.headUrl = res.data.base64;
+    })
+
+    return { ...toRefs(refState) }
   }
 })
 </script>
@@ -118,13 +131,13 @@ h4 {
 }
 .hongbao-middle {
   background-repeat: no-repeat;
+
   min-height: 65px;
   text-align: center;
   padding-top: 30px;
   .take {
     width: 65px;
     height: 65px;
-    background: #fff;
     line-height: 65px;
     text-align: center;
     margin: 0 8px;
@@ -135,6 +148,11 @@ h4 {
     font-size: 24px;
     color: #f00;
     font-weight: bold;
+    img {
+      width: 65px;
+      height: 65px;
+      
+    }
   }
 }
 

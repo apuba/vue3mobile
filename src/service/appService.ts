@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-01-31 04:28:54
+ * @LastEditTime: 2021-02-01 00:23:29
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -10,6 +10,7 @@ import http from './http/index';
 import { DTOActivity, IAvaterModel, IcreateOrder, IuserInfo } from '@/service/appModel';
 import { EApi } from './api';
 import { BaseRequestModel } from '@/service/baseModel';
+import { IUpdateActivityStatus } from '@/service/appModel';
 
 
 // 活动查询
@@ -23,11 +24,26 @@ export const ServGetActivity = async (params: BaseRequestModel) => {
 // 获取管理员列表
 export const ServGetAdminList = async (): Promise<Array<IAvaterModel>> => {
     // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
-    const mapper = ['name', 'avatar', { id: 'userid' }];
-    const res = await http.get(EApi.getAdminList, {}, mapper);
+    const mapper = {
+        name: 'userFullName',
+        avatar: 'userHeadImgUrl',
+        id: 'userId',
+        isAdmin: 'isAdmin'
+    }
+    const res = await http.get(EApi.getAdminList, { params: {} }, mapper);
     return res.data;
 }
 
+// 添加应用管理员
+export const ServAddAdminList = async (adminList: Array<any>) => {
+    return await http.post(EApi.addAdminList, { params: { userArr: adminList } });
+}
+
+
+// 删除应用管理员
+export const ServDelAdminList = async (adminList: Array<any>) => {
+    return await http.post(EApi.delAdminList, { params: { userArr: adminList } });
+}
 
 export const ServGetUndertaker = async (params: BaseRequestModel) => {
     // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
@@ -165,6 +181,18 @@ export const ServIsOpenHongbao = async (activityId: number) => {
 // 拆红包
 export const ServOpenHongbao = async (activityId: number) => {
     return await http.post(EApi.openHongbao, { params: { activityId } });
+}
+
+// 图片转base64
+export const ServGetBase64Img = async (url: string) => {
+
+    return await http.get(EApi.getBase64Image, { params: { url } });
+}
+
+
+// 更新活动状态
+export const ServUpdateActivityStatus = async (params: IUpdateActivityStatus) => {
+    return await http.post(EApi.updateActivityStatus, { params })
 }
 // 获取数据字典
 /* export const ServiceGetDict = async () => {

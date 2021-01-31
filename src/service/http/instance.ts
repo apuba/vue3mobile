@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-11-05 22:01:26
- * @LastEditTime: 2021-01-28 02:00:13
+ * @LastEditTime: 2021-01-31 15:13:44
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -78,7 +78,7 @@ instance.interceptors.response.use(
                 // token过期
                 storage().remove('token');
                 // storage('sessionstorage').remove('store'); // 刷新页面保留的store需要的
-                // window.location.href='/login'
+                window.location.href='/login'
                 break;
             default:
                 break;

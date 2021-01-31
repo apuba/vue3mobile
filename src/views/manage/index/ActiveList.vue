@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-31 02:46:09
+ * @LastEditTime: 2021-01-31 19:38:20
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -18,9 +18,9 @@
     <div class="pt10">
       <ComScrollPage v-model:value="inBottom" v-model:reload="scrollReload" @loadData="onRefresh">
         <div class="active-list">
-          <div class="active-item" v-for="(item, index) in activeList" :key="index">
+          <div class="active-item" v-for="(item) in activeList" :key="item.activityId">
             <div class="progres">
-              <van-progress :percentage="50" />
+              <van-progress :percentage="getComplete(item.useAmount,item.totalAmount)" />
             </div>
             <ul class="active-detail">
               <li>
@@ -43,22 +43,51 @@
                 </span>
                 <span v-else>长期有效</span>
               </li>
+              <li>
+                <span class="title">状态</span>
+                <span>{{ item.statusLabel }}</span>
+              </li>
             </ul>
             <div class="active-btn-list">
-              <span class="active-btn">
+              <span
+                class="active-btn"
+                v-show="item.activityStatus===4 || item.activityStatus===1"
+                @click="updateStatusHandler(item, 2)"
+                title="启动"
+              >
                 <span class="iconfont icon-ai23"></span>
               </span>
-              <span class="active-btn">
+
+              <span
+                class="active-btn"
+                title="暂停"
+                v-show="item.activityStatus ===2"
+                @click="updateStatusHandler(item, 4)"
+              >
+                <span class="iconfont icon-zanting"></span>
+              </span>
+
+              <span
+                class="active-btn"
+                title="停止"
+                v-show="item.activityStatus ===2 || item.activityStatus ===4"
+                @click="updateStatusHandler(item, 3)"
+              >
+                <span class="iconfont icon-tingzhi"></span>
+              </span>
+
+              <span class="active-btn" title="详情">
                 <span class="iconfont icon-xiangqing"></span>
               </span>
-              <span class="active-btn">
+              <span class="active-btn" title="数据">
                 <span class="iconfont icon-shuju"></span>
               </span>
               <router-link
+                title="分享"
                 class="active-btn active"
                 :to="'/customer/hongbao?id=' + item.activityId"
                 @click="commitCurrentActivityHandler(item)"
-                v-show="item.activityStatus === 1"
+                v-show="item.activityStatus === 2"
               >
                 <span class="iconfont icon-fenxiang"></span>
               </router-link>
@@ -70,109 +99,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs, onMounted, unref, toRaw } from "vue";
-import { Tabs, Tab, Progress, PullRefresh } from "vant";
-import { ServGetActivity } from "@/service/appService";
-import { DTOActivity } from "@/service/appModel";
-import { BaseRequestModel } from "@/service/baseModel";
-import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
-import { mapState, mapMutations, useStore } from 'vuex';
-
-interface IqueryParams {
-  activityStatus?: number;
-}
-
-export default defineComponent({
-  components: {
-    [Tabs.name]: Tabs,
-    [Tab.name]: Tab,
-    [Progress.name]: Progress,
-    [PullRefresh.name]: PullRefresh,
-    ComScrollPage
-  },
-  computed: {
-    ...mapState(['title', 'baseInfo'])
-  },
-  /*  methods: {
-     ...mapMutations(['setBaseInfo'])
-   }, */
-  setup() {
-    const store = useStore(); // 使用vuex
-    const state = reactive({
-      activeName: 0,
-      inBottom: true, // 是否到底加载数据
-      scrollReload: false, // 是否重载scroolPage组件
-      activeTab: [
-        { title: "全部", key: 0 },
-        { title: "进行中", key: 1 },
-        { title: "已结束", key: 2 },
-      ],
-      activeList: [] as Array<DTOActivity>,
-    });
-
-    const pagination = {
-      pageIndex: 1,
-      pageRows: 5,
-    };
-
-    // 获取活动列表
-    const getActivityData = async (params: IqueryParams = {}, inBottom?: boolean) => {
-
-      if (inBottom) {
-        pagination.pageIndex++
-      }
-      const query: BaseRequestModel = {
-        params,
-        pageIndex: pagination.pageIndex,
-        pageRows: pagination.pageRows,
-      };
-      const res = await ServGetActivity(query);
-      // state.activeList = res.records;
-
-      if (inBottom) {
-        state.activeList = [...toRaw(state.activeList), ...res.records];
-        console.log(state.activeList)
-      } else {
-        state.activeList = res.records;
-      }
-      state.inBottom = true;
-      !params.activityStatus && store.commit('setBaseInfo', { activityTotal: res.total })
-    };
-
-    const methods = {
-      // 切换活动状态
-      queryActiveStatusHandler: (status: number) => {
-        const params = {
-          activityStatus: status,
-        };
-        state.activeList = [];
-        pagination.pageIndex = 1; // 重置分页大小
-        state.scrollReload = true;
-        status ? getActivityData(params) : getActivityData();
-      },
-      onRefresh: () => {
-        // 下拉刷新
-        const params = {
-          activityStatus: state.activeName,
-        };
-        state.activeName ? getActivityData(params, true) : getActivityData({}, true);
-      },
-      commitCurrentActivityHandler: (activity: any) => {
-        // 保存当前活动到Vuex
-        store.commit('setCurrentActivity', activity)
-      }
-    };
-
-
-
-    onMounted(() => {
-      getActivityData();
-    });
-
-    return { ...toRefs(state), ...toRefs(methods) };
-  },
-});
+<script lang="ts" src="./activieList">
 </script>
 
 <style scoped lang="scss">

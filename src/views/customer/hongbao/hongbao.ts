@@ -1,34 +1,36 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-01-31 04:45:48
+ * @LastEditTime: 2021-02-01 00:47:50
  * @LastEditors: 侯兴章
  * @Description: 
  */
 
 import { defineComponent, reactive, toRefs } from 'vue';
-import { Swipe, SwipeItem, Image, Button, Overlay, Toast } from 'vant';
+import { Swipe, SwipeItem, Image, Button, Overlay, Toast, NoticeBar } from 'vant';
 import Poster from '../Poster.vue';
 import { saveToImage } from '@/common/helper/html2Image';
 import { useStore, mapState } from 'vuex';
-import { ServIsOpenHongbao, ServOpenHongbao } from '@/service/appService';
-
+import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img } from '@/service/appService';
 import _ from 'lodash';
 
 export default defineComponent({
     components: {
+        Poster,
         [Swipe.name]: Swipe,
         [SwipeItem.name]: SwipeItem,
         [Image.name]: Image,
         [Button.name]: Button,
         [Overlay.name]: Overlay,
-        Poster
+        [NoticeBar.name]: NoticeBar
+
     },
     computed: {
         ...mapState(['enteInfo', 'userInfo'])
     },
     setup() {
         const store = useStore();
+        const userInfo = store.state.userInfo;
         const activity = _.cloneDeep(store.getters.getCurrentActivity) // store.state.currentActivity;
         console.log(activity)
 
@@ -38,16 +40,16 @@ export default defineComponent({
         }
 
         const refState = reactive({
+            isOpening: false, // 当前正在拆红包
             activity,
             bannerList,
             showActivityRule: false, // 显示 活动规则
             showPoster: false, // 显示海报
             isShared: false, // 进行分享状态     
-            //   activityStatus: activity.activityStatus || 2, // 活动状态 1:待启动 2：进行中 3：已结束 4：暂停
             createPosterStatus: 0 // 创建海报状态  0 未创建 1 创建中 2已创建
         })
 
-        refState.activity.activityStatus = 2; // 测试状态，调试完需要删除
+        refState.activity.activityStatus = 2; // 进行中 测试状态，调试完需要删除 活动状态 1:待启动 2：进行中 3：已结束 4：暂停
         refState.activity.initMemberCount += Math.round(Math.random() * 100); // 在领取人的基础上随机再添加人数
 
 
@@ -77,7 +79,7 @@ export default defineComponent({
         }
 
         const sharedHandler = () => {      // 分享
-            if (refState.activity.activityStatus === 4) {
+            if (refState.activity.activityStatus === 3) {
                 Toast('活动已结束');
                 return
             }
@@ -85,10 +87,24 @@ export default defineComponent({
 
         // 拆新人红包
         const openHongbaoHandler = () => {
+            if (refState.isOpening) return;
+            refState.isOpening = true;
             ServOpenHongbao(activity.activityId).then(res => {
-                debugger
+                refState.isOpening = false;
                 if (res.data) {
                     refState.isShared = !refState.isShared;
+
+                    switch (res.data.code) {
+                        case 30001: // 活动已结束
+                            refState.activity.activityStatus = 3;
+                            break;
+                        case 30007: // 已领取
+
+                            break;
+                        case 30006: // 已发送
+
+                            break;
+                    }
                 }
             })
         }

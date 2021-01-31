@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-17 00:46:00
- * @LastEditTime: 2021-01-27 21:25:58
+ * @LastEditTime: 2021-01-31 18:06:46
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -86,8 +86,9 @@ export interface IDictOptions {
 // 用户头像
 export interface IAvaterModel {
     name: string,
-    avatar: string,    
-    id: string
+    avatar: string,
+    id: number,
+    isAdmin?: string
 }
 export interface IcreateOrder {
     actualAmt: number,
@@ -106,4 +107,17 @@ export interface IuserInfo {
     externalUserid: string
     puserid?: number | string,
     token: string
+}
+
+export interface IUpdateActivityStatus {
+    activityId: number,
+    activityStatus: number
+}
+
+// 应用管理员列信息
+export interface IAdminList {
+    userFullName: string,
+    userHeadImgUrl?: string,
+    userId: number,
+    isAdmin?: string
 }

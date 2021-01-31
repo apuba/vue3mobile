@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-29 18:44:18
- * @LastEditTime: 2021-01-31 05:01:30
+ * @LastEditTime: 2021-02-01 01:08:29
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -11,65 +11,72 @@
     <div class="banner">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
         <van-swipe-item v-for="(url, index) in bannerList" :key="index">
-          <img width="375" height="160" :src="url" />
+          <img :src="url" />
         </van-swipe-item>
       </van-swipe>
     </div>
-    <div class="main-title">
-      <div class="txt" v-show="!isShared">
-        <h1>{{ activity.sub }}</h1>
-        <h4>{{ activity.subtitle }}</h4>
-      </div>
-      <div v-show="isShared">
-        <img src="@public/images/yuan50.png" />
-      </div>
-    </div>
+
     <div class="hongbao-container">
-      <div class="hongbao">
-        <div class="hongbao-top hongbao-bg" :style="hongbaoTop">
-          <van-swipe class="my-swipe" :autoplay="2500" :show-indicators="false">
-            <van-swipe-item>
-              <span class="title">单个1~50元</span>
-            </van-swipe-item>
-            <van-swipe-item>
-              <span class="title">再邀{{ activity.invitationAmountHigh }}人，可拆1次</span>
-            </van-swipe-item>
-          </van-swipe>
-        </div>
-        <div class="hongbao-bg" :style="hongbaoBottom">
-          <div class="hongbao-middle hongbao-bg" :style="hongbaoMiddle">
-            <span class="take" v-show="!isShared" @click="openHongbaoHandler">拆</span>
-            <div v-show="isShared" v-if="activity.invitationAmountHigh">
-              <span
-                class="shared"
-                v-for="i in activity.invitationAmountHigh"
-                :key="i"
-                @click="sharedHandler"
-              >+</span>
-            </div>
+      <div class="hongbao-box">
+        <div class="main-title">
+          <div class="txt" v-show="!isShared">
+            <h1>{{ activity.sub }}</h1>
+            <h4>{{ activity.subtitle }}</h4>
           </div>
-          <div class="hongbao-bottom">
-            <p v-show="!isShared">{{ activity.initMemberCount }}人领取了红包</p>
-            <p v-show="isShared">
-              <van-button
-                type="danger"
-                class="btn"
-                block
-                round
-                v-if="activity.activityStatus===2"
-              >分享给好友</van-button>
-              <van-button
-                type="default"
-                class="btn"
-                block
-                round
-                disabled
-                v-if="activity.activityStatus===4"
-              >红包已发完</van-button>
-            </p>
-            <div class="remark">
-              <span>红包由 {{ enteInfo.corpName }} 提供</span>
-              <span>“吸粉宝”技术支持</span>
+          <div v-show="isShared">
+            <img src="@public/images/yuan50.png" />
+          </div>
+        </div>
+        <div class="hongbao">
+          <div class="hongbao-top hongbao-bg" :style="hongbaoTop">
+            <van-swipe vertical class="notice-swipe" :autoplay="2500" :show-indicators="false">
+              <van-swipe-item>
+                <span class="title">单个1~50元</span>
+              </van-swipe-item>
+              <van-swipe-item>
+                <span class="title">再邀{{ activity.invitationAmountHigh }}人，可拆1次</span>
+              </van-swipe-item>
+            </van-swipe>
+          </div>
+          <div class="hongbao-bg" :style="hongbaoBottom">
+            <div class="hongbao-middle hongbao-bg" :style="hongbaoMiddle">
+              <span
+                class="take"
+                v-show="!isShared"
+                @click="openHongbaoHandler"
+              >{{ isOpening? '稍候': '拆'}}</span>
+              <div v-show="isShared" v-if="activity.invitationAmountHigh">
+                <span
+                  class="shared"
+                  v-for="i in activity.invitationAmountHigh"
+                  :key="i"
+                  @click="sharedHandler"
+                >+</span>
+              </div>
+            </div>
+            <div class="hongbao-bottom">
+              <p v-show="!isShared">{{ activity.initMemberCount }}人领取了红包</p>
+              <p v-show="isShared">
+                <van-button
+                  type="danger"
+                  class="btn"
+                  block
+                  round
+                  v-if="activity.activityStatus===2"
+                >分享给好友</van-button>
+                <van-button
+                  type="default"
+                  class="btn"
+                  block
+                  round
+                  disabled
+                  v-if="activity.activityStatus!==2"
+                >活动结束</van-button>
+              </p>
+              <div class="remark">
+                <span>红包由 {{ enteInfo.corpName }} 提供</span>
+                <span>“吸粉宝”技术支持</span>
+              </div>
             </div>
           </div>
         </div>
@@ -84,7 +91,7 @@
           <div>
             <div class="imgContainer"></div>
             <div class="remark-bottom" v-show="createPosterStatus === 1">海报生成中...</div>
-            <div class="remark-bottom">长按海报可保存图片或分享到微信</div>
+            <div class="remark-bottom" v-show="createPosterStatus !== 1">长按海报可保存图片或分享到微信</div>
           </div>
         </div>
       </div>
@@ -107,6 +114,21 @@
 </script>
 
 <style lang="scss" scoped>
+.my-swipe {
+  width: 100%;
+  height: 160px;
+  position: relative;
+  img {
+  
+    width: 100%;
+    height: 160px;
+
+  }
+}
+.notice-swipe {
+  height: 40px;
+  line-height: 40px;
+}
 .poster-page {
   display: flex;
   align-items: center;
@@ -190,7 +212,7 @@
 
 .main-title {
   color: #fff;
-  padding-top: 24px;
+  padding: 24px 0;
   position: relative;
   h1,
   h4 {
@@ -207,12 +229,17 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+  width: 100%;
+}
+.hongbao-box {
+  width: 100%;
 }
 .hongbao {
   box-shadow: rgba($color: #000000, $alpha: 0.6) 0 0 10px;
   border-radius: 20px;
   overflow: hidden;
   margin: 0 48px;
+  // width: 100%;
 }
 
 .hongbao-bg {
@@ -221,7 +248,7 @@
 }
 
 .hongbao-top {
-  padding: 32px 0;
+  padding: 15% 0;
 
   .title {
     font-size: 24px;

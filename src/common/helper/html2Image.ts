@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-30 03:03:11
- * @LastEditTime: 2021-01-31 02:08:35
+ * @LastEditTime: 2021-01-31 16:14:01
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -87,7 +87,7 @@ export const saveToImage = async (selector: string, imgContainer: string) => {
     }) */
 
 
-    await html2canvas(dom, { canvas, scale: scaleBy, useCORS: true, });
+    await html2canvas(dom, { canvas, scale: scaleBy, useCORS: true,allowTaint: false });
     const image = convertCanvasToImage(canvas, imgContainer, width, height) // 返回业务逻辑，自行处理。
 
     return {
