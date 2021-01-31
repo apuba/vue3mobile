@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-30 00:58:23
- * @LastEditTime: 2021-01-31 17:30:15
+ * @LastEditTime: 2021-02-01 02:05:13
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -72,13 +72,13 @@ export default defineComponent({
       },
       userInfo: { ...store.state.userInfo },
     })
-
+    const { qrCode, headUrl } = store.state.userInfo;
     // 把远程微信的图片转为base64
-    ServGetBase64Img(store.state.userInfo.qrCode).then(res => {
+    qrCode && ServGetBase64Img(qrCode).then(res => {
       refState.userInfo.qrCode = res.data.base64;
     })
 
-    ServGetBase64Img(store.state.userInfo.headUrl).then(res => {
+    headUrl && ServGetBase64Img(headUrl).then(res => {
       refState.userInfo.headUrl = res.data.base64;
     })
 
@@ -151,7 +151,6 @@ h4 {
     img {
       width: 65px;
       height: 65px;
-      
     }
   }
 }

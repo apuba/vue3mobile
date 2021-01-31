@@ -1,12 +1,16 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-29 18:44:18
- * @LastEditTime: 2021-02-01 01:08:29
+ * @LastEditTime: 2021-02-01 01:56:06
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 <template>
   <div class="body" :style="bgStyle">
+    <!-- <van-nav-bar left-arrow @click-left="onClickLeft" v-if="showGoback" /> -->
+    <div @click="onClickLeft" v-if="showGoback" class="goBack">
+      <van-icon name="arrow-left" />
+    </div>
     <Poster class="poster-position" id="hongbaoPoster" :activity="activity" />
     <div class="banner">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -114,15 +118,28 @@
 </script>
 
 <style lang="scss" scoped>
+.goBack {
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba($color: #14cbc9, $alpha: 0.7);
+  z-index: 100;
+  color: #fff;
+  .van-icon{
+    line-height: 40px;
+  }
+}
 .my-swipe {
   width: 100%;
   height: 160px;
   position: relative;
   img {
-  
     width: 100%;
     height: 160px;
-
   }
 }
 .notice-swipe {
@@ -310,7 +327,7 @@
 }
 
 .hongbao-bottom {
-  padding: 16px;
+  padding: 10% 16px;
   color: #f00;
 
   p {
