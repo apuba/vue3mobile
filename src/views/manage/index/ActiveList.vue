@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-01-31 19:38:20
+ * @LastEditTime: 2021-02-02 02:15:40
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -13,12 +13,18 @@
       color="#007aff"
       @click="queryActiveStatusHandler(activeName)"
     >
-      <van-tab :title="item.title" :name="item.key" v-for="item in activeTab" :key="item.key"></van-tab>
+      <van-tab
+        :badge="item.badge"
+        :title="item.title"
+        :name="item.key"
+        v-for="item in activeTab"
+        :key="item.key"
+      ></van-tab>
     </van-tabs>
     <div class="pt10">
       <ComScrollPage v-model:value="inBottom" v-model:reload="scrollReload" @loadData="onRefresh">
         <div class="active-list">
-          <div class="active-item" v-for="(item) in activeList" :key="item.activityId">
+          <div class="active-item" v-for="(item, index) in activeList" :key="item.activityId">
             <div class="progres">
               <van-progress :percentage="getComplete(item.useAmount,item.totalAmount)" />
             </div>
@@ -76,12 +82,24 @@
                 <span class="iconfont icon-tingzhi"></span>
               </span>
 
-              <span class="active-btn" title="详情">
+              <router-link
+                title="详情"
+                class="active-btn"
+                :to="'/activityDetail?type=detail&id=' + item.activityId"
+                @click="commitCurrentActivityHandler(item)"
+              >
                 <span class="iconfont icon-xiangqing"></span>
-              </span>
-              <span class="active-btn" title="数据">
+              </router-link>
+
+              <router-link
+                title="数据"
+                class="active-btn"
+                :to="'/activityDetail?type=data&id=' + item.activityId"
+                @click="commitCurrentActivityHandler(item)"
+              >
                 <span class="iconfont icon-shuju"></span>
-              </span>
+              </router-link>
+
               <router-link
                 title="分享"
                 class="active-btn active"

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-17 00:46:00
- * @LastEditTime: 2021-01-31 18:06:46
+ * @LastEditTime: 2021-02-02 01:35:12
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -120,4 +120,10 @@ export interface IAdminList {
     userHeadImgUrl?: string,
     userId: number,
     isAdmin?: string
+}
+
+export interface ITabs {
+    title: string,
+    key: number,
+    badge: string
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-01-28 23:59:44
+ * @LastEditTime: 2021-02-02 01:18:49
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -18,7 +18,7 @@ import { defineComponent, onMounted, reactive, ref, toRaw, toRefs, withCtx } fro
 import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image, Calendar, Popup } from 'vant';
 import router from '@/router';
 import moment from 'moment';
-import EmployeeList from './EmployeeList.vue';
+
 import { ServfileUpload, ServAgentSinge, ServSaveActivity } from '@/service/appService';
 import _ from 'lodash';
 import { mapState, useStore } from 'vuex';
@@ -35,7 +35,6 @@ import CompAvatar from '@/views/components/CompAvatar.vue';
 export default defineComponent({
     components: {
         CompAvatar,
-        EmployeeList,
         [Uploader.name]: Uploader,
         [NavBar.name]: NavBar,
         [Form.name]: Form,
@@ -172,7 +171,7 @@ export default defineComponent({
                 params.newFlag = state.formData.newFlag ? 1 : 0; // 是否长期有效
                 params.activityEffectiveFlag = state.formData.activityEffectiveFlag ? 1 : 0; // 启用新人红包
                 params.externalData = state.formData.externalData ? 1 : 0; // 对外数据 
-                params.activityExplain = params.activityExplain || activityExplain;
+                params.activityExplain = params.activityExplain || activityExplain.value;
                 console.log('提交表单的参数------', params);
 
                 state.submitBtn.disabled = true;

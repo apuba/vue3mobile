@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-01-29 21:45:51
+ * @LastEditTime: 2021-02-02 01:10:44
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -287,7 +287,7 @@
 .btnlist {
   background: #fff;
   display: flex;
-  padding: 8px;
+  padding: 16px 0;
   position: fixed;
   width: 100%;
   bottom: 0px;

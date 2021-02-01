@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-02-01 00:23:29
+ * @LastEditTime: 2021-02-02 00:49:52
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -185,7 +185,6 @@ export const ServOpenHongbao = async (activityId: number) => {
 
 // 图片转base64
 export const ServGetBase64Img = async (url: string) => {
-
     return await http.get(EApi.getBase64Image, { params: { url } });
 }
 
@@ -194,6 +193,27 @@ export const ServGetBase64Img = async (url: string) => {
 export const ServUpdateActivityStatus = async (params: IUpdateActivityStatus) => {
     return await http.post(EApi.updateActivityStatus, { params })
 }
+
+// 获取活动发放数据
+export const ServGetGrantData = async (activityId: number) => {
+    return await http.get(EApi.getGrantData, { params: { activityId } });
+}
+
+// 查询活动数据(新增、分享、成本、点击)
+export const ServGetActivityInfo = async (activityId: number) => {
+    return await http.get(EApi.getActivityInfo, { params: { activityId } });
+}
+
+// 邀请排名
+export const ServGetInviteesInfo = async (params: BaseRequestModel<{ activityId: number }>) => {
+    return await http.get(EApi.getInviteesInfo, params);
+}
+
+// 活动状态统计
+export const ServgetCountByStatus = async () => {
+    return await http.get(EApi.getCountByStatus, { params: {} });
+}
+
 // 获取数据字典
 /* export const ServiceGetDict = async () => {
     const mapper = ['dictType', 'dictSort', 'dictValue', { dictLabel: 'dictLabel' }]

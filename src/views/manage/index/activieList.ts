@@ -1,18 +1,19 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 18:12:20
- * @LastEditTime: 2021-01-31 19:39:55
+ * @LastEditTime: 2021-02-02 02:30:43
  * @LastEditors: 侯兴章
  * @Description: 
  */
 
 import { defineComponent, reactive, toRefs, onMounted, unref, toRaw } from "vue";
 import { Tabs, Tab, Progress, PullRefresh, Toast } from "vant";
-import { ServGetActivity, ServUpdateActivityStatus } from "@/service/appService";
-import { DTOActivity, IUpdateActivityStatus } from "@/service/appModel";
+import { ServGetActivity, ServUpdateActivityStatus, ServgetCountByStatus } from "@/service/appService";
+import { DTOActivity, ITabs, IUpdateActivityStatus } from "@/service/appModel";
 import { BaseRequestModel } from "@/service/baseModel";
 import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
 import { mapState, mapMutations, useStore } from 'vuex';
+import _ from "lodash";
 
 interface IqueryParams {
   activityStatus?: number;
@@ -36,12 +37,12 @@ export default defineComponent({
       inBottom: true, // 是否到底加载数据
       scrollReload: false, // 是否重载scroolPage组件
       activeTab: [
-        { title: "全部", key: 0 },
-        { title: "待发布", key: 1 },
-        { title: "进行中", key: 2 },
-        { title: "已暂停", key: 4 },
-        { title: "已结束", key: 3 },
-      ],
+        { title: "全部", key: 0, badge: '' },
+        // { title: "待发布", key: 1, badge: '' },
+        { title: "进行中", key: 2, badge: '' },
+        { title: "已暂停", key: 4, badge: '' },
+        { title: "已结束", key: 3, badge: '' },
+      ] as Array<ITabs>,
       activeList: [] as Array<DTOActivity>,
     });
 
@@ -52,7 +53,6 @@ export default defineComponent({
 
     // 获取活动列表
     const getActivityData = async (params: IqueryParams = {}, inBottom?: boolean) => {
-
       if (inBottom) {
         pagination.pageIndex++
       }
@@ -102,11 +102,11 @@ export default defineComponent({
       },
       updateStatusHandler(activity: any, activityStatus: number) {
         const { activityId } = activity;
-        debugger
+
         // 更新活动状态
         ServUpdateActivityStatus({ activityId, activityStatus }).then(res => {
           if (res.code === 200) {
-            activity.activityId = activityStatus;
+            activity.activityStatus = activityStatus;
             switch (activityStatus) {
               case 2:
                 activity.statusLabel = '进行中'
@@ -118,17 +118,33 @@ export default defineComponent({
                 activity.statusLabel = '已暂停'
                 break;
             }
+            _.remove(state.activeList, item => item.activityId === activityId); // 把当前数据从数组中移除
             Toast(`状态更新为：${activity.statusLabel}成功`)
+            getActivityTotalData();
+
           } else {
             Toast(`状态更新为：${activity.statusLabel}失败`)
           }
         })
       },
-
     };
+
+
+    const getActivityTotalData = () => {
+      // 活动状态统计
+      ServgetCountByStatus().then(res => {
+        if (res.data) {
+          state.activeTab.map(data => {
+            let tab = _.find(res.data, item => item.activityStatus === data.key);
+            tab ? data.badge = tab.counts : data.badge = '';
+          })
+        }
+      })
+    }
 
     onMounted(() => {
       getActivityData();
+      getActivityTotalData();
     });
 
     return { ...toRefs(state), ...toRefs(methods) };

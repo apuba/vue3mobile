@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-31 04:34:21
+ * @LastEditTime: 2021-02-02 00:04:28
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -49,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/createActive',
     name: 'createActive',
     component: () => import('../views/manage/newActive/CreateActive.vue')
+  },
+  {
+    path: '/activityDetail',
+    name: 'activityDetail',
+    component: () => import('../views/manage/activityDetail/ActivityDetail.vue')
   },
   {
     path: '/pay',
