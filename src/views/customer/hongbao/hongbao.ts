@@ -187,7 +187,7 @@ export default defineComponent({
             let queryParams;
             if (!id) {
                 const result = router.currentRoute.value.query.result as string;
-                if (!result) return console.log('缺少aactivityId');
+                if (!result) return console.log('缺少activityId');
                 queryParams = JSON.parse(decodeURIComponent(result));
                 id = queryParams.activityId
             }

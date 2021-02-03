@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-02-04 00:17:25
+ * @LastEditTime: 2021-02-04 03:10:31
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -53,7 +53,9 @@ export default defineComponent({
     },
     setup() {
 
-        const stoer = useStore();
+        const store = useStore();
+        const { userInfo } = store.state;
+
         const initRedCount = Math.round(Math.random() * 5000); // 随机红包个数
         const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
 
@@ -62,7 +64,7 @@ export default defineComponent({
             imageList: [] as Array<any>, // 用于上传图片的URL结果集，提交到数据的值
             showCalendar: false,
             showPeoplePop: false,
-            externalContact: [] as Array<IAvaterModel>,
+            externalContact: [{id: userInfo.qyUserId, avatar:userInfo.headUrl,name:userInfo.name}] as Array<IAvaterModel>,
             activeContactList: [] as Array<string>,
             disabledUpload: false,
             errorPeople: false, // 校验承接人是否为空
@@ -112,7 +114,7 @@ export default defineComponent({
             },
             validoterAmount: (val: string) => {
                 const num = parseInt(val);
-                const r = (num <= stoer.state.enteInfo.balance) && (num >= 500);
+                const r = (num <= store.state.enteInfo.balance) && (num >= 500);
                 console.log(r)
                 // 校验活动金额
                 return r
@@ -182,7 +184,7 @@ export default defineComponent({
                     state.submitBtn.disabled = false;
                     state.submitBtn.loading = false;
                     if (res.data && res.data.activityId) {
-                        router.push(`/customer/hongbao?activitId=${res.data.activityId}`);
+                        router.push(`/customer/hongbao?activityId=${res.data.activityId}`);
                     }
 
                 })
