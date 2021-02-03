@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-02-02 00:49:52
+ * @LastEditTime: 2021-02-02 23:19:27
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -147,9 +147,9 @@ export const ServWechatLogin = async (requestType: string, url = window.location
 }
 
 // 登录服务获取用户信息及token
-export const ServLogin = async (code: string): Promise<IuserInfo> => {
-    const mapper = ['name', { avatar: 'headUrl' }, 'memberId', 'enterId', 'inviteesId', 'qyUserId', 'qyMemberType', 'externalUserid', 'puserid', 'token']
-    const res = await http.post(EApi.login, { code }, mapper);
+export const ServLogin = async (params: any): Promise<IuserInfo> => {
+    const mapper = ['name', { avatar: 'headUrl' }, 'headUrl','isUndertaker','memberId', 'enterId', 'inviteesId', 'qyUserId', 'qyMemberType', 'externalUserid', 'puserid', 'token']
+    const res = await http.post(EApi.login, params, mapper);
     return new Promise((resolve, rejest) => {
         if (!res.data) {
             rejest('登录失败------')
@@ -157,7 +157,6 @@ export const ServLogin = async (code: string): Promise<IuserInfo> => {
             const userInfo = res.data[0] as IuserInfo;
             window.localStorage.token = userInfo.token; // 写入token信息;
             resolve(userInfo)
-
         }
     })
 }
@@ -212,6 +211,11 @@ export const ServGetInviteesInfo = async (params: BaseRequestModel<{ activityId:
 // 活动状态统计
 export const ServgetCountByStatus = async () => {
     return await http.get(EApi.getCountByStatus, { params: {} });
+}
+
+// 获取活动个人二维码
+export const ServGetActivityQrcode = async (activityId: number) => {
+    return await http.get(EApi.getActivityQrcode, { params: { activityId } });
 }
 
 // 获取数据字典

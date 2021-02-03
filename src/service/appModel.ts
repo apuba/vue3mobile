@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-17 00:46:00
- * @LastEditTime: 2021-02-02 01:35:12
+ * @LastEditTime: 2021-02-03 01:21:14
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -106,7 +106,9 @@ export interface IuserInfo {
     qyMemberType: number,
     externalUserid: string
     puserid?: number | string,
-    token: string
+    token: string,
+    isUndertaker?: boolean,
+    headUrl?: string
 }
 
 export interface IUpdateActivityStatus {

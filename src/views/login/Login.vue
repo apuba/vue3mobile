@@ -41,7 +41,7 @@ export default defineComponent({
       if (!code) {
         ServWechatLogin('ADMIN'); // 授权登录
       } else {
-        ServLogin(code).then((res) => {
+        ServLogin({ code }).then((res) => {
           store.commit('setUserInfo', res); // 把用户信息存到store
           router.push('/');
         }).catch(err => {

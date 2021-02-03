@@ -25,14 +25,14 @@
         <div class="hongbao-bg" :style="hongbaoBottom">
           <div class="hongbao-middle hongbao-bg" :style="hongbaoMiddle">
             <span class="take">
-              <img :src="userInfo.headUrl" />
+              <img :src="activity.headUrl" />
             </span>
           </div>
           <div class="hongbao-bottom">
             <h4 class="mb10 userName">{{ userInfo.name }}已领取</h4>
             <h1>单个1~50元</h1>
             <div class="qr">
-              <img :src="userInfo.qrCode" />
+              <img :src="activity.qrCode" />
             </div>
             <div class="remark">
               <span>{{ activity.initMemberCount }}人领取了红包</span>
@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { ServGetBase64Img } from '@/service/appService';
+
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex';
 
@@ -71,15 +71,6 @@ export default defineComponent({
         backgroundImage: ' url(' + require('@public/images/hongbaobgBottom.jpg') + ')'
       },
       userInfo: { ...store.state.userInfo },
-    })
-    const { qrCode, headUrl } = store.state.userInfo;
-    // 把远程微信的图片转为base64
-    qrCode && ServGetBase64Img(qrCode).then(res => {
-      refState.userInfo.qrCode = res.data.base64;
-    })
-
-    headUrl && ServGetBase64Img(headUrl).then(res => {
-      refState.userInfo.headUrl = res.data.base64;
     })
 
     return { ...toRefs(refState) }

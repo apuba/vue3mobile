@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-02 02:20:56
- * @LastEditTime: 2021-02-02 02:15:40
+ * @LastEditTime: 2021-02-03 01:12:15
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -24,7 +24,7 @@
     <div class="pt10">
       <ComScrollPage v-model:value="inBottom" v-model:reload="scrollReload" @loadData="onRefresh">
         <div class="active-list">
-          <div class="active-item" v-for="(item, index) in activeList" :key="item.activityId">
+          <div class="active-item" v-for="(item) in activeList" :key="item.activityId">
             <div class="progres">
               <van-progress :percentage="getComplete(item.useAmount,item.totalAmount)" />
             </div>
@@ -85,8 +85,7 @@
               <router-link
                 title="详情"
                 class="active-btn"
-                :to="'/activityDetail?type=detail&id=' + item.activityId"
-                @click="commitCurrentActivityHandler(item)"
+                :to="'/activityDetail?type=detail&activityId=' + item.activityId"
               >
                 <span class="iconfont icon-xiangqing"></span>
               </router-link>
@@ -94,8 +93,7 @@
               <router-link
                 title="数据"
                 class="active-btn"
-                :to="'/activityDetail?type=data&id=' + item.activityId"
-                @click="commitCurrentActivityHandler(item)"
+                :to="'/activityDetail?type=data&activityId=' + item.activityId"
               >
                 <span class="iconfont icon-shuju"></span>
               </router-link>
@@ -103,8 +101,7 @@
               <router-link
                 title="分享"
                 class="active-btn active"
-                :to="'/customer/hongbao?id=' + item.activityId"
-                @click="commitCurrentActivityHandler(item)"
+                :to="'/customer/hongbao?activityId=' + item.activityId"
                 v-show="item.activityStatus === 2"
               >
                 <span class="iconfont icon-fenxiang"></span>

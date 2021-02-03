@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 18:12:20
- * @LastEditTime: 2021-02-02 02:30:43
+ * @LastEditTime: 2021-02-02 23:38:04
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -14,7 +14,7 @@ import { BaseRequestModel } from "@/service/baseModel";
 import ComScrollPage from '@/components/public/Com_Scroll_Page.vue';
 import { mapState, mapMutations, useStore } from 'vuex';
 import _ from "lodash";
-
+import router from '@/router';
 interface IqueryParams {
   activityStatus?: number;
 }
@@ -96,9 +96,16 @@ export default defineComponent({
         };
         state.activeName ? getActivityData(params, true) : getActivityData({}, true);
       },
-      commitCurrentActivityHandler: (activity: any) => {
+      commitCurrentActivityHandler: (activity: any, target: string) => {
         // 保存当前活动到Vuex
-        store.commit('setCurrentActivity', activity)
+        store.commit('setCurrentActivity', activity);
+
+        switch(target) {
+          case 'share':
+            router.push('/customer/hongbao?activityId=' + activity.activityId)
+          break;
+        }
+        
       },
       updateStatusHandler(activity: any, activityStatus: number) {
         const { activityId } = activity;

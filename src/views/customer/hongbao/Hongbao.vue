@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-29 18:44:18
- * @LastEditTime: 2021-02-01 01:56:06
+ * @LastEditTime: 2021-02-02 21:33:37
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -13,7 +13,8 @@
     </div>
     <Poster class="poster-position" id="hongbaoPoster" :activity="activity" />
     <div class="banner">
-      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+      <img src="@public/images/toptxt.png" v-if="!bannerList.length" class="banner-img" />
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white" v-else>
         <van-swipe-item v-for="(url, index) in bannerList" :key="index">
           <img :src="url" />
         </van-swipe-item>
@@ -87,7 +88,11 @@
       </div>
     </div>
 
-    <div class="btn-poster" @click="createPosterHandler" v-if="activity.activityStatus ===2">生成海报</div>
+    <div
+      class="btn-poster"
+      @click="createPosterHandler"
+      v-if="activity.activityStatus ===2 && loadBase64===2"
+    >生成海报</div>
     <div class="btn-activityrule" @click="showActivityRule = true">规则</div>
     <van-overlay :show="showPoster" @click="showPoster = false">
       <div class="poster-page">
@@ -129,11 +134,11 @@
   background: rgba($color: #14cbc9, $alpha: 0.7);
   z-index: 100;
   color: #fff;
-  .van-icon{
+  .van-icon {
     line-height: 40px;
   }
 }
-.my-swipe {
+.banner {
   width: 100%;
   height: 160px;
   position: relative;
@@ -141,6 +146,9 @@
     width: 100%;
     height: 160px;
   }
+}
+.banner-img {
+  vertical-align: bottom;
 }
 .notice-swipe {
   height: 40px;
@@ -221,10 +229,6 @@
   flex-direction: column;
   width: 375px;
   margin: 0 auto;
-}
-
-.banner {
-  height: 160px;
 }
 
 .main-title {

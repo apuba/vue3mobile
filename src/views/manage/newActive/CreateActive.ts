@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-02-02 01:18:49
+ * @LastEditTime: 2021-02-02 21:06:27
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -168,8 +168,8 @@ export default defineComponent({
                         name: item.name
                     }
                 })
-                params.newFlag = state.formData.newFlag ? 1 : 0; // 是否长期有效
-                params.activityEffectiveFlag = state.formData.activityEffectiveFlag ? 1 : 0; // 启用新人红包
+                params.newFlag = state.formData.newFlag ? 1 : 0;  // 启用新人红包
+                params.activityEffectiveFlag = state.formData.activityEffectiveFlag ? 0 : 1; // 是否长期有效
                 params.externalData = state.formData.externalData ? 1 : 0; // 对外数据 
                 params.activityExplain = params.activityExplain || activityExplain.value;
                 console.log('提交表单的参数------', params);

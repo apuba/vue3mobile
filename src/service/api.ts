@@ -36,4 +36,5 @@ export enum EApi {
     getActivityInfo = '/wxServer/activity/getActivityInfo', // 查询活动数据-活动效果数据
     getGrantData = '/wxServer/activity/getGrantData', // 查询活动数据-活动发放数据
     getCountByStatus = '/wxServer/activity/getCountByStatus', // 活动状态统计
+    getActivityQrcode ='/wxServer/activity/getActivityQrcode', // 获取活动个人二维码 base64
 }
