@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-02-04 03:10:31
+ * @LastEditTime: 2021-02-04 03:22:43
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -52,10 +52,8 @@ export default defineComponent({
         ...mapState(['baseInfo', 'enteInfo'])
     },
     setup() {
-
         const store = useStore();
         const { userInfo } = store.state;
-
         const initRedCount = Math.round(Math.random() * 5000); // 随机红包个数
         const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
 
@@ -94,13 +92,10 @@ export default defineComponent({
                 initMemberCount,
                 initRedCount,
                 undertaker: [] as Array<any>
-
             }
-
         })
 
         const activityExplain = ref(createActivityExplain()); // 活动说明文
-
         function createActivityExplain() {
             return `结束时间：${state.formData.newFlag ? '长期有效' : `即日起至${state.formData.endTime}`}，红包抢完提 前结束；
 红包规则：首次添加客服企业微信可获得红包；
@@ -186,7 +181,6 @@ export default defineComponent({
                     if (res.data && res.data.activityId) {
                         router.push(`/customer/hongbao?activityId=${res.data.activityId}`);
                     }
-
                 })
 
             },

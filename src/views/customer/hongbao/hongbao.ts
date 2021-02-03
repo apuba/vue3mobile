@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-02-04 02:53:54
+ * @LastEditTime: 2021-02-04 03:24:02
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -35,12 +35,6 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const { userInfo, enteInfo } = store.state;
-
-        // corpSquareLogoUrl
-
-        // const activity = _.cloneDeep(store.getters.getCurrentActivity) // store.state.currentActivity;
-        // console.log(activity)
-        // let bannerList = [];
         const refState = reactive({
             isOpening: false, // 当前正在拆红包
             isUndertaker: false, // 当前用户是否是活动承接人，活动承接人可以生成海报进行分享。
@@ -187,7 +181,7 @@ export default defineComponent({
             let queryParams;
             if (!id) {
                 const result = router.currentRoute.value.query.result as string;
-                if (!result) return console.log('缺少activityId');
+                if (!result) return console.log('缺少参数');
                 queryParams = JSON.parse(decodeURIComponent(result));
                 id = queryParams.activityId
             }
