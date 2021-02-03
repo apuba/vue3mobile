@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-27 19:22:26
- * @LastEditTime: 2021-01-29 22:28:58
+ * @LastEditTime: 2021-02-04 00:55:47
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -34,15 +34,42 @@ export default defineComponent({
     const code = router.currentRoute.value.query.code as string || '';
     onMounted(() => {
       debugger
+      const result = router.currentRoute.value.query.result as string;
       if (window.localStorage.token) {
+        if (result) {
+          const userInfo = JSON.parse(window.localStorage.userInfo);
+          const queryParams = JSON.parse(decodeURIComponent(result));
+          if (queryParams.userType === 'share') {
+            // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
+            if (userInfo.isUndertaker) {
+              router.push(`/customer/hongbao?result=${result}`)
+            } else {
+              router.push(`/customer/sharePoster?result=${result}`)
+            }
+            return
+          }
+        }
         router.push('/');
         return
       }
       if (!code) {
-        ServWechatLogin('ADMIN'); // 授权登录
+        ServWechatLogin('ADMIN'); // 授权
       } else {
+        // 授权后进行登录处理
         ServLogin({ code }).then((res) => {
           store.commit('setUserInfo', res); // 把用户信息存到store
+          if (result) {
+            const queryParams = JSON.parse(decodeURIComponent(result));
+            if (queryParams.userType === 'share') {
+              // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
+              if (res.isUndertaker) {
+                router.push(`/customer/hongbao?result=${result}`)
+              } else {
+                router.push(`/customer/sharePoster?result=${result}`)
+              }
+              return
+            }
+          }
           router.push('/');
         }).catch(err => {
           console.log('登录失败', err)

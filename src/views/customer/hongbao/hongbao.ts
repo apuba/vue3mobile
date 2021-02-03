@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-02-03 02:34:14
+ * @LastEditTime: 2021-02-04 02:53:54
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -34,7 +34,10 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
-        const userInfo = store.state.userInfo;
+        const { userInfo, enteInfo } = store.state;
+
+        // corpSquareLogoUrl
+
         // const activity = _.cloneDeep(store.getters.getCurrentActivity) // store.state.currentActivity;
         // console.log(activity)
         // let bannerList = [];
@@ -114,7 +117,7 @@ export default defineComponent({
 
 
         // 查询当前活动数据
-        const getActivityData = (activityId: number) => {
+        const getActivityData = (activityId: number, queryParams: any) => {
             console.log('获取活动请求--')
             const query: BaseRequestModel = {
                 params: {
@@ -128,9 +131,6 @@ export default defineComponent({
                 refState.activity.initMemberCount += Math.round(Math.random() * 100); // 在领取人的基础上随机再添加人数
                 refState.bannerList = JSON.parse(refState.activity.banner);
 
-
-
-
                 // 判断当前用户是否为承接人
                 if (!userInfo.qyUserId) {
                     refState.isUndertaker = false;
@@ -143,26 +143,37 @@ export default defineComponent({
                     })
                 }
 
+                refState.activity.isUndertaker = refState.isUndertaker; // 判断是否承接人
+
                 console.log('当前用户信息--', userInfo);
                 console.log('判断当前用户是否为承接人--', refState.isUndertaker);
-
                 if (refState.isUndertaker) {
                     console.log('获取 活动二维码--')
-                    ServGetActivityQrcode(activityId).then(res => {
+                    ServGetActivityQrcode(activityId, userInfo.memberId).then(res => {
                         // 获取活动二维码 base64
                         if (res.data) {
                             refState.activity.qrCode = res.data.base64;
                             refState.loadBase64 += 1;
                         }
                     })
-                    const { headUrl } = userInfo;
-                    ServGetBase64Img(headUrl).then(res => {
+                } else {
+                    refState.loadBase64 += 1;
+                    // 普通用户生成的二维码链接
+                    queryParams.shareId = userInfo.memberId;
+                    refState.activity.qrCodeContent = window.location.origin + '?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                }
+                const { headUrl } = userInfo;
+                const { corpSquareLogoUrl } = enteInfo;
+                const photo = headUrl || corpSquareLogoUrl
+                if (photo) {
+                    ServGetBase64Img(photo).then(res => {
                         // 获取头像,转为base64
                         refState.activity.headUrl = res.data.base64;
                         refState.loadBase64 += 1;
                     })
+                } else {
+                    refState.loadBase64 += 1;
                 }
-
             })
         }
         const onClickLeft = () => {
@@ -172,17 +183,18 @@ export default defineComponent({
         // 初始化数据
         const initData = async () => {
             console.log('当前用户信息-刚进来-initData', userInfo);
-            let id = router.currentRoute.value.query.activityId as string
+            let id = router.currentRoute.value.query.activityId as string;
+            let queryParams;
             if (!id) {
                 const result = router.currentRoute.value.query.result as string;
                 if (!result) return console.log('缺少aactivityId');
-                const queryParams = JSON.parse(decodeURIComponent(result));
+                queryParams = JSON.parse(decodeURIComponent(result));
                 id = queryParams.activityId
             }
             const activityId = parseInt(id);
 
             console.log('当前用户信息--initData', userInfo);
-            getActivityData(activityId);
+            getActivityData(activityId, queryParams);
             // 是否拆过红包
             ServIsOpenHongbao(activityId).then(res => {
                 refState.isShared = res.data.isOpen; // 是否已折过红包 ？
@@ -190,48 +202,8 @@ export default defineComponent({
         }
 
         onMounted(() => {
-            const code = router.currentRoute.value.query.code as string;
-            if (code) {
-                const result = router.currentRoute.value.query.result as string;
-                const queryParams = JSON.parse(decodeURIComponent(result));
-                queryParams.code = code;
+            initData();
 
-                console.log('红包页面进行授权登录,参数：', queryParams)
-                // 代表是经过微信授权登录回调的地址。所有参数应该出来这里取出
-                ServLogin(queryParams).then((res) => {
-                    console.log('红包页面进行授权登录,登录成功：', res)
-                    store.commit('setUserInfo', res); // 把用户信息存到store   
-                    initData();
-                }).catch(err => {
-                    console.log('登录失败', err)
-                })
-
-            } else {
-                initData();
-            }
-
-            window.wx.updateAppMessageShareData({
-                title: refState.activity.sub, // 分享标题
-                desc: '999999个红包全给你', // 分享描述
-                link: window.location.href.split('#')[0] + '&shareId=' + userInfo.qyUserId, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: '', // 分享图标
-                success: function () {
-                    // 设置成功 
-                    console.log('分享给朋友设置成功',)
-                }
-            });
-
-            //自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
-            window.wx.updateTimelineShareData({
-                title: refState.activity.sub, // 分享标题
-                desc: '999999个红包全给你', // 分享描述
-                link: window.location.href.split('#')[0] + '&shareId=' + userInfo.qyUserId, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: '', // 分享图标
-                success: function () {
-                    // 设置成功 
-                    console.log('分享给朋友设置成功',)
-                }
-            });
 
         })
         return {

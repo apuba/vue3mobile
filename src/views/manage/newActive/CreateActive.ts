@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-02-02 21:06:27
+ * @LastEditTime: 2021-02-04 00:17:25
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -181,8 +181,8 @@ export default defineComponent({
                     console.log('创建活动结果 ----- ', res)
                     state.submitBtn.disabled = false;
                     state.submitBtn.loading = false;
-                    if(res.data && res.data.id) {
-                        
+                    if (res.data && res.data.activityId) {
+                        router.push(`/customer/hongbao?activitId=${res.data.activityId}`);
                     }
 
                 })

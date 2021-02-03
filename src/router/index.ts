@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-02-02 00:04:28
+ * @LastEditTime: 2021-02-03 22:06:39
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -87,6 +87,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'poster',
         name: 'poster',
         component: () => import('../views/customer/Poster.vue')
+      },
+      {
+        path: 'sharePoster',
+        name: 'sharePoster',
+        component: () => import('../views/customer/sharePoster/SharePoster.vue')
       },
       {
         path: 'hongbao',

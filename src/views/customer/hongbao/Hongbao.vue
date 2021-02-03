@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-29 18:44:18
- * @LastEditTime: 2021-02-02 21:33:37
+ * @LastEditTime: 2021-02-04 02:54:22
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -27,6 +27,7 @@
           <div class="txt" v-show="!isShared">
             <h1>{{ activity.sub }}</h1>
             <h4>{{ activity.subtitle }}</h4>
+            <div id="qr"></div>
           </div>
           <div v-show="isShared">
             <img src="@public/images/yuan50.png" />

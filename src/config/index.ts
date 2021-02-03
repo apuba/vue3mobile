@@ -1,12 +1,12 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-24 14:49:06
- * @LastEditTime: 2021-01-30 01:37:29
+ * @LastEditTime: 2021-02-04 00:20:15
  * @LastEditors: 侯兴章
  * @Description: 
  */
 export const APP_NAME: string = 'VUE3.0大型系统前端框架'; // 系统应用名
-export const ROUTER_WIHITELIST: string[] = ['/login', '/customer','/customer/hongbao','/customer/poster',]; // 路由白名单
+export const ROUTER_WIHITELIST: string[] = ['/login']; // 路由白名单
 export const BASET_LAYOUT: string = 'default'; // 默认的布局
 export const OPEN_KEEPALIVE: boolean = false; // 是否开启KeepAlive缓存  开发时候最好关闭,不然每次都需要清除缓存
 export const ENABLED_ROUTER_TRANSTION: boolean = false; // 是否启用路由转场动画？

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-02-02 23:19:27
+ * @LastEditTime: 2021-02-04 00:41:27
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -108,11 +108,14 @@ export const ServSinge = async (url: string = window.location.href.split('#')[0]
         timestamp: res.data.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
         signature: res.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['selectEnterpriseContact', 'selectExternalContact', 'getCurExternalContact', 'openUserProfile', 'chooseImage'] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'selectEnterpriseContact', 'selectExternalContact', 'getCurExternalContact', 'openUserProfile', 'chooseImage'] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
     });
     window.wx.ready(function (res: any) {
         console.log('wx.ready 完成')
         // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+
+
+
     });
 
     window.wx.error(function (res: any) {
@@ -143,12 +146,13 @@ export const ServFindCapitalFlow = async (params: BaseRequestModel) => {
 export const ServWechatLogin = async (requestType: string, url = window.location.href.split('#')[0]) => {
     // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
     const res = await http.get(EApi.wechatLogin, { params: { url, requestType } });
+    console.log('获取到微信的授权地址', res.data.oauth2Url)
     window.location.href = res.data.oauth2Url;
 }
 
 // 登录服务获取用户信息及token
 export const ServLogin = async (params: any): Promise<IuserInfo> => {
-    const mapper = ['name', { avatar: 'headUrl' }, 'headUrl','isUndertaker','memberId', 'enterId', 'inviteesId', 'qyUserId', 'qyMemberType', 'externalUserid', 'puserid', 'token']
+    const mapper = ['name', { avatar: 'headUrl' }, 'headUrl', 'isUndertaker', 'memberId', 'enterId', 'inviteesId', 'qyUserId', 'qyMemberType', 'externalUserid', 'puserid', 'token']
     const res = await http.post(EApi.login, params, mapper);
     return new Promise((resolve, rejest) => {
         if (!res.data) {
@@ -156,6 +160,7 @@ export const ServLogin = async (params: any): Promise<IuserInfo> => {
         } else {
             const userInfo = res.data[0] as IuserInfo;
             window.localStorage.token = userInfo.token; // 写入token信息;
+            window.localStorage.userInfo = JSON.stringify(userInfo); // 写入token信息;
             resolve(userInfo)
         }
     })
@@ -169,7 +174,9 @@ export const ServGetEnteInfo = async () => {
 
 // 获取会员信息
 export const ServGetMemberInfo = async () => {
-    return await http.get(EApi.getMemberInfo, {});
+    const res = await http.get(EApi.getMemberInfo, {});
+    window.localStorage.userInfo = JSON.stringify(res.data); // 写入token信息;
+    return res.data
 }
 
 // 是否打开过红包
@@ -214,8 +221,8 @@ export const ServgetCountByStatus = async () => {
 }
 
 // 获取活动个人二维码
-export const ServGetActivityQrcode = async (activityId: number) => {
-    return await http.get(EApi.getActivityQrcode, { params: { activityId } });
+export const ServGetActivityQrcode = async (activityId: number, undertakerId: number) => {
+    return await http.get(EApi.getActivityQrcode, { params: { activityId, undertakerId } });
 }
 
 // 获取数据字典
