@@ -43,8 +43,8 @@ export default defineComponent({
       const result = router.currentRoute.value.query.result as string;
       if (window.localStorage.token) {
         if (result) {
-          
-          const userInfo = store.state.userInfo // JSON.parse(window.localStorage.userInfo);
+
+          const userInfo =  JSON.parse(window.localStorage.userInfo); // store.state.userInfo //
           const queryParams = JSON.parse(decodeURIComponent(result));
           if (queryParams.userType === "share") {
             // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面

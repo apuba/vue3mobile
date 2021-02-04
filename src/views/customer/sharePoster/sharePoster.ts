@@ -25,7 +25,8 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
-        const userInfo = store.state.userInfo;
+        // const userInfo = store.state.userInfo; 
+        const userInfo =  JSON.parse(window.localStorage.userInfo); 
         const refState = reactive({
             userInfo,
             isUndertaker: false,

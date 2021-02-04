@@ -34,7 +34,9 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
-        const { userInfo, enteInfo } = store.state;
+        const { enteInfo } = store.state;
+
+        const userInfo = JSON.parse(window.localStorage.userInfo);
         const refState = reactive({
             isOpening: false, // 当前正在拆红包
             isUndertaker: false, // 当前用户是否是活动承接人，活动承接人可以生成海报进行分享。
@@ -110,7 +112,7 @@ export default defineComponent({
 
 
         // 查询当前活动数据
-        const getActivityData = (activityId: number, queryParams: any={}) => {
+        const getActivityData = (activityId: number, queryParams: any = {}) => {
             console.log('获取活动请求--')
             const query: BaseRequestModel = {
                 params: {
@@ -139,23 +141,23 @@ export default defineComponent({
                 refState.activity.isUndertaker = refState.isUndertaker; // 判断是否承接人
                 console.log('当前用户信息--', userInfo);
                 console.log('判断当前用户是否为承接人--', refState.isUndertaker);
-               /*  if (refState.isUndertaker) {
-                    console.log('获取 活动二维码--')
-                    ServGetActivityQrcode(activityId, userInfo.memberId).then(res => {
-                        // 获取活动二维码 base64
-                        if (res.data) {
-                            refState.activity.qrCode = res.data.base64;
-                            refState.loadBase64 += 1;
-                        }
-                    })
-                } else {
-                    refState.loadBase64 += 1;
-                    // 普通用户生成的二维码链接
-                    queryParams.userType = 'share';
-                    queryParams.realMemberId= userInfo.memberId;
-                    refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
-                    console.log(refState.activity.qrCodeContent)
-                } */
+                /*  if (refState.isUndertaker) {
+                     console.log('获取 活动二维码--')
+                     ServGetActivityQrcode(activityId, userInfo.memberId).then(res => {
+                         // 获取活动二维码 base64
+                         if (res.data) {
+                             refState.activity.qrCode = res.data.base64;
+                             refState.loadBase64 += 1;
+                         }
+                     })
+                 } else {
+                     refState.loadBase64 += 1;
+                     // 普通用户生成的二维码链接
+                     queryParams.userType = 'share';
+                     queryParams.realMemberId= userInfo.memberId;
+                     refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                     console.log(refState.activity.qrCodeContent)
+                 } */
 
                 refState.loadBase64 += 1;
                 // 普通用户生成的二维码链接
@@ -163,11 +165,11 @@ export default defineComponent({
                 // queryParams.realMemberId= userInfo.memberId; // 当前
                 queryParams.inviteesId = userInfo.memberId; // 承接人ID
                 queryParams.activityId = activityId; // 活动id
-                
+
                 refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
                 console.log(refState.activity.qrCodeContent)
 
-                
+
                 const { headUrl } = userInfo;
                 const { corpSquareLogoUrl } = enteInfo;
                 const photo = headUrl || corpSquareLogoUrl
