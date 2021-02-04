@@ -225,9 +225,14 @@ export const ServGetActivityQrcode = async (activityId: number, undertakerId: nu
     return await http.get(EApi.getActivityQrcode, { params: { activityId, undertakerId } });
 }
 
+
+interface qrCode {
+    inviteesId: number
+    activityId: number
+}
 // 获取 活动二维码，有分享者与新用户关联关系
-export const ServCreateTempQrcode = async (activityId: number, realMemberId: number) => {
-    return await http.get(EApi.createTempQrcode, { params: { activityId, realMemberId } });
+export const ServCreateTempQrcode = async (params: qrCode) => {
+    return await http.get(EApi.createTempQrcode, { params });
 }
 
 // 获取数据字典

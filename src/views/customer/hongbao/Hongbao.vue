@@ -13,8 +13,17 @@
     </div>
     <Poster class="poster-position" id="hongbaoPoster" :activity="activity" />
     <div class="banner">
-      <img src="@public/images/toptxt.png" v-if="!bannerList.length" class="banner-img" />
-      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white" v-else>
+      <img
+        src="@public/images/toptxt.png"
+        v-if="!bannerList.length"
+        class="banner-img"
+      />
+      <van-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="white"
+        v-else
+      >
         <van-swipe-item v-for="(url, index) in bannerList" :key="index">
           <img :src="url" />
         </van-swipe-item>
@@ -35,12 +44,19 @@
         </div>
         <div class="hongbao">
           <div class="hongbao-top hongbao-bg" :style="hongbaoTop">
-            <van-swipe vertical class="notice-swipe" :autoplay="2500" :show-indicators="false">
+            <van-swipe
+              vertical
+              class="notice-swipe"
+              :autoplay="2500"
+              :show-indicators="false"
+            >
               <van-swipe-item>
                 <span class="title">单个1~50元</span>
               </van-swipe-item>
               <van-swipe-item>
-                <span class="title">再邀{{ activity.invitationAmountHigh }}人，可拆1次</span>
+                <span class="title"
+                  >再邀{{ activity.invitationAmountHigh }}人，可拆1次</span
+                >
               </van-swipe-item>
             </van-swipe>
           </div>
@@ -50,34 +66,41 @@
                 class="take"
                 v-show="!isShared"
                 @click="openHongbaoHandler"
-              >{{ isOpening? '稍候': '拆'}}</span>
+                >{{ isOpening ? "稍候" : "拆" }}</span
+              >
               <div v-show="isShared" v-if="activity.invitationAmountHigh">
                 <span
                   class="shared"
                   v-for="i in activity.invitationAmountHigh"
                   :key="i"
-                  @click="sharedHandler"
-                >+</span>
+                  @click="createPosterHandler"
+                  >+</span
+                >
               </div>
             </div>
             <div class="hongbao-bottom">
-              <p v-show="!isShared">{{ activity.initMemberCount }}人领取了红包</p>
+              <p v-show="!isShared">
+                {{ activity.initMemberCount }}人领取了红包
+              </p>
               <p v-show="isShared">
                 <van-button
                   type="danger"
                   class="btn"
                   block
                   round
-                  v-if="activity.activityStatus===2"
-                >分享给好友</van-button>
+                  v-if="activity.activityStatus === 2"
+                  @click="createPosterHandler"
+                  >分享给好友</van-button
+                >
                 <van-button
                   type="default"
                   class="btn"
                   block
                   round
                   disabled
-                  v-if="activity.activityStatus!==2"
-                >活动结束</van-button>
+                  v-if="activity.activityStatus !== 2"
+                  >活动结束</van-button
+                >
               </p>
               <div class="remark">
                 <span>红包由 {{ enteInfo.corpName }} 提供</span>
@@ -92,16 +115,22 @@
     <div
       class="btn-poster"
       @click="createPosterHandler"
-      v-if="activity.activityStatus ===2 && loadBase64===2"
-    >生成海报</div>
+      v-if="activity.activityStatus === 2 && loadBase64 === 2"
+    >
+      生成海报
+    </div>
     <div class="btn-activityrule" @click="showActivityRule = true">规则</div>
     <van-overlay :show="showPoster" @click="showPoster = false">
       <div class="poster-page">
         <div class="poster-contain">
           <div>
             <div class="imgContainer"></div>
-            <div class="remark-bottom" v-show="createPosterStatus === 1">海报生成中...</div>
-            <div class="remark-bottom" v-show="createPosterStatus !== 1">长按海报可保存图片或分享到微信</div>
+            <div class="remark-bottom" v-show="createPosterStatus === 1">
+              海报生成中...
+            </div>
+            <div class="remark-bottom" v-show="createPosterStatus !== 1">
+              长按海报可保存图片或分享到微信
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +141,7 @@
         <div class="poster-contain">
           <div class="rule-content">
             <h2>活动规则</h2>
-            <p>{{ activity.activityExplain}}</p>
+            <p>{{ activity.activityExplain }}</p>
           </div>
         </div>
       </div>

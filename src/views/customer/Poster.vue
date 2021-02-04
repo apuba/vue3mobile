@@ -26,8 +26,8 @@
             <h4 class="mb10 userName">{{ userInfo.name }}已领取</h4>
             <h1>单个1~50元</h1>
             <div class="qr">
-              <img :src="activity.qrCode" v-show="activity.isUndertaker" />
-              <div id="qr" v-show="!activity.isUndertaker"></div>
+              <!-- <img :src="activity.qrCode" v-show="activity.isUndertaker" /> -->
+              <div id="qr"></div>
             </div>
             <div class="remark">
               <span>{{ activity.initMemberCount }}人领取了红包</span>
@@ -72,7 +72,8 @@ export default defineComponent({
     })
 
     watch(() => props.activity.qrCodeContent, (nval, oval) => {
-      if (!nval || props.activity.isUndertaker) return;
+      // if (!nval || props.activity.isUndertaker) return;
+      if (!nval) return;
       const qr = qrcanvas({
         data: nval || '红包生成中',
         size: 120, // 二维码大小

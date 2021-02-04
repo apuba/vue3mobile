@@ -43,7 +43,8 @@ export default defineComponent({
         })
 
         // 查询当前活动数据
-        const getActivityData = (activityId: number, realMemberId: number) => {
+        const getActivityData = (queryParams: any) => {
+            const { activityId } = queryParams
             console.log('获取活动请求--')
             const query: BaseRequestModel = {
                 params: {
@@ -63,7 +64,7 @@ export default defineComponent({
                 console.log('当前用户信息--', userInfo);
                 console.log('获取 活动二维码--')
 
-                ServCreateTempQrcode(activityId, realMemberId).then(res => {
+                ServCreateTempQrcode(queryParams).then(res => {
                     debugger
                     // 获取活动二维码 base64
                     if (res.data) {
@@ -82,8 +83,8 @@ export default defineComponent({
             const queryParams = JSON.parse(decodeURIComponent(result));
             // const id = queryParams.activityId
 
-            const { inviteesId, activityId, realMemberId } = queryParams
-            // const activityId = parseInt(id);
+            const { activityId } = queryParams
+
             console.log('当前用户信息--initData', userInfo);
 
             // 是否拆过红包
@@ -96,10 +97,10 @@ export default defineComponent({
                         ServGetMemberInfo().then(res => {
                             store.commit('setUserInfo', res.data);
 
-                            getActivityData(activityId, realMemberId);
+                            getActivityData(queryParams);
                         })
                     } else {
-                        getActivityData(activityId, realMemberId);
+                        getActivityData(queryParams);
                     }
 
                     // 获取企业信息
