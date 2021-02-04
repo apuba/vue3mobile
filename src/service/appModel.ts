@@ -109,6 +109,7 @@ export interface IuserInfo {
     token: string,
     isUndertaker?: boolean,
     headUrl?: string
+    realMemberId?:number
 }
 
 export interface IUpdateActivityStatus {

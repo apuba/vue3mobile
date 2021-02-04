@@ -16,69 +16,78 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import { ServWechatLogin, ServGetEnteInfo, ServLogin } from '@/service/appService';
-import router from '@/router';
-import { useStore } from 'vuex';
+import { defineComponent, onMounted } from "vue";
+import {
+  ServWechatLogin,
+  ServGetEnteInfo,
+  ServLogin,
+} from "@/service/appService";
+import router from "@/router";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
     const store = useStore();
     const loginStyle = {
-      backgroundImage: 'url(' + require('@public/images/login.jpg') + ')'
+      backgroundImage: "url(" + require("@public/images/login.jpg") + ")",
     };
 
     const gifStyle = {
-      backgroundImage: 'url(' + require('@public/images/logo.jpg') + ')'
-    }
-    const code = router.currentRoute.value.query.code as string || '';
+      backgroundImage: "url(" + require("@public/images/logo.jpg") + ")",
+    };
+    const code = (router.currentRoute.value.query.code as string) || "";
     onMounted(() => {
-      debugger
+      debugger;
+      const redirect_url = router.currentRoute.value.query
+        .redirect_url as string;
       const result = router.currentRoute.value.query.result as string;
       if (window.localStorage.token) {
         if (result) {
           const userInfo = JSON.parse(window.localStorage.userInfo);
           const queryParams = JSON.parse(decodeURIComponent(result));
-          if (queryParams.userType === 'share') {
+          if (queryParams.userType === "share") {
             // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
-            if (userInfo.isUndertaker) {
-              router.push(`/customer/hongbao?result=${result}`)
+            if (userInfo.isUndertaker || userInfo.isAdd===1) {
+              // 是否为活动承接人或已添加企业微信好友
+              router.push(`/customer/hongbao?result=${result}`);
             } else {
-              router.push(`/customer/sharePoster?result=${result}`)
+              router.push(`/customer/sharePoster?result=${result}`);
             }
-            return
+            return;
           }
         }
-        router.push('/');
-        return
+        redirect_url ? (window.location.href = redirect_url) : router.push("/");
+        return;
       }
       if (!code) {
-        ServWechatLogin('ADMIN'); // 授权
+        ServWechatLogin("ADMIN"); // 授权
       } else {
         // 授权后进行登录处理
-        ServLogin({ code }).then((res) => {
-          store.commit('setUserInfo', res); // 把用户信息存到store
-          if (result) {
-            const queryParams = JSON.parse(decodeURIComponent(result));
-            if (queryParams.userType === 'share') {
-              // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
-              if (res.isUndertaker) {
-                router.push(`/customer/hongbao?result=${result}`)
-              } else {
-                router.push(`/customer/sharePoster?result=${result}`)
+        ServLogin({ code })
+          .then((res) => {
+            store.commit("setUserInfo", res); // 把用户信息存到store
+            if (result) {
+              const queryParams = JSON.parse(decodeURIComponent(result));
+              if (queryParams.userType === "share") {
+                // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
+                if (res.isUndertaker) {
+                  router.push(`/customer/hongbao?result=${result}`);
+                } else {
+                  router.push(`/customer/sharePoster?result=${result}`);
+                }
+                return;
               }
-              return
             }
-          }
-          router.push('/');
-        }).catch(err => {
-          console.log('登录失败', err)
-        })
+            redirect_url ? (window.location.href = redirect_url) : router.push("/");
+          })
+          .catch((err) => {
+            console.log("登录失败", err);
+          });
       }
-    })
-    return { loginStyle, gifStyle }
-  }
-})
+    });
+    return { loginStyle, gifStyle };
+  },
+});
 </script>
 
 <style scoped lang="scss">

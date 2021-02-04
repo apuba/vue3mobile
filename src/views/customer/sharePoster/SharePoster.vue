@@ -11,7 +11,6 @@
     <div class="page">
       <div class="contain">
         <!-- <Poster id="hongbaoPoster" :activity="activity" /> -->
-
         <div class="hongbao">
           <div class="hongbao-poster">
             <div class="hongbao-top hongbao-bg" :style="hongbaoTop">
@@ -39,7 +38,6 @@
                   <span class="txt">长按识别二维码</span>
                   <span class="txt">添加红包派发员微信</span>
                 </div>
-
                 <div class="enteInfo">红包由{{ enteInfo.corpName }}提供</div>
               </div>
             </div>

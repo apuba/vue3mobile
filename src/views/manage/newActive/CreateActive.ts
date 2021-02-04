@@ -19,7 +19,7 @@ import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, I
 import router from '@/router';
 import moment from 'moment';
 
-import { ServfileUpload, ServAgentSinge, ServSaveActivity } from '@/service/appService';
+import { ServfileUpload, ServAgentSinge, ServSaveActivity, ServGetActivity } from '@/service/appService';
 import _ from 'lodash';
 import { mapState, useStore } from 'vuex';
 import { IAvaterModel } from '@/service/appModel';
@@ -31,6 +31,8 @@ import { IAvaterModel } from '@/service/appModel';
     name: string
 } */
 import CompAvatar from '@/views/components/CompAvatar.vue';
+import { BaseRequestModel } from '@/service/baseModel';
+import { mapperHelper } from '@/service/mapperHelper';
 
 export default defineComponent({
     components: {
@@ -58,11 +60,12 @@ export default defineComponent({
         const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
 
         const state = reactive({
+            pageType: router.currentRoute.value.query.type as string, // 页面类型，是否为编辑页面？ type= edit
             fileList: [] as Array<any>, // 用于显示上传图片回显
             imageList: [] as Array<any>, // 用于上传图片的URL结果集，提交到数据的值
             showCalendar: false,
             showPeoplePop: false,
-            externalContact: [{id: userInfo.qyUserId, avatar:userInfo.headUrl,name:userInfo.name}] as Array<IAvaterModel>,
+            externalContact: [{ id: userInfo.qyUserId, avatar: userInfo.headUrl, name: userInfo.name }] as Array<IAvaterModel>,
             activeContactList: [] as Array<string>,
             disabledUpload: false,
             errorPeople: false, // 校验承接人是否为空
@@ -161,7 +164,7 @@ export default defineComponent({
                 params.undertaker = state.externalContact.map(item => {
                     return {
                         qyUserid: item.id,
-                        avater: item.avatar,
+                        avatar: item.avatar,
                         name: item.name
                     }
                 })
@@ -246,8 +249,39 @@ export default defineComponent({
             initMemberCount: [{ required: true, message: '请输入初始化会员数' }],
             undertaker: [{ required: true, message: '承接人至少一个' }],
         }
+
+        // 查询当前活动数据
+        const getActivityData = (activityId: number | string) => {
+            const query: BaseRequestModel = {
+                params: {
+                    activityId
+                },
+                pageIndex: 1,
+                pageRows: 10,
+            };
+            ServGetActivity(query).then(res => {                
+                // refState.activity = res.records[0];
+                const data = res.records[0];
+
+                state.formData = {
+                    ...state.formData,
+                    ...data
+                }
+
+                state.imageList = JSON.parse(data.banner);
+                state.formData.activityEffectiveFlag = data.activityEffectiveFlag === 0;
+                state.formData.newFlag = data.newFlag === 1;
+                state.formData.externalData = data.externalData ===1;
+                state.externalContact = mapperHelper(res.records[0].undertaker, { name: 'name', id: 'qyUserId', avatar: 'headUrl' })
+                console.log(state.formData)
+            })
+        }
+
         onMounted(() => {
             ServAgentSinge(); // 应用签名
+            debugger
+            const activityId = router.currentRoute.value.query.activityId as string;
+            activityId && getActivityData(activityId);
         })
         return { ...toRefs(methods), ...toRefs(state), validator, activityExplain }
     }

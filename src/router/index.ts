@@ -120,7 +120,9 @@ router.beforeEach(async (to, from, next) => {
     if (ROUTER_WIHITELIST.includes(to.path)) {
       next();
     } else {
-      next({ name: 'login' });
+      // next({ name: 'login' });
+      // next({ name: 'login', query: { redirect_url: to.fullPath } });
+      next({ name: 'login', query: { redirect_url: window.location.href } });
     }
   }
 })

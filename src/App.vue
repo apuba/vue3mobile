@@ -45,7 +45,7 @@ export default defineComponent({
 // @import "./style/animate.css";
 @import "./style/default.scss";
 // @import './style/iconfont.css';
-@import url("//at.alicdn.com/t/font_2305781_xba93ktb06.css");
+@import url("//at.alicdn.com/t/font_2305781_h09f1xmqlkp.css");
 .routerStyle {
   position: absolute;
   width: 100%;

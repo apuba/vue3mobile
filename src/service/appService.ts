@@ -176,7 +176,7 @@ export const ServGetEnteInfo = async () => {
 export const ServGetMemberInfo = async () => {
     const res = await http.get(EApi.getMemberInfo, {});
     window.localStorage.userInfo = JSON.stringify(res.data); // 写入token信息;
-    return res.data
+    return res
 }
 
 // 是否打开过红包
@@ -223,6 +223,11 @@ export const ServgetCountByStatus = async () => {
 // 获取活动个人二维码
 export const ServGetActivityQrcode = async (activityId: number, undertakerId: number) => {
     return await http.get(EApi.getActivityQrcode, { params: { activityId, undertakerId } });
+}
+
+// 获取 活动二维码，有分享者与新用户关联关系
+export const ServCreateTempQrcode = async (activityId: number, realMemberId: number) => {
+    return await http.get(EApi.createTempQrcode, { params: { activityId, realMemberId } });
 }
 
 // 获取数据字典

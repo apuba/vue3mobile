@@ -28,6 +28,7 @@ export default defineComponent({
 
         if (!userInfo.memberId) {
             ServGetMemberInfo().then(res => {
+                debugger
                 store.commit('setUserInfo', res.data);
             })
         }

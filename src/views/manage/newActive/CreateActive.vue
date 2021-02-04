@@ -258,13 +258,10 @@
 
         <!-- <div class="activityExplain">{{ activityExplain }}</div> -->
       </van-cell-group>
-      <div class="btnlist">
-<!--         <div class="btnlist-item">
-          <van-button type="default" round block>查看样式</van-button>
-        </div> -->
+      <div class="btnlist"> 
         <div class="btnlist-item">
           <van-button type="primary" round block native-type="submit" :loading="submitBtn.loading"
-          :disabled="submitBtn.disabled" :loading-text="submitBtn.loadingTxt">确定创建</van-button
+          :disabled="submitBtn.disabled" :loading-text="submitBtn.loadingTxt"> {{ pageType==='edit'?'确定修改':'确定创建'}}</van-button
           >
         </div>
       </div>

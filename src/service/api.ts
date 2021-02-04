@@ -37,4 +37,5 @@ export enum EApi {
     getGrantData = '/wxServer/activity/getGrantData', // 查询活动数据-活动发放数据
     getCountByStatus = '/wxServer/activity/getCountByStatus', // 活动状态统计
     getActivityQrcode ='/wxServer/activity/getActivityQrcode', // 获取活动个人二维码 base64
+    createTempQrcode = '/wxServer/member/createTempQrcode', // 创建二维码
 }

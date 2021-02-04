@@ -7,7 +7,7 @@
  */
 
 import { defineComponent, reactive, toRefs, onMounted, unref, toRaw } from "vue";
-import { Tabs, Tab, Progress, PullRefresh, Toast } from "vant";
+import { Tabs, Tab, Progress, PullRefresh, Toast, Icon } from "vant";
 import { ServGetActivity, ServUpdateActivityStatus, ServgetCountByStatus } from "@/service/appService";
 import { DTOActivity, ITabs, IUpdateActivityStatus } from "@/service/appModel";
 import { BaseRequestModel } from "@/service/baseModel";
@@ -21,6 +21,7 @@ interface IqueryParams {
 
 export default defineComponent({
   components: {
+    [Icon.name]: Icon,
     [Tabs.name]: Tabs,
     [Tab.name]: Tab,
     [Progress.name]: Progress,
@@ -100,12 +101,12 @@ export default defineComponent({
         // 保存当前活动到Vuex
         store.commit('setCurrentActivity', activity);
 
-        switch(target) {
+        switch (target) {
           case 'share':
             router.push('/customer/hongbao?activityId=' + activity.activityId)
-          break;
+            break;
         }
-        
+
       },
       updateStatusHandler(activity: any, activityStatus: number) {
         const { activityId } = activity;
@@ -125,7 +126,9 @@ export default defineComponent({
                 activity.statusLabel = '已暂停'
                 break;
             }
-            _.remove(state.activeList, item => item.activityId === activityId); // 把当前数据从数组中移除
+
+            (activityStatus === 0) && _.remove(state.activeList, item => item.activityId === activityId); // 把当前数据从数组中移除
+
             Toast(`状态更新为：${activity.statusLabel}成功`)
             getActivityTotalData();
 

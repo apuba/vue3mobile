@@ -109,7 +109,6 @@ export default defineComponent({
         }
 
 
-
         // 查询当前活动数据
         const getActivityData = (activityId: number, queryParams: any) => {
             console.log('获取活动请求--')
@@ -138,7 +137,6 @@ export default defineComponent({
                 }
 
                 refState.activity.isUndertaker = refState.isUndertaker; // 判断是否承接人
-
                 console.log('当前用户信息--', userInfo);
                 console.log('判断当前用户是否为承接人--', refState.isUndertaker);
                 if (refState.isUndertaker) {
@@ -153,8 +151,10 @@ export default defineComponent({
                 } else {
                     refState.loadBase64 += 1;
                     // 普通用户生成的二维码链接
-                    queryParams.shareId = userInfo.memberId;
-                    refState.activity.qrCodeContent = window.location.origin + '?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                    queryParams.userType = 'share';
+                    queryParams.realMemberId= userInfo.memberId;
+                    refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                    console.log(refState.activity.qrCodeContent)
                 }
                 const { headUrl } = userInfo;
                 const { corpSquareLogoUrl } = enteInfo;
@@ -197,8 +197,6 @@ export default defineComponent({
 
         onMounted(() => {
             initData();
-
-
         })
         return {
             ...toRefs(refState),

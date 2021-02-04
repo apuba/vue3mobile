@@ -6,7 +6,7 @@
  * @Description: 
  */
 export const APP_NAME: string = 'VUE3.0大型系统前端框架'; // 系统应用名
-export const ROUTER_WIHITELIST: string[] = ['/login']; // 路由白名单
+export const ROUTER_WIHITELIST: string[] = ['/login','http://localhost:8080/customer/sharePoster']; // 路由白名单
 export const BASET_LAYOUT: string = 'default'; // 默认的布局
 export const OPEN_KEEPALIVE: boolean = false; // 是否开启KeepAlive缓存  开发时候最好关闭,不然每次都需要清除缓存
 export const ENABLED_ROUTER_TRANSTION: boolean = false; // 是否启用路由转场动画？

@@ -63,7 +63,7 @@ export default defineComponent({
         const onClickLeft = () => {
             router.go(-1);
         }
-        const activityId = router.currentRoute.value.query.id as string;
+        const activityId = router.currentRoute.value.query.activityId as string;
 
         // 查询当前活动数据
         const getActivityData = () => {
@@ -79,7 +79,7 @@ export default defineComponent({
                 refState.bannerList = JSON.parse(refState.activity.banner);
                 refState.activity.activityEffectiveFlag = refState.activity.activityEffectiveFlag === 1;
                 refState.activity.newFlag = refState.activity.newFlag === 1;
-                refState.externalContact = mapperHelper(res.records[0].undertaker, { name: 'name', id: 'avtivityId', avatar: 'headUrl' })
+                refState.externalContact = mapperHelper(res.records[0].undertaker, { name: 'name', id: 'qyUserId', avatar: 'headUrl' })
                 refState.isLoaded = true;
             })
         }

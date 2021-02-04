@@ -22,11 +22,21 @@
       ></van-tab>
     </van-tabs>
     <div class="pt10">
-      <ComScrollPage v-model:value="inBottom" v-model:reload="scrollReload" @loadData="onRefresh">
+      <ComScrollPage
+        v-model:value="inBottom"
+        v-model:reload="scrollReload"
+        @loadData="onRefresh"
+      >
         <div class="active-list">
-          <div class="active-item" v-for="(item) in activeList" :key="item.activityId">
+          <div
+            class="active-item"
+            v-for="item in activeList"
+            :key="item.activityId"
+          >
             <div class="progres">
-              <van-progress :percentage="getComplete(item.useAmount,item.totalAmount)" />
+              <van-progress
+                :percentage="getComplete(item.useAmount, item.totalAmount)"
+              />
             </div>
             <ul class="active-detail">
               <li>
@@ -57,7 +67,7 @@
             <div class="active-btn-list">
               <span
                 class="active-btn"
-                v-show="item.activityStatus===4 || item.activityStatus===1"
+                v-show="item.activityStatus === 4 || item.activityStatus === 1"
                 @click="updateStatusHandler(item, 2)"
                 title="启动"
               >
@@ -67,7 +77,7 @@
               <span
                 class="active-btn"
                 title="暂停"
-                v-show="item.activityStatus ===2"
+                v-show="item.activityStatus === 2"
                 @click="updateStatusHandler(item, 4)"
               >
                 <span class="iconfont icon-zanting"></span>
@@ -76,7 +86,7 @@
               <span
                 class="active-btn"
                 title="停止"
-                v-show="item.activityStatus ===2 || item.activityStatus ===4"
+                v-show="item.activityStatus === 2 || item.activityStatus === 4"
                 @click="updateStatusHandler(item, 3)"
               >
                 <span class="iconfont icon-tingzhi"></span>
@@ -85,7 +95,9 @@
               <router-link
                 title="详情"
                 class="active-btn"
-                :to="'/activityDetail?type=detail&activityId=' + item.activityId"
+                :to="
+                  '/activityDetail?type=detail&activityId=' + item.activityId
+                "
               >
                 <span class="iconfont icon-xiangqing"></span>
               </router-link>
@@ -106,6 +118,16 @@
               >
                 <span class="iconfont icon-fenxiang"></span>
               </router-link>
+
+              <router-link
+                title="编辑"
+                class="active-btn active fr"
+                :to="'/createActive?type=edit&activityId=' + item.activityId"
+                v-show="item.activityStatus === 4"
+              >
+                <span class="iconfont icon-bianji1"></span>
+              </router-link>
+             
             </div>
           </div>
         </div>

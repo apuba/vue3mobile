@@ -8,10 +8,10 @@
 
 import router from '@/router';
 import { defineComponent, onMounted, reactive, toRefs } from 'vue'
-import { ServGetActivity, ServGetActivityQrcode, ServGetBase64Img, ServGetEnteInfo, ServGetMemberInfo, ServIsOpenHongbao } from '@/service/appService';
+import { ServCreateTempQrcode, ServGetActivity, ServGetActivityQrcode, ServGetBase64Img, ServGetEnteInfo, ServGetMemberInfo, ServIsOpenHongbao } from '@/service/appService';
 import { BaseRequestModel } from '@/service/baseModel';
 import { useStore, mapState } from 'vuex'
-import { Overlay } from 'vant';
+import { Overlay, Toast } from 'vant';
 
 import Poster from '../Poster.vue'
 
@@ -43,7 +43,7 @@ export default defineComponent({
         })
 
         // 查询当前活动数据
-        const getActivityData = (activityId: number, undertakerId: number) => {
+        const getActivityData = (activityId: number, realMemberId: number) => {
             console.log('获取活动请求--')
             const query: BaseRequestModel = {
                 params: {
@@ -53,11 +53,18 @@ export default defineComponent({
                 pageRows: 10,
             };
             ServGetActivity(query).then(async (res) => {
+                if (!res) {
+                    console.log('无此活动');
+                    Toast('无此活动')
+                    return;
+                }
                 refState.activity = res.records[0];
                 refState.activity.initMemberCount += Math.round(Math.random() * 100); // 在领取人的基础上随机再添加人数
                 console.log('当前用户信息--', userInfo);
                 console.log('获取 活动二维码--')
-                ServGetActivityQrcode(activityId, undertakerId).then(res => {
+
+                ServCreateTempQrcode(activityId, realMemberId).then(res => {
+                    debugger
                     // 获取活动二维码 base64
                     if (res.data) {
                         refState.activity.qrCode = res.data.base64;
@@ -71,10 +78,12 @@ export default defineComponent({
             console.log('当前用户信息-刚进来-initData', userInfo);
             const result = router.currentRoute.value.query.result as string;
             debugger
-            if (!result) return console.error('缺少aactivityId');
+            if (!result) return console.error('缺少海报参数');
             const queryParams = JSON.parse(decodeURIComponent(result));
-            const id = queryParams.activityId
-            const activityId = parseInt(id);
+            // const id = queryParams.activityId
+
+            const { inviteesId, activityId, realMemberId } = queryParams
+            // const activityId = parseInt(id);
             console.log('当前用户信息--initData', userInfo);
 
             // 是否拆过红包
@@ -86,10 +95,11 @@ export default defineComponent({
                     if (!userInfo.memberId) {
                         ServGetMemberInfo().then(res => {
                             store.commit('setUserInfo', res.data);
-                            getActivityData(activityId, res.data.memberId);
+
+                            getActivityData(activityId, realMemberId);
                         })
                     } else {
-                        getActivityData(activityId, userInfo.memberId);
+                        getActivityData(activityId, realMemberId);
                     }
 
                     // 获取企业信息
