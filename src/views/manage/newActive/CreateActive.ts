@@ -149,6 +149,8 @@ export default defineComponent({
                 })
             },
             onClickLeft: () => {
+                console.log(router)
+                debugger
                 router.go(-1);
             },
             onSubmit: (values: any) => {
@@ -262,12 +264,10 @@ export default defineComponent({
             ServGetActivity(query).then(res => {                
                 // refState.activity = res.records[0];
                 const data = res.records[0];
-
                 state.formData = {
                     ...state.formData,
                     ...data
                 }
-
                 state.imageList = JSON.parse(data.banner);
                 state.formData.activityEffectiveFlag = data.activityEffectiveFlag === 0;
                 state.formData.newFlag = data.newFlag === 1;
@@ -279,7 +279,6 @@ export default defineComponent({
 
         onMounted(() => {
             ServAgentSinge(); // 应用签名
-            debugger
             const activityId = router.currentRoute.value.query.activityId as string;
             activityId && getActivityData(activityId);
         })

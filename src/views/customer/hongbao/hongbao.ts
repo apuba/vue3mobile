@@ -5,16 +5,17 @@
  * @LastEditors: 侯兴章
  * @Description: 
  */
-
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import { Swipe, SwipeItem, Image, Button, Overlay, Toast, NoticeBar, NavBar, Icon } from 'vant';
 import Poster from '../Poster.vue';
 import { saveToImage } from '@/common/helper/html2Image';
 import { useStore, mapState } from 'vuex';
-import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServGetActivityQrcode, ServLogin } from '@/service/appService';
+import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServGetActivityQrcode, ServLogin, ServGetInvitessList } from '@/service/appService';
 import _ from 'lodash';
 import { BaseRequestModel } from '@/service/baseModel';
 import router from '@/router';
+// import { loadScript } from '@/common/helper/tools';
+
 
 export default defineComponent({
     components: {
@@ -38,6 +39,7 @@ export default defineComponent({
 
         const userInfo = JSON.parse(window.localStorage.userInfo);
         const refState = reactive({
+            posterImg: {} as any, // 海报图片
             isOpening: false, // 当前正在拆红包
             isUndertaker: false, // 当前用户是否是活动承接人，活动承接人可以生成海报进行分享。
             activity: {} as any,
@@ -47,7 +49,12 @@ export default defineComponent({
             showPoster: false, // 显示海报
             isShared: false, // 进行分享状态     
             createPosterStatus: 0,// 创建海报状态  0 未创建 1 创建中 2已创建
-            loadBase64: 0 // 需要转换头像与活动二维码的图片至base64格式，  为2时转换完毕,方可以生成海报
+            loadBase64: 0, // 需要转换头像与活动二维码的图片至base64格式，  为2时转换完毕,方可以生成海报
+            inviteeList: new Array(3),
+            showAmount: {
+                show: false,
+                amount: 0
+            } // 显示领取金额 ? 
         })
 
         // refState.activity.activityStatus = 2; // 进行中 测试状态，调试完需要删除 活动状态 1:待启动 2：进行中 3：已结束 4：暂停
@@ -73,7 +80,9 @@ export default defineComponent({
             refState.showPoster = true;
             if (refState.createPosterStatus === 2) return; // 已经创建成功海报，不需要再进行创建
             refState.createPosterStatus = 1;
-            saveToImage('#hongbaoPoster', '.imgContainer').then(res => {
+            console.log('发起生成海报=======')
+            saveToImage('#hongbaoPoster', '#imgContainer').then(res => {
+                console.log('生成海报结束=======', res)
                 refState.createPosterStatus = 2;
             })
         }
@@ -96,16 +105,21 @@ export default defineComponent({
                         case 30001: // 活动已结束
                             refState.activity.activityStatus = 3;
                             break;
-                        case 30007: // 已领取
+                        case 30007: // 已领取过了
                             refState.isShared = !refState.isShared;
                             break;
-                        case 30006: // 已发送
+                        case 30006: // 已发送，领取成功
                             refState.isShared = !refState.isShared;
+                            refState.showAmount = {
+                                show: true,
+                                amount: res.data.orderInfo.actualAmt
+                            }; //
                             break;
                         case 30003: // 未关注承接人
                             Toast(res.data.msg)
                             break;
                     }
+                    getInvitessList(refState.activity.activityId);
                 }
             })
         }
@@ -137,27 +151,9 @@ export default defineComponent({
                         }
                     })
                 }
-
                 refState.activity.isUndertaker = refState.isUndertaker; // 判断是否承接人
                 console.log('当前用户信息--', userInfo);
                 console.log('判断当前用户是否为承接人--', refState.isUndertaker);
-                /*  if (refState.isUndertaker) {
-                     console.log('获取 活动二维码--')
-                     ServGetActivityQrcode(activityId, userInfo.memberId).then(res => {
-                         // 获取活动二维码 base64
-                         if (res.data) {
-                             refState.activity.qrCode = res.data.base64;
-                             refState.loadBase64 += 1;
-                         }
-                     })
-                 } else {
-                     refState.loadBase64 += 1;
-                     // 普通用户生成的二维码链接
-                     queryParams.userType = 'share';
-                     queryParams.realMemberId= userInfo.memberId;
-                     refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
-                     console.log(refState.activity.qrCodeContent)
-                 } */
 
                 refState.loadBase64 += 1;
                 // 普通用户生成的二维码链接
@@ -168,7 +164,6 @@ export default defineComponent({
 
                 refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
                 console.log(refState.activity.qrCodeContent)
-
 
                 const { headUrl } = userInfo;
                 const { corpSquareLogoUrl } = enteInfo;
@@ -184,8 +179,21 @@ export default defineComponent({
                 }
             })
         }
+
         const onClickLeft = () => {
             router.go(-1);
+        }
+
+        // 获取 已邀请人员列表
+        const getInvitessList = (activityId: number) => {
+            ServGetInvitessList({ activityId }).then(res => {
+                if (res.data) {
+                    res.data.some((item: any, index: number) => {
+                        refState.inviteeList[index] = item
+                        return index > 2
+                    });
+                }
+            })
         }
 
         // 初始化数据
@@ -203,6 +211,8 @@ export default defineComponent({
 
             console.log('当前用户信息--initData', userInfo);
             getActivityData(activityId, queryParams);
+
+            getInvitessList(activityId);
             // 是否拆过红包
             ServIsOpenHongbao(activityId).then(res => {
                 refState.isShared = res.data.isOpen; // 是否已折过红包 ？

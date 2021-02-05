@@ -8,7 +8,7 @@
 
 import router from '@/router';
 import { defineComponent, onMounted, reactive, toRefs } from 'vue'
-import { ServCreateTempQrcode, ServGetActivity, ServGetActivityQrcode, ServGetBase64Img, ServGetEnteInfo, ServGetMemberInfo, ServIsOpenHongbao } from '@/service/appService';
+import { ServCreateTempQrcode, ServGetActivity, ServGetActivityQrcode, ServGetBase64Img, ServGetEnteInfo, ServGetEnterInfoByActivityId, ServGetMemberInfo, ServIsOpenHongbao } from '@/service/appService';
 import { BaseRequestModel } from '@/service/baseModel';
 import { useStore, mapState } from 'vuex'
 import { Overlay, Toast } from 'vant';
@@ -26,7 +26,7 @@ export default defineComponent({
     setup() {
         const store = useStore();
         // const userInfo = store.state.userInfo; 
-        const userInfo =  JSON.parse(window.localStorage.userInfo); 
+        const userInfo = JSON.parse(window.localStorage.userInfo);
         const refState = reactive({
             userInfo,
             isUndertaker: false,
@@ -105,7 +105,7 @@ export default defineComponent({
                     }
 
                     // 获取企业信息
-                    ServGetEnteInfo().then((res: any) => {
+                    ServGetEnterInfoByActivityId({activityId}).then((res: any) => {
                         store.commit('setEnteInfo', res.data) // 把企业信息存到store
                     })
                 }

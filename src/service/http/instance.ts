@@ -8,6 +8,7 @@
 
 import axios, { AxiosRequestConfig, Method } from 'axios';
 import storage from '@/common/storage';
+import { getURLParams } from '@/common/helper/tools';
 // import { Loading } from 'element-ui';
 // import { ElLoadingComponent } from 'element-ui/types/loading';
 
@@ -76,9 +77,12 @@ instance.interceptors.response.use(
                 break;
             case 9000:
                 // token过期
-                storage().remove('token');
+                // storage().remove('token');
                 // storage('sessionstorage').remove('store'); // 刷新页面保留的store需要的
-                window.location.href='/login'
+
+                window.localStorage.clear();
+                // const redirect_url = getURLParams('redirect_url') || window.location.href;
+                window.location.href = window.location.origin + '/login?redirect_url=' + encodeURIComponent(window.location.href);
                 break;
             default:
                 break;

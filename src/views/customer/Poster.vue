@@ -17,16 +17,18 @@
           </div>
         </div>
         <div class="hongbao-bg" :style="hongbaoBottom">
-          <div class="hongbao-middle hongbao-bg" :style="hongbaoMiddle">
-            <span class="take">
-              <img :src="activity.headUrl"  />
-            </span>
+          <div class="hongbao-middle hongbao-bg">
+            <div class="photo">
+              <span class="take" v-if="activity.headUrl">
+                <img :src="activity.headUrl" />
+              </span>
+            </div>
+            <img src="@public/images/hongbaoMiddlePoster.jpg" />
           </div>
           <div class="hongbao-bottom">
             <h4 class="mb10 userName">{{ userInfo.name }}已领取</h4>
             <h1>单个1~50元</h1>
-            <div class="qr">
-              <!-- <img :src="activity.qrCode" v-show="activity.isUndertaker" /> -->
+            <div class="qr">            
               <div id="qr"></div>
             </div>
             <div class="remark">
@@ -41,9 +43,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue'
-import { useStore } from 'vuex';
-import { qrcanvas } from 'qrcanvas'; // 二维码
+import { defineComponent, onMounted, reactive, ref, toRefs, watch } from "vue";
+import { useStore } from "vuex";
+import { qrcanvas } from "qrcanvas"; // 二维码
 
 export default defineComponent({
   components: {
@@ -52,42 +54,50 @@ export default defineComponent({
   props: {
     id: {
       type: String,
-      default: 'poster'
+      default: "poster",
     },
     activity: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const store = useStore();
     const refState = reactive({
       hongbaoMiddle: {
-        backgroundImage: 'url(' + require('@public/images/hongbaoMiddlePoster.jpg') + ')'
+        backgroundImage:
+          "url(" + require("@public/images/hongbaoMiddlePoster.jpg") + ")",
       },
       hongbaoBottom: {
-        backgroundImage: ' url(' + require('@public/images/hongbaobgBottom.jpg') + ')'
+        backgroundImage:
+          " url(" + require("@public/images/hongbaobgBottom.jpg") + ")",
       },
-      userInfo: { ...store.state.userInfo }
-    })
+      userInfo: { ...store.state.userInfo },
+    });
 
-    watch(() => props.activity.qrCodeContent, (nval, oval) => {
-      // if (!nval || props.activity.isUndertaker) return;
-      if (!nval) return;
-      const qr = qrcanvas({
-        data: nval || '红包生成中',
-        size: 120, // 二维码大小
-      })
-      const ele = document.querySelector('#qr') as HTMLDivElement
-      ele.appendChild(qr);
-    })
-    onMounted(() => {
+    watch(
+      () => props.activity.qrCodeContent,
+      (nval, oval) => {       
+        if (!nval) return;
+        const qr = qrcanvas({
+          data: nval || "红包生成中",
+        });
 
-    })
+        const newImage = new Image();
+        newImage.width = 120;
+        newImage.height = 120;
+        newImage.style.border = "4px solid #fff";
+        newImage.src = qr.toDataURL("image/png");
+        newImage.style.margin = "4px";
+        const ele = document.querySelector("#qr") as HTMLDivElement;
+        ele.appendChild(newImage);
+      }
+    );
+    onMounted(() => {});
 
-    return { ...toRefs(refState) }
-  }
-})
+    return { ...toRefs(refState) };
+  },
+});
 </script>
 
 <style scoped lang="scss">
@@ -133,19 +143,29 @@ export default defineComponent({
     .title {
       color: #ff0;
     }
+    h1 {
+      font-size: 32px;
+    }
   }
   .hongbao-middle {
+    position: relative;
     background-repeat: no-repeat;
-
-    min-height: 65px;
-    text-align: center;
-    padding-top: 30px;
+    & > img {
+      width: 100%;
+    }
+    .photo {
+      position: absolute;
+      top: 30px;
+      left: 50%;    
+      margin-left: -32px;
+    }
     .take {
+      z-index: 1;
       width: 65px;
       height: 65px;
       line-height: 65px;
       text-align: center;
-      margin: 0 8px;
+  
       display: inline-block;
       border-radius: 35px;
       overflow: hidden;
@@ -154,8 +174,8 @@ export default defineComponent({
       color: #f00;
       font-weight: bold;
       img {
-        width: 65px;
-        height: 65px;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
   }
@@ -178,28 +198,16 @@ export default defineComponent({
       }
     }
     .qr {
-      padding: 8px;
+      // padding: 8px;
       display: inline-block;
       margin: 0 auto;
-      width: 128px;
-      height: 128px;
+
       background-size: contain;
       // background-color: #fff;
-      img {
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
     }
   }
   .userName {
     font-weight: normal;
-  }
-  #qr {
-    padding: 4px;
-    background-color: #fff;
-    height: 120px;
-    width: 120px;
   }
 }
 </style>

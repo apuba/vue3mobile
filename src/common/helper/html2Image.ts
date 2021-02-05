@@ -8,8 +8,12 @@
 /**
      * 根据window.devicePixelRatio获取像素比
      */
-import html2canvas from 'html2canvas';
-import { xor } from 'lodash';
+// import html2canvas from 'html2canvas'
+
+// import html2canvas from './html2canvas.js'
+
+const html2canvas = require('./html2canvas');
+
 
 function DPR() {
     if (window.devicePixelRatio && window.devicePixelRatio > 1) {
@@ -28,26 +32,27 @@ function parseValue(value: string) {
  * 图片转base64格式
  */
 function convertCanvasToImage(canvas: HTMLCanvasElement, imgContainer: string, x: number, y: number) {
-    const image = new Image();
+    const newImage = new Image();
 
-    image.width = x;
-    image.height = y;
-    image.src = canvas.toDataURL("image/png");
+    newImage.width = x;
+    newImage.height = y;
+    newImage.src = canvas.toDataURL("image/png");
     /*   image.style.position = 'absolute';
       image.style.zIndex = '10';
       image.style.top = '0'; */
 
-    const _container = document.querySelector(imgContainer);
-    const _child = _container?.querySelector('img');
+    let _container = document.querySelector(imgContainer);
+    _container && (_container.innerHTML = '');
 
-    _child && _container?.removeChild(_child);
+
+    console.log('img    ----', newImage)
 
     if (_container) {
-        _container.appendChild(image);
+        _container.appendChild(newImage);
     } else {
-        document.body.appendChild(image);
+        document.body.appendChild(newImage);
     }
-    return image;
+    return newImage;
 }
 
 /**
@@ -86,8 +91,10 @@ export const saveToImage = async (selector: string, imgContainer: string) => {
         convertCanvasToImage(canvas, x, y)
     }) */
 
+    await html2canvas(dom, { canvas, scale: scaleBy, useCORS: true, allowTaint: false });
 
-    await html2canvas(dom, { canvas, scale: scaleBy, useCORS: true,allowTaint: false });
+
+
     const image = convertCanvasToImage(canvas, imgContainer, width, height) // 返回业务逻辑，自行处理。
 
     return {

@@ -24,8 +24,8 @@ export default defineComponent({
     setup(props, content) {
         const store = useStore();
 
-        const userInfo = store.state.userInfo;
-
+        // const userInfo = store.state.userInfo;
+        const userInfo = JSON.parse(window.localStorage.userInfo);
         if (!userInfo.memberId) {
             ServGetMemberInfo().then(res => {
                 debugger

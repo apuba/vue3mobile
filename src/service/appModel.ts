@@ -107,9 +107,11 @@ export interface IuserInfo {
     externalUserid: string
     puserid?: number | string,
     token: string,
+    undertaker?: boolean,
     isUndertaker?: boolean,
     headUrl?: string
-    realMemberId?:number
+    realMemberId?: number,
+    isAdd?: number
 }
 
 export interface IUpdateActivityStatus {

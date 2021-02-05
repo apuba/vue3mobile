@@ -113,9 +113,6 @@ export const ServSinge = async (url: string = window.location.href.split('#')[0]
     window.wx.ready(function (res: any) {
         console.log('wx.ready 完成')
         // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-
-
-
     });
 
     window.wx.error(function (res: any) {
@@ -152,13 +149,16 @@ export const ServWechatLogin = async (requestType: string, url = window.location
 
 // 登录服务获取用户信息及token
 export const ServLogin = async (params: any): Promise<IuserInfo> => {
-    const mapper = ['name', { avatar: 'headUrl' }, 'headUrl', 'isUndertaker', 'memberId', 'enterId', 'inviteesId', 'qyUserId', 'qyMemberType', 'externalUserid', 'puserid', 'token']
-    const res = await http.post(EApi.login, params, mapper);
+    const res = await http.post(EApi.login, params);
     return new Promise((resolve, rejest) => {
         if (!res.data) {
             rejest('登录失败------')
         } else {
-            const userInfo = res.data[0] as IuserInfo;
+            res.data.isUndertaker = res.data.undertaker;
+
+            const userInfo = res.data as IuserInfo;
+            console.log('用户登录成功结果', userInfo)
+            userInfo.headUrl && (userInfo.avatar = userInfo.headUrl);
             window.localStorage.token = userInfo.token; // 写入token信息;
             window.localStorage.userInfo = JSON.stringify(userInfo); // 写入token信息;
             resolve(userInfo)
@@ -169,12 +169,12 @@ export const ServLogin = async (params: any): Promise<IuserInfo> => {
 // 获取企业信息
 export const ServGetEnteInfo = async () => {
     return await http.get(EApi.getEnteInfo, {});
-
 }
 
 // 获取会员信息
-export const ServGetMemberInfo = async () => {
-    const res = await http.get(EApi.getMemberInfo, {});
+export const ServGetMemberInfo = async (params?: any) => {
+    const res = await http.get(EApi.getMemberInfo, { params });
+    res.data.isUndertaker = res.data.undertaker;
     window.localStorage.userInfo = JSON.stringify(res.data); // 写入token信息;
     return res
 }
@@ -193,7 +193,6 @@ export const ServOpenHongbao = async (activityId: number) => {
 export const ServGetBase64Img = async (url: string) => {
     return await http.get(EApi.getBase64Image, { params: { url } });
 }
-
 
 // 更新活动状态
 export const ServUpdateActivityStatus = async (params: IUpdateActivityStatus) => {
@@ -234,6 +233,19 @@ interface qrCode {
 export const ServCreateTempQrcode = async (params: qrCode) => {
     return await http.get(EApi.createTempQrcode, { params });
 }
+
+// 获取当前用户已邀请的成员列表
+export const ServGetInvitessList = async (params: { activityId: number }) => {
+    return await http.get(EApi.getInvitessList, { params })
+}
+
+
+// 根据活动ID查询企业信息
+export const ServGetEnterInfoByActivityId = async (params: { activityId: number }) => {
+    return await http.get(EApi.getEnterInfoByActivityId, { params })
+}
+
+
 
 // 获取数据字典
 /* export const ServiceGetDict = async () => {

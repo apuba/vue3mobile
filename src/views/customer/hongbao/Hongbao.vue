@@ -71,11 +71,12 @@
               <div v-show="isShared" v-if="activity.invitationAmountHigh">
                 <span
                   class="shared"
-                  v-for="i in activity.invitationAmountHigh"
-                  :key="i"
+                  v-for="item in inviteeList"
+                  :key="item"
                   @click="createPosterHandler"
-                  >+</span
                 >
+                  <span class="name">{{ item ? item.name : "+" }}</span>
+                </span>
               </div>
             </div>
             <div class="hongbao-bottom">
@@ -83,6 +84,9 @@
                 {{ activity.initMemberCount }}人领取了红包
               </p>
               <p v-show="isShared">
+                <span v-if="showAmount.show"
+                  >成功领取：{{ showAmount.amount }}元</span
+                >
                 <van-button
                   type="danger"
                   class="btn"
@@ -124,7 +128,9 @@
       <div class="poster-page">
         <div class="poster-contain">
           <div>
-            <div class="imgContainer"></div>
+            <div class="imgContainer" id="imgContainer">
+              <!-- <img :src="posterImg.toDataURL('image/png')" :width="poster.width" :height="poster.heigth" /> -->
+            </div>
             <div class="remark-bottom" v-show="createPosterStatus === 1">
               海报生成中...
             </div>
@@ -216,6 +222,14 @@
   width: 100vw;
   height: 100vh;
   top: -20000px;
+  z-index: 100;
+}
+
+.poster-position1 {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 .btn-activityrule {
@@ -343,6 +357,10 @@
     font-size: 24px;
     color: #f00;
     font-weight: bold;
+    .name {
+      font-size: 14px;
+      line-height: 24px;
+    }
   }
 }
 
@@ -361,7 +379,7 @@
 }
 
 .hongbao-bottom {
-  padding: 10% 16px;
+  padding: 6% 16px;
   color: #f00;
 
   p {

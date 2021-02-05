@@ -12,5 +12,6 @@ declare module '*.vue' {
 }
 declare interface Window {
   __app__: any,
-  wx: any
+  wx: any,
+  html2canvas:any
 }

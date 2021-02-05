@@ -14,7 +14,7 @@ export const loadScript = (url: string, callback: Function, params: any) => {
     script.async = true
     script.src = url
     document.head.appendChild(script)
-    
+
     script.onload = function () {
         callback && callback(params)
     }
@@ -43,4 +43,16 @@ export const loadCss = (url: string) => {
     link.rel = 'stylesheet'
     link.href = url
     head.appendChild(link)
+}
+
+// 获取 URL参数
+export const getURLParams = (name: string) => {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+    var context = "";
+    if (r != null)
+        context = r[2];
+    // reg = null;
+    r = null;
+    return context == null || context == "" || context == "undefined" ? "" : context;
 }

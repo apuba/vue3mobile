@@ -38,4 +38,6 @@ export enum EApi {
     getCountByStatus = '/wxServer/activity/getCountByStatus', // 活动状态统计
     getActivityQrcode ='/wxServer/activity/getActivityQrcode', // 获取活动个人二维码 base64
     createTempQrcode = '/wxServer/member/createTempQrcode', // 创建二维码
+    getInvitessList = '/wxServer/member/getAllInviteesByInviteesId' , // 获取已邀请人列表
+    getEnterInfoByActivityId='wxServer/enter/getEnterInfoByActivityId', //通过活动获取企业信息
 }

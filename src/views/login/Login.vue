@@ -21,6 +21,7 @@ import {
   ServWechatLogin,
   ServGetEnteInfo,
   ServLogin,
+  ServGetMemberInfo,
 } from "@/service/appService";
 import router from "@/router";
 import { useStore } from "vuex";
@@ -31,59 +32,82 @@ export default defineComponent({
     const loginStyle = {
       backgroundImage: "url(" + require("@public/images/login.jpg") + ")",
     };
-
     const gifStyle = {
       backgroundImage: "url(" + require("@public/images/logo.jpg") + ")",
     };
     const code = (router.currentRoute.value.query.code as string) || "";
+    const result = router.currentRoute.value.query.result as string;
+    const redirect_url = router.currentRoute.value.query.redirect_url as string; // token过期时被 重定向的页面
+
+    const login = () => {
+      // 授权后进行登录处理
+      let queryParams;
+      let activityId;
+      if (result) {
+        queryParams = JSON.parse(decodeURIComponent(result));
+        activityId = queryParams.activityId;
+      }
+
+      ServLogin({ code, activityId })
+        .then((userInfo) => {
+          store.commit("setUserInfo", userInfo); // 把用户信息存到store
+          if (result) {
+            const queryParams = JSON.parse(decodeURIComponent(result));
+            if (queryParams.userType === "share") {
+              // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
+              if (userInfo.isAdd === 1) {
+                // 是否为活动承接人或已添加企业微信好友
+                router.push(`/customer/hongbao?result=${result}`);
+              } else {
+                router.push(`/customer/sharePoster?result=${result}`);
+              }
+              return;
+            }
+          }
+          redirect_url
+            ? (window.location.href = redirect_url)
+            : router.push("/");
+        })
+        .catch((err) => {
+          console.log("登录失败", err);
+        });
+    };
+
     onMounted(() => {
       debugger;
-      const redirect_url = router.currentRoute.value.query
-        .redirect_url as string;
-      const result = router.currentRoute.value.query.result as string;
+      // let userInfo = JSON.parse(window.localStorage.userInfo); // store.state.userInfo //
+
       if (window.localStorage.token) {
         if (result) {
-
-          const userInfo =  JSON.parse(window.localStorage.userInfo); // store.state.userInfo //
           const queryParams = JSON.parse(decodeURIComponent(result));
           if (queryParams.userType === "share") {
-            // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
-            if (userInfo.isUndertaker || userInfo.isAdd===1) {
-              // 是否为活动承接人或已添加企业微信好友
-              router.push(`/customer/hongbao?result=${result}`);
-            } else {
-              router.push(`/customer/sharePoster?result=${result}`);
-            }
+            const { activityId } = queryParams;
+
+            ServGetMemberInfo({ activityId }).then((res) => {
+              console.log("分享页面进来，需要重新获取最新用户信息");
+              store.commit("setUserInfo", res.data);
+              const userInfo = res.data;
+              // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
+              if (userInfo.isUndertaker || userInfo.isAdd === 1) {
+                // 是否为活动承接人或已添加企业微信好友
+                router.push(`/customer/hongbao?result=${result}`);
+              } else {
+                router.push(`/customer/sharePoster?result=${result}`);
+              }
+            });
             return;
           }
         }
-        redirect_url ? (window.location.href = redirect_url) : router.push("/");
-        return;
+        redirect_url
+          ? (window.location.href = decodeURIComponent(redirect_url))
+          : router.push("/");
       }
+
       if (!code) {
         ServWechatLogin("ADMIN"); // 授权
       } else {
         // 授权后进行登录处理
-        ServLogin({ code })
-          .then((res) => {
-            store.commit("setUserInfo", res); // 把用户信息存到store
-            if (result) {
-              const queryParams = JSON.parse(decodeURIComponent(result));
-              if (queryParams.userType === "share") {
-                // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
-                if (res.isUndertaker) {
-                  router.push(`/customer/hongbao?result=${result}`);
-                } else {
-                  router.push(`/customer/sharePoster?result=${result}`);
-                }
-                return;
-              }
-            }
-            redirect_url ? (window.location.href = redirect_url) : router.push("/");
-          })
-          .catch((err) => {
-            console.log("登录失败", err);
-          });
+        login();
       }
     });
     return { loginStyle, gifStyle };

@@ -10,6 +10,7 @@ import Home from '../views/Home.vue'
 import { ROUTER_MODEL } from '@/config/index'
 import storage from '@/common/storage';
 import { ROUTER_WIHITELIST } from '@/config';
+import { getURLParams } from '@/common/helper/tools';
 
 // 路由模式
 const historyModel = {
@@ -100,8 +101,8 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   }
- 
-  
+
+
 ]
 
 const router = createRouter({
@@ -111,7 +112,7 @@ const router = createRouter({
 })
 
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   const token = storage().get('token') || storage('localstorage').get('token');
   // 判断是否登录
   if (token) {
@@ -121,8 +122,8 @@ router.beforeEach(async (to, from, next) => {
       next();
     } else {
       // next({ name: 'login' });
-      // next({ name: 'login', query: { redirect_url: to.fullPath } });
-      next({ name: 'login', query: { redirect_url: window.location.href } });
+      const redirect_url = from.query.redirect_url || encodeURIComponent(window.location.href)
+      next({ name: 'login', query: { redirect_url } });
     }
   }
 })
