@@ -323,7 +323,7 @@
 
 .hongbao-middle {
   background-repeat: no-repeat;
-  min-height: 65px;
+  min-height: 70px;
   text-align: center;
 
   .take {

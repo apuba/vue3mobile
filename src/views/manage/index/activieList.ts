@@ -7,7 +7,7 @@
  */
 
 import { defineComponent, reactive, toRefs, onMounted, unref, toRaw } from "vue";
-import { Tabs, Tab, Progress, PullRefresh, Toast, Icon } from "vant";
+import { Tabs, Tab, Progress, PullRefresh, Toast, Icon, Dialog } from "vant";
 import { ServGetActivity, ServUpdateActivityStatus, ServgetCountByStatus } from "@/service/appService";
 import { DTOActivity, ITabs, IUpdateActivityStatus } from "@/service/appModel";
 import { BaseRequestModel } from "@/service/baseModel";
@@ -109,8 +109,19 @@ export default defineComponent({
 
       },
       updateStatusHandler(activity: any, activityStatus: number) {
-        const { activityId } = activity;
+        if (activityStatus === 3) {
+          Dialog.confirm({
+            message: '确认要结束当前活动吗？活动结束后不能再重启！'
+          }).then(() => {
+            methods.updateStatusEvent(activity, activityStatus);
 
+          })
+        } else {
+          methods.updateStatusEvent(activity, activityStatus);
+        }
+      },
+      updateStatusEvent(activity: any, activityStatus: number) {
+        const { activityId } = activity;
         // 更新活动状态
         ServUpdateActivityStatus({ activityId, activityStatus }).then(res => {
           if (res.code === 200) {
@@ -136,7 +147,7 @@ export default defineComponent({
             Toast(`状态更新为：${activity.statusLabel}失败`)
           }
         })
-      },
+      }
     };
 
 

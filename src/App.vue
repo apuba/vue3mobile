@@ -19,25 +19,28 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 
-import { defineComponent } from 'vue';
-
-import store from '@/store';
+import store from "@/store";
+import { onBeforeRouteUpdate } from "vue-router";
 
 export default defineComponent({
-
   setup() {
-    window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('store', JSON.stringify(store.state));
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("store", JSON.stringify(store.state));
     });
-
+    onBeforeRouteUpdate((to, form) => {
+      debugger
+      console.log(to, "=====");
+    });
     const sessionStore: string = sessionStorage.store;
     if (sessionStore) {
-      store.replaceState(Object.assign({}, store.state, JSON.parse(sessionStore)));
+      store.replaceState(
+        Object.assign({}, store.state, JSON.parse(sessionStore))
+      );
     }
-
     return {};
-  }
+  },
 });
 </script>
 

@@ -245,6 +245,11 @@ export const ServGetEnterInfoByActivityId = async (params: { activityId: number 
     return await http.get(EApi.getEnterInfoByActivityId, { params })
 }
 
+// 更新点击次数
+export const ServUpdateClick = async (activityId: number) => {
+    return await http.post(EApi.updateClick, { params: { activityId } })
+}
+
 
 
 // 获取数据字典

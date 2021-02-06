@@ -10,7 +10,7 @@ import { Swipe, SwipeItem, Image, Button, Overlay, Toast, NoticeBar, NavBar, Ico
 import Poster from '../Poster.vue';
 import { saveToImage } from '@/common/helper/html2Image';
 import { useStore, mapState } from 'vuex';
-import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServGetActivityQrcode, ServLogin, ServGetInvitessList } from '@/service/appService';
+import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServGetActivityQrcode, ServLogin, ServGetInvitessList, ServUpdateClick } from '@/service/appService';
 import _ from 'lodash';
 import { BaseRequestModel } from '@/service/baseModel';
 import router from '@/router';
@@ -36,6 +36,9 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const { enteInfo } = store.state;
+
+    
+        debugger;
 
         const userInfo = JSON.parse(window.localStorage.userInfo);
         const refState = reactive({
@@ -76,6 +79,8 @@ export default defineComponent({
         }
 
         const createPosterHandler = () => {
+            
+            if(refState.isShared) return;
             // html生成海报图片
             refState.showPoster = true;
             if (refState.createPosterStatus === 2) return; // 已经创建成功海报，不需要再进行创建
@@ -212,7 +217,8 @@ export default defineComponent({
             console.log('当前用户信息--initData', userInfo);
             getActivityData(activityId, queryParams);
 
-            getInvitessList(activityId);
+            getInvitessList(activityId); // 获取已邀请人列表
+            ServUpdateClick(activityId); // 更新点击次数
             // 是否拆过红包
             ServIsOpenHongbao(activityId).then(res => {
                 refState.isShared = res.data.isOpen; // 是否已折过红包 ？

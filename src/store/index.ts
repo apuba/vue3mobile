@@ -20,8 +20,14 @@ export default createStore({
     userInfo: {},
     payAgainUrl: '',
     currentActivity: {}, // 当前查询的活动
+    router: {
+      form: null
+    }
   },
   mutations: {
+    setRouter(state, payload) {
+      state.router = { ...state.router, ...payload };
+    },
     setCurrentActivity(state, payload) {
       state.currentActivity = payload
     },

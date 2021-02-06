@@ -48,8 +48,8 @@
                 <span>{{ item.subtitle }}</span>
               </li>
               <li>
-                <span class="title">金额</span>
-                <span>{{ item.totalAmount }}元</span>
+                <span class="title">金额(元)</span>
+                <span>总额：{{ item.totalAmount }}、已用：{{item.useAmount}}、剩余：{{ item.totalAmount - item.useAmount }} </span>
               </li>
               <li>
                 <span class="title">时间</span>

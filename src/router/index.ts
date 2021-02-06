@@ -11,6 +11,7 @@ import { ROUTER_MODEL } from '@/config/index'
 import storage from '@/common/storage';
 import { ROUTER_WIHITELIST } from '@/config';
 import { getURLParams } from '@/common/helper/tools';
+import { useStore } from 'vuex'
 
 // 路由模式
 const historyModel = {
@@ -20,20 +21,15 @@ const historyModel = {
 
 const routeHistory = historyModel[ROUTER_MODEL];
 
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    // redirect: '/index'
     component: () => import('../views/manage/index/Index.vue')
   },
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
@@ -71,13 +67,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'flowRecord',
     component: () => import('../views/manage/pay/FlowRecord.vue')
   },
-  // { path: '*', component: NotFoundComponent }
   {
     path: '/login',
     name: 'login',
     component: () => import('../views/login/Login.vue')
   },
-
   {
     path: '/customer',
     name: 'customer',
@@ -101,8 +95,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   }
-
-
 ]
 
 const router = createRouter({
@@ -110,7 +102,6 @@ const router = createRouter({
   history: routeHistory(process.env.BASE_URL),
   routes
 })
-
 
 router.beforeEach((to, from, next) => {
   const token = storage().get('token') || storage('localstorage').get('token');
@@ -127,4 +118,5 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
 export default router

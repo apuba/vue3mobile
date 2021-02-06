@@ -85,7 +85,7 @@ export default defineComponent({
         }
 
         const changeType = () => {
-            !refState.isLoaded && getActivityData();
+            initData();
         }
 
         const getInvitationData = () => {
@@ -104,8 +104,9 @@ export default defineComponent({
         const initData = () => {
             if (refState.active === 0) {
                 // 数据详情
-                getActivityData();
+                !refState.isLoaded && getActivityData();
             } else {
+                // 活动数据
                 ServGetGrantData(parseInt(activityId)).then(res => {
                     if (res.data) {
                         refState.activityTotalData = {
@@ -114,7 +115,6 @@ export default defineComponent({
                         }
                     }
                 })
-
                 ServGetActivityInfo(parseInt(activityId)).then(res => {
                     if (res.data) {
                         refState.activityTotalData = {
@@ -123,7 +123,6 @@ export default defineComponent({
                         }
                     }
                 })
-
                 getInvitationData();
 
             }
