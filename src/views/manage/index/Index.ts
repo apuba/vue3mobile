@@ -1,8 +1,8 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-29 23:30:25
- * @LastEditTime: 2021-01-31 03:07:33
- * @LastEditors: 侯兴章
+ * @LastEditTime: 2021-03-06 15:04:20
+ * @LastEditors: 3603317@qq.com
  * @Description: 
  */
 import { defineComponent, onMounted } from 'vue'
@@ -25,7 +25,8 @@ export default defineComponent({
         const store = useStore();
 
         // const userInfo = store.state.userInfo;
-        const userInfo = JSON.parse(window.localStorage.userInfo);
+        const userInfo = window.localStorage.userInfo ? JSON.parse(window.localStorage.userInfo) : {};
+        
         if (!userInfo.memberId) {
             ServGetMemberInfo().then(res => {
                 debugger

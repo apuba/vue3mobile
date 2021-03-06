@@ -1,8 +1,8 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-30 00:58:23
- * @LastEditTime: 2021-02-04 02:52:50
- * @LastEditors: 侯兴章
+ * @LastEditTime: 2021-03-06 15:37:23
+ * @LastEditors: 3603317@qq.com
  * @Description: 
 -->
 
@@ -90,6 +90,7 @@ export default defineComponent({
         newImage.src = qr.toDataURL("image/png");
         newImage.style.margin = "4px";
         const ele = document.querySelector("#qr") as HTMLDivElement;
+        ele.innerHTML = '';
         ele.appendChild(newImage);
       }
     );

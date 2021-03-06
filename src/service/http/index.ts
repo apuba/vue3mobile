@@ -28,8 +28,10 @@ class Abstract {
     protected headers: object = {
         'Content-Type': REQUEST_CONTENT_TYPE
     }
-
+    
     private apiAxios({ baseURL = this.baseURL, headers = this.headers, method, url, data, params, responseType, mapper }: AxiosRequest): Promise<CustomResponse> {
+
+        console.log('baseURL',baseURL);
         const token = storage().get('token');
         //  Authorization
         if (token) {

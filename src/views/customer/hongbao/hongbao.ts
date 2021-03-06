@@ -1,8 +1,8 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-02-04 03:24:02
- * @LastEditors: 侯兴章
+ * @LastEditTime: 2021-03-06 15:41:33
+ * @LastEditors: 3603317@qq.com
  * @Description: 
  */
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
@@ -10,7 +10,7 @@ import { Swipe, SwipeItem, Image, Button, Overlay, Toast, NoticeBar, NavBar, Ico
 import Poster from '../Poster.vue';
 import { saveToImage } from '@/common/helper/html2Image';
 import { useStore, mapState } from 'vuex';
-import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServGetActivityQrcode, ServLogin, ServGetInvitessList, ServUpdateClick } from '@/service/appService';
+import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServWxLogin, ServLogin, ServGetInvitessList, ServUpdateClick } from '@/service/appService';
 import _ from 'lodash';
 import { BaseRequestModel } from '@/service/baseModel';
 import router from '@/router';
@@ -36,10 +36,6 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const { enteInfo } = store.state;
-
-    
-        debugger;
-
         const userInfo = JSON.parse(window.localStorage.userInfo);
         const refState = reactive({
             posterImg: {} as any, // 海报图片
@@ -79,8 +75,7 @@ export default defineComponent({
         }
 
         const createPosterHandler = () => {
-            
-            if(refState.isShared) return;
+            if (refState.isShared) return;
             // html生成海报图片
             refState.showPoster = true;
             if (refState.createPosterStatus === 2) return; // 已经创建成功海报，不需要再进行创建
@@ -167,7 +162,16 @@ export default defineComponent({
                 queryParams.inviteesId = userInfo.memberId; // 承接人ID
                 queryParams.activityId = activityId; // 活动id
 
-                refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                // refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                const redirectUrl = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                refState.activity.qrCodeContent = redirectUrl;
+                ServWxLogin(redirectUrl).then(wxRes => {
+                    // debugger
+                    if (wxRes.code === 200 ) {                        
+                        refState.activity.qrCodeContent = wxRes.data.authUrl
+                    }
+                })
+
                 console.log(refState.activity.qrCodeContent)
 
                 const { headUrl } = userInfo;

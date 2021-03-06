@@ -23,7 +23,8 @@ export enum EApi {
     findCapitalFlow = '/wxServer/capitalFlow/findCapitalFlow', // 资金流水
     getOrderHeader = '/wxServer/order/getOrderHeader', // 订单查询
     getAppJsapiTicket = '/wxServer/sign/getAppJsapiTicket', // 应用签名
-    wechatLogin = '/wxServer/sc/getOauth2', // 授权登录
+    wechatLogin = '/wxServer/sc/getOauth2', // 企业微信授权登录
+    wxLogin = '/wxServer/wechat/getAuthUrl', // 微信公众号授权登录
     login = '/wxServer/baseLogin/mLogin', // 登录 获取token
     getEnteInfo = '/wxServer/enter/getEnterInfo', // 获取企业信息
     getMemberInfo = '/wxServer/member/findMember', // 获取会员信息
