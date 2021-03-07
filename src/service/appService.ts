@@ -1,8 +1,8 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-02-24 23:37:25
- * @LastEditors: 侯兴章
+ * @LastEditTime: 2021-03-06 17:43:42
+ * @LastEditors: 3603317@qq.com
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
 
@@ -139,11 +139,23 @@ export const ServFindCapitalFlow = async (params: BaseRequestModel) => {
     return http.get(EApi.findCapitalFlow, params);
 }
 
-// 登录服务
+// 微信公众号授权登录  state:is_wx_login   参数用于在登录页面识别公众号与企业微信登录接口返回 
+export const ServWxLogin = async (redirectUri = window.location.href.split('#')[0], state: string = 'is_wx_login') => {
+    // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
+    // TODO 清除 公众号自定参数state
+    const res = await http.get(EApi.wxLogin, { params: { redirectUri, state } });
+    console.log('获取到微信公众号的授权地址', res.data.authUrl)
+    // window.location.href = res.data.authUrl;
+    return res
+}
+
+// 企业微信授权登录服务
 export const ServWechatLogin = async (requestType: string, url = window.location.href.split('#')[0]) => {
     // mapUserInfo 为 IModelUserInfo 与后端实际返回的报文数据映射
+    debugger
+    //TODO: 清除 公众号自定参数state
     const res = await http.get(EApi.wechatLogin, { params: { url, requestType } });
-    console.log('获取到微信的授权地址', res.data.oauth2Url)
+    console.log('获取到企业微信的授权地址', res.data.oauth2Url)
     window.location.href = res.data.oauth2Url;
 }
 

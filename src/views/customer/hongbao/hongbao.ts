@@ -1,8 +1,8 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-02-11 01:47:31
- * @LastEditors: 侯兴章
+ * @LastEditTime: 2021-03-06 15:41:33
+ * @LastEditors: 3603317@qq.com
  * @Description: 
  */
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
@@ -10,7 +10,7 @@ import { Swipe, SwipeItem, Image, Button, Overlay, Toast, NoticeBar, NavBar, Ico
 import Poster from '../Poster.vue';
 import { saveToImage } from '@/common/helper/html2Image';
 import { useStore, mapState } from 'vuex';
-import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServGetActivityQrcode, ServLogin, ServGetInvitessList, ServUpdateClick } from '@/service/appService';
+import { ServIsOpenHongbao, ServOpenHongbao, ServGetBase64Img, ServGetActivity, ServWxLogin, ServLogin, ServGetInvitessList, ServUpdateClick } from '@/service/appService';
 import _ from 'lodash';
 import { BaseRequestModel } from '@/service/baseModel';
 import router from '@/router';
@@ -168,7 +168,16 @@ export default defineComponent({
                 queryParams.inviteesId = userInfo.memberId; // 承接人ID
                 queryParams.activityId = activityId; // 活动id
 
-                refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                // refState.activity.qrCodeContent = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                const redirectUrl = window.location.origin + '/login?result=' + encodeURIComponent(JSON.stringify(queryParams));
+                refState.activity.qrCodeContent = redirectUrl;
+                ServWxLogin(redirectUrl).then(wxRes => {
+                    // debugger
+                    if (wxRes.code === 200 ) {                        
+                        refState.activity.qrCodeContent = wxRes.data.authUrl
+                    }
+                })
+
                 console.log(refState.activity.qrCodeContent)
 
                 const { headUrl } = userInfo;

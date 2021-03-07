@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-30 00:58:23
- * @LastEditTime: 2021-02-24 22:23:25
+ * @LastEditTime: 2021-03-07 15:07:46
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -90,7 +90,7 @@ export default defineComponent({
         newImage.src = qr.toDataURL("image/png");
         newImage.style.margin = "4px";
         const ele = document.querySelector("#qr") as HTMLDivElement;
-        ele.innerHTML = ''; // 清除内容
+        ele.innerHTML = '';
         ele.appendChild(newImage);
       }
     );

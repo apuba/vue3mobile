@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-27 19:22:26
- * @LastEditTime: 2021-02-09 13:18:34
+ * @LastEditTime: 2021-03-07 16:26:32
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -36,19 +36,24 @@ export default defineComponent({
       backgroundImage: "url(" + require("@public/images/logo.jpg") + ")",
     };
     const code = (router.currentRoute.value.query.code as string) || "";
+    const state = (router.currentRoute.value.query.state as string) || ""; // URL自定义参数，用于区分微信公众号授权还是企业微信号授权。
     const result = router.currentRoute.value.query.result as string;
     const redirectUrl = router.currentRoute.value.query.redirect_url as string; // token过期时被 重定向的页面
+
+    // const wxCode = (router.currentRoute.value.query.wxCode as string);
 
     const login = () => {
       // 授权后进行登录处理
       let queryParams;
       let activityId;
+      let wxCode;
       if (result) {
         queryParams = JSON.parse(decodeURIComponent(result));
         activityId = queryParams.activityId;
+        wxCode = queryParams.wxCode;
       }
 
-      ServLogin({ code, activityId })
+      ServLogin({ code, activityId, wxCode })
         .then((userInfo) => {
           store.commit("setUserInfo", userInfo); // 把用户信息存到store
           if (result) {
@@ -74,7 +79,6 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      debugger;
       // let userInfo = JSON.parse(window.localStorage.userInfo); // store.state.userInfo //
 
       if (window.localStorage.token) {
@@ -103,8 +107,36 @@ export default defineComponent({
           : router.push("/");
       }
 
-      if (!code) {
-        ServWechatLogin("ADMIN"); // 授权
+      if (!code || state == "is_wx_login") {
+        // state === is_wx_login  时为公众号重定向到此页面，需要再进行企业号授权
+        // const queryObj = router.currentRoute.value.query;
+        let url = window.location.href.split("#")[0];
+        debugger;
+
+
+        if (state === "is_wx_login") {
+          //FIXME: 
+          // 包含公众号授权信息
+          url = window.location.origin + window.location.pathname + '?';
+
+          const resultURL = JSON.parse(decodeURIComponent(result));
+          resultURL.wxCode = code;
+          url += 'result=' + encodeURIComponent(JSON.stringify(resultURL))
+
+          /*  Object.keys(queryObj).forEach(key => {
+             if (key === 'code') {
+               url = url + 'wxCode=' + queryObj[key] + '&'
+             } else if (key === 'result') {
+               url = url + 'result=' + encodeURIComponent(JSON.stringify(queryParams)) + '&'
+             } else if (key !== 'state') {
+               url = url + key + '=' + queryObj[key] + '&'
+             }
+           }) 
+           url = url.substr(0, url.length - 1);*/
+          console.log('微信公众号授权后再到企业微信授权url', url)
+
+        }
+        ServWechatLogin("ADMIN", url); // 授权
       } else {
         // 授权后进行登录处理
         login();

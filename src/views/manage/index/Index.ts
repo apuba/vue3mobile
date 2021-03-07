@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-29 23:30:25
- * @LastEditTime: 2021-02-24 21:59:09
+ * @LastEditTime: 2021-03-07 15:26:37
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -25,7 +25,8 @@ export default defineComponent({
         const store = useStore();
 
         // const userInfo = store.state.userInfo;
-        const userInfo = window.localStorage.userInfo? JSON.parse(window.localStorage.userInfo) : {};
+        const userInfo = window.localStorage.userInfo ? JSON.parse(window.localStorage.userInfo) : {};
+        
         if (!userInfo.memberId) {
             ServGetMemberInfo().then(res => {
                 debugger
