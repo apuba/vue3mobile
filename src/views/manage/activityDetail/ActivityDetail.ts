@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-02-01 20:50:13
- * @LastEditTime: 2021-02-02 02:00:31
+ * @LastEditTime: 2021-02-09 16:58:42
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -97,7 +97,8 @@ export default defineComponent({
                 pageRows: 10
             }
             ServGetInviteesInfo(param).then(res => {
-                // debugger
+                res.data && (refState.invitationData = res.data.records);
+                
             })
         }
 

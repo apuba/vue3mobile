@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-27 19:22:26
- * @LastEditTime: 2021-02-04 00:55:47
+ * @LastEditTime: 2021-02-09 13:18:34
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -37,7 +37,7 @@ export default defineComponent({
     };
     const code = (router.currentRoute.value.query.code as string) || "";
     const result = router.currentRoute.value.query.result as string;
-    const redirect_url = router.currentRoute.value.query.redirect_url as string; // token过期时被 重定向的页面
+    const redirectUrl = router.currentRoute.value.query.redirect_url as string; // token过期时被 重定向的页面
 
     const login = () => {
       // 授权后进行登录处理
@@ -64,8 +64,8 @@ export default defineComponent({
               return;
             }
           }
-          redirect_url
-            ? (window.location.href = redirect_url)
+          redirectUrl
+            ? (window.location.href = redirectUrl)
             : router.push("/");
         })
         .catch((err) => {
@@ -98,8 +98,8 @@ export default defineComponent({
             return;
           }
         }
-        redirect_url
-          ? (window.location.href = decodeURIComponent(redirect_url))
+        redirectUrl
+          ? (window.location.href = decodeURIComponent(redirectUrl))
           : router.push("/");
       }
 

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-02-04 00:41:27
+ * @LastEditTime: 2021-02-24 23:37:25
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -103,7 +103,7 @@ export const ServSinge = async (url: string = window.location.href.split('#')[0]
     }
     window.wx.config({
         beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: res.data.appid, // 必填，企业微信的corpID
         timestamp: res.data.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.data.nonceStr, // 必填，生成签名的随机串

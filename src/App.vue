@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-01-31 18:52:37
+ * @LastEditTime: 2021-02-11 01:30:50
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -11,7 +11,7 @@
     leave-active-class="animate__animated animate__slideOutRight"
   >
     <router-view class="routerStyle" />
-  </transition> -->
+  </transition>-->
 
   <transition>
     <router-view />
@@ -20,19 +20,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
 import store from "@/store";
-import { onBeforeRouteUpdate } from "vue-router";
-
 export default defineComponent({
   setup() {
     window.addEventListener("beforeunload", () => {
       sessionStorage.setItem("store", JSON.stringify(store.state));
     });
-    onBeforeRouteUpdate((to, form) => {
-      debugger
-      console.log(to, "=====");
-    });
+
     const sessionStore: string = sessionStorage.store;
     if (sessionStore) {
       store.replaceState(

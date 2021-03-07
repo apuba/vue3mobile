@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-02-02 01:59:57
+ * @LastEditTime: 2021-02-24 22:59:02
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -68,7 +68,7 @@
           </van-grid-item>
           <van-grid-item>
             <div class="column">
-              <div class="total">{{ activityTotalData.actualAmt || 0}}</div>
+              <div class="total">{{ activityTotalData.countAmt || 0}}</div>
               <div class="title">已发放新人红包金额(元)</div>
             </div>
           </van-grid-item>

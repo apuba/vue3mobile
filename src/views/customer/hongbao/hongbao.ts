@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-02-04 03:24:02
+ * @LastEditTime: 2021-02-11 01:47:31
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -36,10 +36,6 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const { enteInfo } = store.state;
-
-    
-        debugger;
-
         const userInfo = JSON.parse(window.localStorage.userInfo);
         const refState = reactive({
             posterImg: {} as any, // 海报图片
@@ -79,8 +75,11 @@ export default defineComponent({
         }
 
         const createPosterHandler = () => {
-            
-            if(refState.isShared) return;
+            // if(refState.isShared) return;
+            if (refState.activity.activityStatus !== 2) {
+                (refState.activity.activityStatus === 4) ? Toast('活动暂停中，请稍候再试') : Toast('活动已结束');
+                return;
+            }
             // html生成海报图片
             refState.showPoster = true;
             if (refState.createPosterStatus === 2) return; // 已经创建成功海报，不需要再进行创建
@@ -90,13 +89,6 @@ export default defineComponent({
                 console.log('生成海报结束=======', res)
                 refState.createPosterStatus = 2;
             })
-        }
-
-        const sharedHandler = () => {      // 分享
-            if (refState.activity.activityStatus === 3) {
-                Toast('活动已结束');
-                return
-            }
         }
 
         // 拆新人红包
@@ -144,7 +136,16 @@ export default defineComponent({
                 refState.activity = res.records[0];
                 refState.activity.initMemberCount += Math.round(Math.random() * 100); // 在领取人的基础上随机再添加人数
                 refState.bannerList = JSON.parse(refState.activity.banner);
+                // refState.activity.activityStatus = 3;
 
+                if (refState.activity.activityStatus !== 2) {
+                    refState.isShared = true; // 活动非进行中
+                } else {
+                    // 是否拆过红包
+                    ServIsOpenHongbao(activityId).then(res => {
+                        refState.isShared = res.data.isOpen; // 是否已折过红包 ？
+                    })
+                }
                 // 判断当前用户是否为承接人
                 if (!userInfo.qyUserId) {
                     refState.isUndertaker = false;
@@ -213,16 +214,11 @@ export default defineComponent({
                 id = queryParams.activityId
             }
             const activityId = parseInt(id);
-
             console.log('当前用户信息--initData', userInfo);
             getActivityData(activityId, queryParams);
-
             getInvitessList(activityId); // 获取已邀请人列表
             ServUpdateClick(activityId); // 更新点击次数
-            // 是否拆过红包
-            ServIsOpenHongbao(activityId).then(res => {
-                refState.isShared = res.data.isOpen; // 是否已折过红包 ？
-            })
+
         }
 
         onMounted(() => {
@@ -233,7 +229,6 @@ export default defineComponent({
             ...state,
             createPosterHandler,
             onClickLeft,
-            sharedHandler,
             openHongbaoHandler
         }
     }

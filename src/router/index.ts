@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-02-03 22:06:39
+ * @LastEditTime: 2021-02-10 23:12:31
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -105,6 +105,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = storage().get('token') || storage('localstorage').get('token');
+
   // 判断是否登录
   if (token) {
     next();
@@ -118,5 +119,6 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
 
 export default router

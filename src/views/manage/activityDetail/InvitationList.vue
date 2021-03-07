@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-02-02 00:06:10
- * @LastEditTime: 2021-02-02 01:06:18
+ * @LastEditTime: 2021-02-09 17:01:03
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -10,21 +10,21 @@
   <div class="invitation-list">
     <div class="header">
       <div class="rank">排名</div>
-      <div class="avatar">头像</div>
+      <!-- <div class="avatar">头像</div> -->
       <div class="name">用户名</div>
       <div class="total">邀请人数</div>
       <div class="hongbao">获取红包</div>
       <div class="amount">红包金额</div>
     </div>
-    <div class="row">
-      <div class="rank">1</div>
-      <div class="avatar">
+    <div class="row" v-for="(item,index) of dataList" :key="index">
+      <div class="rank">{{ index + 1}}</div>
+      <!-- <div class="avatar">
           <img src="http://wework.qpic.cn/bizmail/87jfwAOYR57aNGd9vKTOanl997suuaFs5YqYSzdicrfJWmEGvKejLDQ/0" />
-      </div>
-      <div class="name">用户名</div>
-      <div class="total">邀请人数</div>
-      <div class="hongbao">获取红包</div>
-      <div class="amount">红包金额</div>
+      </div> -->
+      <div class="name">{{ item.name }}</div>
+      <div class="total">{{ item.inviteesMember}}</div>
+      <div class="hongbao">{{item.redNumber}}</div>
+      <div class="amount">{{ item.inviteesAmt}}</div>
     </div>
   </div>
 </template>
@@ -78,7 +78,7 @@ export default defineComponent({
     }
   }
   .name {
-    min-width: 20%;
+    min-width: 40%;
   }
   .total {
     min-width: 17%;
