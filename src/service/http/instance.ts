@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-11-05 22:01:26
- * @LastEditTime: 2021-01-31 15:13:44
+ * @LastEditTime: 2021-03-10 23:23:20
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -81,8 +81,12 @@ instance.interceptors.response.use(
                 // storage('sessionstorage').remove('store'); // 刷新页面保留的store需要的
 
                 window.localStorage.clear();
+                if (location.pathname === '/login') {
+                    window.location.reload()
+                } else {
+                    window.location.href = window.location.origin + '/login?redirect_url=' + encodeURIComponent(window.location.href);
+                }
                 // const redirect_url = getURLParams('redirect_url') || window.location.href;
-                window.location.href = window.location.origin + '/login?redirect_url=' + encodeURIComponent(window.location.href);
                 break;
             default:
                 break;

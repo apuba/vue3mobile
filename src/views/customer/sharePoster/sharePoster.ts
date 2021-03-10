@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-02-03 21:44:00
- * @LastEditTime: 2021-02-04 00:57:12
+ * @LastEditTime: 2021-03-10 23:43:31
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -49,7 +49,8 @@ export default defineComponent({
             console.log('获取活动请求--')
             const query: BaseRequestModel = {
                 params: {
-                    activityId
+                    activityId,
+                    type:1
                 },
                 pageIndex: 1,
                 pageRows: 10,

@@ -32,7 +32,7 @@ class Abstract {
     private apiAxios({ baseURL = this.baseURL, headers = this.headers, method, url, data, params, responseType, mapper }: AxiosRequest): Promise<CustomResponse> {
 
         // console.log('baseURL',baseURL);
-        const token = storage().get('token');
+        const token = window.localStorage.token
         //  Authorization
         if (token) {
             headers.Authorization = token

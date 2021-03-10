@@ -1,8 +1,8 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-31 04:32:39
- * @LastEditTime: 2021-03-06 15:41:33
- * @LastEditors: 3603317@qq.com
+ * @LastEditTime: 2021-03-10 23:55:23
+ * @LastEditors: 侯兴章
  * @Description: 
  */
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
@@ -36,7 +36,7 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const { enteInfo } = store.state;
-        const userInfo = JSON.parse(window.localStorage.userInfo);
+        const userInfo = window.localStorage.userInfo ? JSON.parse(window.localStorage.userInfo) : {};
         const refState = reactive({
             posterImg: {} as any, // 海报图片
             isOpening: false, // 当前正在拆红包
@@ -205,8 +205,10 @@ export default defineComponent({
                 if (res.data) {
                     res.data.some((item: any, index: number) => {
                         refState.inviteeList[index] = item
-                        return index > 2
+                        return index >= 2
                     });
+
+                    console.log(refState.inviteeList)
                 }
             })
         }

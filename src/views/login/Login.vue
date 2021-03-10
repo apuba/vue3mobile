@@ -86,7 +86,6 @@ export default defineComponent({
           const queryParams = JSON.parse(decodeURIComponent(result));
           if (queryParams.userType === "share") {
             const { activityId } = queryParams;
-
             ServGetMemberInfo({ activityId }).then((res) => {
               console.log("分享页面进来，需要重新获取最新用户信息");
               store.commit("setUserInfo", res.data);
