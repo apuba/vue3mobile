@@ -11,7 +11,7 @@
       <h2>{{ enteInfo.corpName }}</h2>
       <div class="small">企业头像与名称将用于对外展示</div>
 
-      <span class="logo">
+      <span class="logo" @click="openEasterEggs">
         <img :alt="enteInfo.corpFullName" :src="enteInfo.corpSquareLogoUrl" />
       </span>
     </div>
@@ -20,14 +20,32 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapState } from "vuex";
-// import { Notify } from 'vant';
+import { mapState, useStore } from "vuex";
+import { Notify } from 'vant';
+import Vconsole from "vconsole";
 export default defineComponent({
   computed: {
     ...mapState(["title", 'enteInfo'])
   },
   setup() {
-    return {};
+  const store = useStore();
+   const openEasterEggs = ()=> {
+      // 打开vconsole
+      let easterEggs = window.localStorage.easterEggs || 0;
+      easterEggs++;
+      if (easterEggs === 5) {
+        window.vConsole = new Vconsole(); // 打开vconsole
+        Notify({ type: "warning", message: "vconsole 已经打开" });
+        window.localStorage.vconsoleUser = JSON.stringify({id: store.state.userInfo.memberId, name: store.state.userInfo.name});
+      } else if (easterEggs > 10) {
+        easterEggs = 0;
+        window.vConsole && window.vConsole.destroy();
+        Notify({ type: "success", message: "vconsole 已经关闭" });
+      }
+      console.log(easterEggs);
+      window.localStorage.easterEggs = easterEggs;
+    }
+    return { openEasterEggs };
 
   },
   mounted() {

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-02-03 21:44:00
- * @LastEditTime: 2021-03-10 23:43:31
+ * @LastEditTime: 2021-03-11 23:58:26
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -26,7 +26,7 @@ export default defineComponent({
     setup() {
         const store = useStore();
         // const userInfo = store.state.userInfo; 
-        const userInfo = JSON.parse(window.localStorage.userInfo);
+        const userInfo = JSON.parse(window.sessionStorage.userInfo);
         const refState = reactive({
             userInfo,
             isUndertaker: false,

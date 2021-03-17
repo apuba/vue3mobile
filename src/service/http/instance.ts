@@ -77,12 +77,10 @@ instance.interceptors.response.use(
                 break;
             case 9000:
                 // token过期
-                // storage().remove('token');
-                // storage('sessionstorage').remove('store'); // 刷新页面保留的store需要的
-
-                window.localStorage.clear();
+          
+                window.sessionStorage.clear();
                 if (location.pathname === '/login') {
-                    window.location.reload()
+                    window.location.reload();
                 } else {
                     window.location.href = window.location.origin + '/login?redirect_url=' + encodeURIComponent(window.location.href);
                 }

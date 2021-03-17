@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-02-10 23:12:31
+ * @LastEditTime: 2021-03-12 00:28:13
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -104,7 +104,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = storage().get('token') || storage('localstorage').get('token');
+  const token = window.sessionStorage.token ||  window.localStorage.token;
 
   // 判断是否登录
   if (token) {

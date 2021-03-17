@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-03-10 22:44:55
+ * @LastEditTime: 2021-03-14 15:48:50
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -108,7 +108,7 @@ export const ServSinge = async (url: string = window.location.href.split('#')[0]
         timestamp: res.data.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
         signature: res.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'selectEnterpriseContact', 'selectExternalContact', 'getCurExternalContact', 'openUserProfile', 'chooseImage'] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        jsApiList: ['getLocation', 'updateAppMessageShareData', 'updateTimelineShareData', 'selectEnterpriseContact', 'selectExternalContact', 'getCurExternalContact', 'openUserProfile', 'chooseImage'] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
     });
     window.wx.ready(function (res: any) {
         console.log('wx.ready 完成')
@@ -171,8 +171,8 @@ export const ServLogin = async (params: any): Promise<IuserInfo> => {
             const userInfo = res.data as IuserInfo;
             console.log('用户登录成功结果', userInfo)
             userInfo.headUrl && (userInfo.avatar = userInfo.headUrl);
-            window.localStorage.token = userInfo.token; // 写入token信息;
-            window.localStorage.userInfo = JSON.stringify(userInfo); // 写入token信息;
+            window.sessionStorage.token = userInfo.token; // 写入token信息;
+            window.sessionStorage.userInfo = JSON.stringify(userInfo); // 写入token信息;
             resolve(userInfo)
         }
     })
@@ -187,7 +187,7 @@ export const ServGetEnteInfo = async () => {
 export const ServGetMemberInfo = async (params?: any) => {
     const res = await http.get(EApi.getMemberInfo, { params });
     res.data.isUndertaker = res.data.undertaker;
-    window.localStorage.userInfo = JSON.stringify(res.data); // 写入token信息;
+    window.sessionStorage.userInfo = JSON.stringify(res.data); // 写入token信息;
     return res
 }
 

@@ -25,7 +25,7 @@ export default defineComponent({
         const store = useStore();
 
         // const userInfo = store.state.userInfo;
-        const userInfo = window.localStorage.userInfo ? JSON.parse(window.localStorage.userInfo) : {};
+        const userInfo = window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {};
         
         if (!userInfo.memberId) {
             ServGetMemberInfo().then(res => {

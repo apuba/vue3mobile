@@ -79,9 +79,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      // let userInfo = JSON.parse(window.localStorage.userInfo); // store.state.userInfo //
-
-      if (window.localStorage.token) {
+      // let userInfo = JSON.parse(window.sessionStorage.userInfo); // store.state.userInfo //
+      if (window.sessionStorage.token) {
         if (result) {
           const queryParams = JSON.parse(decodeURIComponent(result));
           if (queryParams.userType === "share") {

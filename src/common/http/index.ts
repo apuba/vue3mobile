@@ -29,7 +29,7 @@ class Abstract {
     }
 
     private apiAxios({ baseURL = this.baseURL, headers = this.headers, method, url, data, params, responseType, mapper }: AxiosRequest): Promise<CustomResponse> {
-        const token = storage().get('token');
+        const token = window.sessionStorage.token; 
         //  Authorization
         if (token) {
             headers.Authorization = token

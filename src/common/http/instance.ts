@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-11-05 22:01:26
- * @LastEditTime: 2020-11-18 23:59:24
+ * @LastEditTime: 2021-03-12 00:26:23
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -75,9 +75,8 @@ instance.interceptors.response.use(
                 // 根据errorCode，对业务做异常处理(和后端约定)
                 break;
             case 9000:
-                // token过期
-                storage().clear();
-                storage('sessionstorage').remove('store'); // 刷新页面保留的store需要的
+                // token过期             
+                window.sessionStorage.clear();
                 break;
             default:
                 break;

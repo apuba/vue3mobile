@@ -1,18 +1,13 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-02-02 01:10:44
+ * @LastEditTime: 2021-03-14 21:58:39
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 <template>
   <div>
-    <van-nav-bar
-      title="新增活动"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar title="新增活动" left-text="返回" left-arrow @click-left="onClickLeft" />
     <van-form @submit="onSubmit" class="form" :scroll-to-error="true">
       <div class="banner">
         <div class="uploader">
@@ -40,7 +35,7 @@
         <van-field
           label="主标题"
           placeholder="请输入主标题"
-          value=""
+          value
           is-link
           v-model="formData.sub"
           :rules="validator.sub"
@@ -48,7 +43,7 @@
         <van-field
           label="副标题"
           placeholder="请输入副标题"
-          value=""
+          value
           is-link
           v-model="formData.subtitle"
           :rules="validator.subtitle"
@@ -78,25 +73,17 @@
       <van-cell-group class="group">
         <van-cell title="承接人">
           <template #default>
-            <van-button
-              type="primary"
-              size="mini"
-              @click="selectExternalContact"
-              ><van-icon name="plus" />请选择人员</van-button
-            >
+            <van-button type="primary" size="mini" @click="selectExternalContact">
+              <van-icon name="plus" />请选择人员
+            </van-button>
           </template>
         </van-cell>
         <div class="people">
-          <div class="txt" v-show="!errorPeople">
-            可设置添加指定成员才有奖励，最多可选100人
-          </div>
+          <div class="txt" v-show="!errorPeople">可设置添加指定成员才有奖励，最多可选100人</div>
           <div class="txt red" v-show="errorPeople">至少要选一个承接人</div>
 
           <ul class="people-list">
-            <comp-avatar
-              :data-list="externalContact"
-              @delHandler="deleContactHandler"
-            ></comp-avatar>
+            <comp-avatar :data-list="externalContact" @delHandler="deleContactHandler"></comp-avatar>
             <!-- <span
               class="people-img"
               v-for="item in externalContact"
@@ -106,13 +93,13 @@
             >
               <span class="mask" @click="deleContactHandler(item.id)">X</span>
               <van-image width="36" height="36" :src="item.avatar" />
-            </span> -->
+            </span>-->
           </ul>
         </div>
       </van-cell-group>
 
       <van-cell-group class="group">
-        <van-cell title="配置欢迎语"> </van-cell>
+        <van-cell title="配置欢迎语"></van-cell>
         <van-field
           v-model="formData.welcomeMsg"
           rows="2"
@@ -151,7 +138,7 @@
       </van-cell-group>
 
       <van-cell-group class="group">
-        <van-cell title="邀请红包金额" value="邀请人红包领取的金额"> </van-cell>
+        <van-cell title="邀请红包金额" value="邀请人红包领取的金额"></van-cell>
         <van-field
           label="最小红包"
           is-link
@@ -222,9 +209,7 @@
             type="digit"
           />
           <div class="container">
-            <div class="txt">
-              此数不宜过大或过小，有利于活动初期启动， 激发用户参与
-            </div>
+            <div class="txt">此数不宜过大或过小，有利于活动初期启动， 激发用户参与</div>
           </div>
         </div>
       </van-cell-group>
@@ -244,7 +229,7 @@
             之前有添加过则无奖励； 邀请攻略：邀请3个好友可获得1个现金红包，不累
             计产生红包，请及时拆开，否则更多邀请将不会产 生更多红包
           </div>
-        </div> -->
+        </div>-->
 
         <van-field
           v-model="formData.activityExplain"
@@ -258,17 +243,33 @@
 
         <!-- <div class="activityExplain">{{ activityExplain }}</div> -->
       </van-cell-group>
-      <div class="btnlist"> 
+
+      <van-cell-group class="group">
+        <van-cell title="高级设置" label="打开后，仅符合设定条件的客户方可领取，请谨慎使用">
+          <template #default>
+            <van-switch v-model="openAdvanced" size="22" />
+          </template>
+        </van-cell>
+      </van-cell-group>
+      <div class="btnlist">
         <div class="btnlist-item">
-          <van-button type="primary" round block native-type="submit" :loading="submitBtn.loading"
-          :disabled="submitBtn.disabled" :loading-text="submitBtn.loadingTxt"> {{ pageType==='edit'?'确定修改':'确定创建'}}</van-button
-          >
+          <van-button
+            type="primary"
+            round
+            block
+            native-type="submit"
+            :loading="submitBtn.loading"
+            :disabled="submitBtn.disabled"
+            :loading-text="submitBtn.loadingTxt"
+          >{{ pageType==='edit'?'确定修改':'确定创建'}}</van-button>
         </div>
       </div>
     </van-form>
     <van-calendar v-model:show="showCalendar" @confirm="selectEndTime" />
 
-   
+    <van-popup v-model:show="openAdvanced"   position="right" class="advanced" :style="{width: '100%', height: '100%'}">
+        <a-dvanced />
+    </van-popup>
   </div>
 </template>
 
@@ -276,12 +277,18 @@
 </script>
 
 <style lang="scss" scoped>
+
+.advanced{
+  width: 100%;
+  height: 100%;
+}
 .activityExplain {
   padding: 16px;
   position: absolute;
   z-index: 1;
 }
 .btnlist {
+  margin-top: 24px;
   background: #fff;
   display: flex;
   padding: 16px 0;
@@ -296,7 +303,7 @@
 .form {
   background-color: #f5f5f5;
   overflow-x: hidden;
-  padding-bottom: 60px;
+  padding-bottom: 88px;
 }
 .banner {
   position: relative;

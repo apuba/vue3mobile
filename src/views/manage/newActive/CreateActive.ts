@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-02-04 03:22:43
+ * @LastEditTime: 2021-03-14 21:20:58
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -34,6 +34,8 @@ import CompAvatar from '@/views/components/CompAvatar.vue';
 import { BaseRequestModel } from '@/service/baseModel';
 import { mapperHelper } from '@/service/mapperHelper';
 
+import Advanced from './Advanced.vue';
+
 export default defineComponent({
     components: {
         CompAvatar,
@@ -48,7 +50,8 @@ export default defineComponent({
         [Cell.name]: Cell,
         [Image.name]: Image,
         [Calendar.name]: Calendar,
-        [Popup.name]: Popup
+        [Popup.name]: Popup,
+        Advanced
     },
     computed: {
         ...mapState(['baseInfo', 'enteInfo'])
@@ -60,6 +63,7 @@ export default defineComponent({
         const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
 
         const state = reactive({
+            openAdvanced:false, // 打开高级设置
             pageType: router.currentRoute.value.query.type as string, // 页面类型，是否为编辑页面？ type= edit
             fileList: [] as Array<any>, // 用于显示上传图片回显
             imageList: [] as Array<any>, // 用于上传图片的URL结果集，提交到数据的值
@@ -78,7 +82,7 @@ export default defineComponent({
                 // name: "活动名称",
                 // startTime: "2020-01-14 20:00:00",
                 endTime: "",
-                totalAmount: 500,
+                totalAmount: 10,
                 newAmountLow: 1.2,
                 newAmountHigh: 2.0,
                 invitationAmountLow: 1.2,
@@ -112,7 +116,8 @@ export default defineComponent({
             },
             validoterAmount: (val: string) => {
                 const num = parseInt(val);
-                const r = (num <= store.state.enteInfo.balance) && (num >= 500);
+                // const r = (num <= store.state.enteInfo.balance) && (num >= 500);
+                const r = (num <= store.state.enteInfo.balance) && (num >= 10);
                 console.log(r)
                 // 校验活动金额
                 return r
@@ -238,7 +243,7 @@ export default defineComponent({
             sub: [{ required: true, message: '请输入标题' }],
             subtitle: [{ required: true, message: '请输入副标题' }],
             totalAmount: [{ required: true, message: '请输入活动金额' },
-            { trigger: 'onChange', validator: methods.validoterAmount, message: '活动金额须大于500且小于余额' }],
+            { trigger: 'onChange', validator: methods.validoterAmount, message: '活动金额须大于10且小于等于余额' }],
             endTime: [{ required: true, message: '请输入结束时间' }],
             banner: [{ required: true, message: '请上传图片' }],
             welcomeMsg: [{ required: true, message: '请输入欢迎语' }],

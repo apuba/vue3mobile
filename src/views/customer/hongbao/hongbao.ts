@@ -36,7 +36,7 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const { enteInfo } = store.state;
-        const userInfo = window.localStorage.userInfo ? JSON.parse(window.localStorage.userInfo) : {};
+        const userInfo = window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {};
         const refState = reactive({
             posterImg: {} as any, // 海报图片
             isOpening: false, // 当前正在拆红包

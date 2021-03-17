@@ -1,25 +1,20 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-21 21:25:26
- * @LastEditTime: 2021-01-28 01:27:12
+ * @LastEditTime: 2021-03-14 12:23:14
  * @LastEditors: 侯兴章
  * @Description: 
 -->
 
 <template>
   <div class="body">
-    <van-nav-bar
-      title="充值"
-      left-text="返回"
-      left-arrow
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar title="充值" left-text="返回" left-arrow @click-left="onClickLeft" />
 
     <div class="header">
       <div class="main">
         <span class="title">账户余额</span>
         <div class="txt">
-          <span class="record" @click="goto()"> 充值记录 &gt; </span>
+          <span class="record" @click="goto()">充值记录 &gt;</span>
 
           <span class="price">￥{{ enteInfo.balance }}</span>
         </div>
@@ -31,23 +26,40 @@
       <li
         v-for="(price, index) in priceList"
         :key="index"
-        @click="choosePriceHandler(price)"
+        @click="choosePriceHandler(price, index)"
       >
-        <span :class="{ active: price === choosePrice }">￥{{ price }}</span>
+        <span
+          :class="{ active: index === chooseIndex }"
+          v-if="index< priceList.length-1"
+        >￥{{ price }}</span>
+        <span :class="{ active: index === chooseIndex }" v-else>其他金额</span>
       </li>
     </ul>
 
+    <div class="otherPrice" v-if="chooseIndex === priceList.length-1">
+      <van-field
+        v-model="choosePrice"
+        placeholder="请输入金额"
+        required
+        type="digit"
+        :error="priceError"
+        @keyup="otherPriceHandler(choosePrice)"
+        maxlength="7"
+      ></van-field>
+    </div>
     <div class="remark">
       <span class="title">充值须知：</span>
       <div class="content">
-        <span>1、充值免收手续费；</span><br />
+        <span>1、充值免收手续费；</span>
+        <br />
         <span>2、充值后不支持提现</span>
       </div>
     </div>
     <div class="btn">
-      <van-button block type="primary" round @click="createOrderHandler"
-        >充值{{ choosePrice }} 元</van-button
-      >
+      <van-button block type="primary" round @click="createOrderHandler">
+        <span v-if="!choosePrice">请输入金额</span>
+        <span v-else>充值{{ choosePrice }} 元</span>
+      </van-button>
     </div>
   </div>
 </template>
@@ -56,6 +68,9 @@
 </script>
 
 <style scoped lang="scss">
+.otherPrice {
+  padding: 0 16px;
+}
 .body {
   background-color: #f5f5f5;
   height: 100vh;
@@ -112,7 +127,7 @@
 .body::after {
   width: 120%;
   height: 160px;
-  position: fixed;
+  position: absolute;
   left: -10%;
   top: 0;
   // z-index: -1;
@@ -147,7 +162,7 @@
   }
 }
 .remark {
-  padding: 0 16px 16px 16px;
+  padding: 16px;
   .title {
     font-size: 16px;
     // font-weight: bold;
