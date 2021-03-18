@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-05 00:21:31
- * @LastEditTime: 2021-03-14 21:58:39
+ * @LastEditTime: 2021-03-18 00:55:48
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -245,11 +245,7 @@
       </van-cell-group>
 
       <van-cell-group class="group">
-        <van-cell title="高级设置" label="打开后，仅符合设定条件的客户方可领取，请谨慎使用">
-          <template #default>
-            <van-switch v-model="openAdvanced" size="22" />
-          </template>
-        </van-cell>
+        <van-cell title="高级设置" label="打开后，仅符合设定条件的客户方可领取，请谨慎使用" is-link @click="openAdvanced=true"></van-cell>
       </van-cell-group>
       <div class="btnlist">
         <div class="btnlist-item">
@@ -267,8 +263,12 @@
     </van-form>
     <van-calendar v-model:show="showCalendar" @confirm="selectEndTime" />
 
-    <van-popup v-model:show="openAdvanced"   position="right" class="advanced" :style="{width: '100%', height: '100%'}">
-        <a-dvanced />
+    <van-popup
+      v-model:show="openAdvanced"
+      position="right"
+      :style="{width: '100%', height: '100%'}"
+    >
+      <Advanced />
     </van-popup>
   </div>
 </template>
@@ -277,8 +277,7 @@
 </script>
 
 <style lang="scss" scoped>
-
-.advanced{
+.advanced {
   width: 100%;
   height: 100%;
 }

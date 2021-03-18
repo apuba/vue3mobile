@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-03-14 21:20:58
+ * @LastEditTime: 2021-03-18 00:43:28
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -14,7 +14,7 @@
  */
 
 
-import { defineComponent, onMounted, reactive, ref, toRaw, toRefs, withCtx } from 'vue'
+import { defineComponent, onMounted, provide, reactive, ref, toRaw, toRefs, withCtx } from 'vue'
 import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, Image, Calendar, Popup } from 'vant';
 import router from '@/router';
 import moment from 'moment';
@@ -56,14 +56,20 @@ export default defineComponent({
     computed: {
         ...mapState(['baseInfo', 'enteInfo'])
     },
+
     setup() {
         const store = useStore();
         const { userInfo } = store.state;
         const initRedCount = Math.round(Math.random() * 5000); // 随机红包个数
         const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
 
+
+        const openAdvanced = ref(false); // 打开高级设置
+        provide('openAdvanced', ref(openAdvanced)); // 向组件传递 参数
+
+
         const state = reactive({
-            openAdvanced:false, // 打开高级设置
+            openAdvanced: openAdvanced, // 打开高级设置
             pageType: router.currentRoute.value.query.type as string, // 页面类型，是否为编辑页面？ type= edit
             fileList: [] as Array<any>, // 用于显示上传图片回显
             imageList: [] as Array<any>, // 用于上传图片的URL结果集，提交到数据的值
@@ -101,6 +107,7 @@ export default defineComponent({
                 undertaker: [] as Array<any>
             }
         })
+
 
         const activityExplain = ref(createActivityExplain()); // 活动说明文
         function createActivityExplain() {
@@ -266,7 +273,7 @@ export default defineComponent({
                 pageIndex: 1,
                 pageRows: 10,
             };
-            ServGetActivity(query).then(res => {                
+            ServGetActivity(query).then(res => {
                 // refState.activity = res.records[0];
                 const data = res.records[0];
                 state.formData = {
@@ -276,7 +283,7 @@ export default defineComponent({
                 state.imageList = JSON.parse(data.banner);
                 state.formData.activityEffectiveFlag = data.activityEffectiveFlag === 0;
                 state.formData.newFlag = data.newFlag === 1;
-                state.formData.externalData = data.externalData ===1;
+                state.formData.externalData = data.externalData === 1;
                 state.externalContact = mapperHelper(res.records[0].undertaker, { name: 'name', id: 'qyUserId', avatar: 'headUrl' })
                 console.log(state.formData)
             })
