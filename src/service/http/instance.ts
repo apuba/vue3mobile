@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-11-05 22:01:26
- * @LastEditTime: 2021-03-10 23:23:20
+ * @LastEditTime: 2021-03-20 00:47:04
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -116,7 +116,7 @@ instance.interceptors.response.use(
         // 超时重新请求
         const config = error.config;
         // 全局的请求次数,请求的间隙
-        const [RETRY_COUNT, RETRY_DELAY] = [3, 1000];
+        const [RETRY_COUNT, RETRY_DELAY] = [1, 1000];
 
         if (config && RETRY_COUNT) {
             // 设置用于跟踪重试计数的变量

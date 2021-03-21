@@ -42,4 +42,5 @@ export enum EApi {
     getInvitessList = '/wxServer/member/getAllInviteesByInviteesId' , // 获取已邀请人列表
     getEnterInfoByActivityId='wxServer/enter/getEnterInfoByActivityId', //通过活动获取企业信息
     updateClick='/wxServer/activity/updateClickNumber', // 红包点击次数
+    getCityList = '/wxServer/sysCity/getCity', // 获取城市
 }

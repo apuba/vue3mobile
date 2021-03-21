@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-01 20:21:47
- * @LastEditTime: 2021-03-14 12:45:55
+ * @LastEditTime: 2021-03-20 13:42:22
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -21,5 +21,8 @@ const app = createApp(App);
 app.use(store);
 app.use(router);
 app.mount('#app')
+
+window.sessionStorage.token="6707589146180307f1fca727c";
+// window.sessionStorage.token="asdasdasdasdasdasdasdasd"
 
 window.__app__ = app

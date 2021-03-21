@@ -1,19 +1,19 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-15 00:28:55
- * @LastEditTime: 2020-11-22 04:29:42
+ * @LastEditTime: 2021-03-20 00:16:37
  * @LastEditors: 侯兴章
  * @Description:  数组转换为树形结构
  */
 
-const defaultConfig: MapToTree = {
+const defaultConfig: IMapToTree = {
     id: 'id',
     pId: 'pId',
     children: 'children'
 }
 
 // 转化在关键字段
-export interface MapToTree {
+export interface IMapToTree {
     id: string;
     pId: string;
     children?: string;
@@ -25,7 +25,7 @@ export interface MapToTree {
  * @param {Iconfig} map 基础配置
  * @return {*}
  */
-export const arrayToTreeHelper = <T>(originData: Array<any>, mapperConfig: MapToTree = defaultConfig): Array<T> => {
+export const arrayToTreeHelper = <T>(originData: Array<any>, mapperConfig: IMapToTree = defaultConfig): Array<T> => {
     mapperConfig = { ...defaultConfig, ...mapperConfig }
     let result: Array<T | any> = [];
     if (!Array.isArray(originData)) {

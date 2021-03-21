@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-24 14:49:06
- * @LastEditTime: 2021-02-04 00:20:15
+ * @LastEditTime: 2021-03-22 02:37:09
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -17,7 +17,8 @@ export const COMPONENT_SETTING: any = { // 全局组件配置
     drawerPlacement: 'right', // 弹窗出现的位置  top \ left \ right \ bottom
 }
 export const ROUTER_MODEL = 'history'; // 路由模式 hash 或是  history
-
+// export const AMAP_KEY = 'dd9f86ff46ec547f04a5b1e371717e15'; // 高德地图
+export const AMAP_KEY = '14fec93a1bb3ed124e6be1c5d994a033';
 export const RETENTION_STORE: boolean = true; // 刷新页面时是否保留状态
 // form-data  upload
 export const FORM_DATA = 'multipart/form-data;charset=UTF-8';

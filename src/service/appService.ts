@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-03-14 15:48:50
+ * @LastEditTime: 2021-03-21 15:33:58
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -261,6 +261,10 @@ export const ServGetEnterInfoByActivityId = async (params: { activityId: number 
 export const ServUpdateClick = async (activityId: number) => {
     return await http.post(EApi.updateClick, { params: { activityId } })
 }
+
+// 获取微信服务
+export const ServeGetCityList = (params: BaseRequestModel<{ adcode?: string, level?: number }>) => http.get(EApi.getCityList, params,
+    ['cityId', 'parentId','center', { text: 'name', id: 'adcode' }])
 
 
 

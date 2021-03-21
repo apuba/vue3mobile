@@ -14,5 +14,7 @@ declare interface Window {
   __app__: any,
   wx: any,
   html2canvas:any,
-  vConsole: any
+  vConsole: any,
+  AMap:any,
+  initAMap: Function
 }

@@ -6,10 +6,13 @@
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build -mode production",
     "lint": "vue-cli-service lint",
-    "deploy": "npm run build && npm run upload",
-    "upload": "node upload.js"
+    "upload:prod": "set NODE_ENV=prod && node upload.js",
+    "upload": "set NODE_ENV=dev && node upload.js",
+    "deploy": "npm run build && npm run upload",
+    "deploy:prod": "npm run build && npm run upload:prod"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.168",
     "core-js": "^3.6.5",
     "html2canvas": "^1.0.0-rc.4",
     "lib-flexible": "^0.3.2",
@@ -19,6 +22,7 @@
     "vant": "^3.0.0",
     "vconsole": "^3.4.0",
     "vue": "^3.0.0",
+    "vue-amap": "^0.5.10",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
