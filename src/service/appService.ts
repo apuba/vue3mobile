@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-03-21 15:33:58
+ * @LastEditTime: 2021-03-22 22:12:39
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -11,6 +11,8 @@ import { DTOActivity, IAvaterModel, IcreateOrder, IuserInfo } from '@/service/ap
 import { EApi } from './api';
 import { BaseRequestModel } from '@/service/baseModel';
 import { IUpdateActivityStatus } from '@/service/appModel';
+import { Irule, Irules } from '@/views/manage/newActive/Iadvanced';
+import _ from 'lodash';
 
 
 // 活动查询
@@ -264,8 +266,26 @@ export const ServUpdateClick = async (activityId: number) => {
 
 // 获取微信服务
 export const ServeGetCityList = (params: BaseRequestModel<{ adcode?: string, level?: number }>) => http.get(EApi.getCityList, params,
-    ['cityId', 'parentId','center', { text: 'name', id: 'adcode' }])
+    ['cityId', 'parentId', 'center', { text: 'name', id: 'adcode' }])
 
+// 获取活动规则（高级设置）
+export const ServeGetActivityRule = async (activityId: number | string): Promise<Irules> => {
+    const res = await http.get(EApi.getActivityRules, { params: { activityId } });
+    let rules: Irules = {};
+    if (res.code === 200) {
+        const data: Array<Irule> = res.data;
+        const gender = _.find(data, item => item.ruleType === 'gender');
+        const map = _.find(data, item => item.ruleType === 'map');
+        const range = _.find(data, item => item.ruleType === 'range');
+        rules = {
+            gender,
+            map,
+            range
+        };
+
+    }
+    return rules;
+};
 
 
 // 获取数据字典

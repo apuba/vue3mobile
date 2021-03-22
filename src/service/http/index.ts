@@ -61,7 +61,7 @@ class Abstract {
                 // 200:服务端业务处理正常结束
                 if (res.status === 200) {
                     if (res.data.success || res.data.code == 200 || res.data.status === 'S') {
-                        const mapperList = Array.isArray(res.data?.data) ? res.data?.data : res.data?.data.records;
+                        const mapperList =!res.data.data ? false : (Array.isArray(res.data.data) ? res.data.data : res.data.data.records);
                         const result = mapper ? mapperHelper<any>(mapperList, mapper) : res.data?.data; // 数据清洗
 
                         resolve({ total: res.data?.pagesCount, status: true, code: 200, msg: res.data?.msg, data: result, origin: res.data });

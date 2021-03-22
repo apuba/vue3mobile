@@ -268,7 +268,7 @@
       position="right"
       :style="{width: '100%', height: '100%'}"
     >
-      <Advanced />
+      <Advanced :rules="activityRules" />
     </van-popup>
   </div>
 </template>

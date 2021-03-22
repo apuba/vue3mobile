@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-22 03:14:17
- * @LastEditTime: 2021-02-02 00:34:20
+ * @LastEditTime: 2021-03-22 21:50:24
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -43,4 +43,5 @@ export enum EApi {
     getEnterInfoByActivityId='wxServer/enter/getEnterInfoByActivityId', //通过活动获取企业信息
     updateClick='/wxServer/activity/updateClickNumber', // 红包点击次数
     getCityList = '/wxServer/sysCity/getCity', // 获取城市
+    getActivityRules = '/wxServer/activity/getActivityRule', // 获取活动规则（高级设置）
 }

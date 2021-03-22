@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-27 19:22:26
- * @LastEditTime: 2021-03-07 16:26:32
+ * @LastEditTime: 2021-03-22 18:27:55
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -90,6 +90,9 @@ export default defineComponent({
               store.commit("setUserInfo", res.data);
               const userInfo = res.data;
               // 分享页面跳转过来的，如果是承接人，转到红包页面，如果是客户，转到二维分享页面
+
+                
+
               if (userInfo.isUndertaker || userInfo.isAdd === 1) {
                 // 是否为活动承接人或已添加企业微信好友
                 router.push(`/customer/hongbao?result=${result}`);

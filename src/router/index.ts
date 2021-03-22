@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-03-12 00:28:13
+ * @LastEditTime: 2021-03-22 18:25:03
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -66,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/FlowRecord',
     name: 'flowRecord',
     component: () => import('../views/manage/pay/FlowRecord.vue')
+  },
+  {
+    path: '/advanced',
+    name: 'advanced',
+    component: () => import('../views/manage/newActive/Advanced.vue')
   },
   {
     path: '/login',

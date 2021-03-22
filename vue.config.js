@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-13 01:19:23
- * @LastEditTime: 2021-03-22 00:20:12
+ * @LastEditTime: 2021-03-22 13:00:07
  * @LastEditors: 侯兴章
  * @Description: 配置
  */
@@ -115,7 +115,7 @@ module.exports = {
     },
     // host: 'localhost',
     // port: '8080', // 代理端口
-    https: true,
+    // https: true,
     hotOnly: true, // 热更新
     open: true, // 是否打开浏览器
     proxy: createProxy()

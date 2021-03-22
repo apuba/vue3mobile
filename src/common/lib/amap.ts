@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-03-20 18:52:38
- * @LastEditTime: 2021-03-22 02:19:22
+ * @LastEditTime: 2021-03-22 21:44:28
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -15,7 +15,9 @@ export default function MapLoader(plugin?: string[]) {
         } else {
             let url = 'https://webapi.amap.com/maps?v=1.4.15&callback=initAMap&key=' + AMAP_KEY;
             if (plugin?.length) {
-                url +='&plugin=' + plugin.join(',');
+
+                plugin.forEach(p => url +='&plugin=' + p )
+                // url +='&plugin=' + plugin.join(',');
             }
             const script = document.createElement('script')
             script.type = 'text/javascript'

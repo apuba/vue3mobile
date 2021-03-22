@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-19 01:39:07
- * @LastEditTime: 2021-03-18 00:43:28
+ * @LastEditTime: 2021-03-22 23:24:54
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -19,7 +19,7 @@ import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, I
 import router from '@/router';
 import moment from 'moment';
 
-import { ServfileUpload, ServAgentSinge, ServSaveActivity, ServGetActivity } from '@/service/appService';
+import { ServfileUpload, ServAgentSinge, ServSaveActivity, ServGetActivity, ServeGetActivityRule } from '@/service/appService';
 import _ from 'lodash';
 import { mapState, useStore } from 'vuex';
 import { IAvaterModel } from '@/service/appModel';
@@ -35,6 +35,7 @@ import { BaseRequestModel } from '@/service/baseModel';
 import { mapperHelper } from '@/service/mapperHelper';
 
 import Advanced from './Advanced.vue';
+import { Irules } from './Iadvanced';
 
 export default defineComponent({
     components: {
@@ -63,10 +64,15 @@ export default defineComponent({
         const initRedCount = Math.round(Math.random() * 5000); // 随机红包个数
         const initMemberCount = Math.round(Math.random() * 1000); // 随机红包领取人数
 
+        //处理高级设置的规则
+        const setActivityRules = (rules: Irules) => {
+            state.activityRules = rules;
+            console.log(state.activityRules)
+        }
 
         const openAdvanced = ref(false); // 打开高级设置
         provide('openAdvanced', ref(openAdvanced)); // 向组件传递 参数
-
+        provide('setActivityRules', setActivityRules); // 向子级组件传函数参数
 
         const state = reactive({
             openAdvanced: openAdvanced, // 打开高级设置
@@ -84,6 +90,7 @@ export default defineComponent({
                 disabled: false,
                 loadingTxt: '创建中...'
             },
+            activityRules: {} as Irules,
             formData: {
                 // name: "活动名称",
                 // startTime: "2020-01-14 20:00:00",
@@ -104,7 +111,7 @@ export default defineComponent({
                 externalData: true,
                 initMemberCount,
                 initRedCount,
-                undertaker: [] as Array<any>
+                undertaker: [] as Array<any>,
             }
         })
 
@@ -162,14 +169,13 @@ export default defineComponent({
             },
             onClickLeft: () => {
                 console.log(router)
-                debugger
                 router.go(-1);
             },
             onSubmit: (values: any) => {
                 console.log('校验结题', values)
                 // const params = _.cloneDeep(state.formData);
                 state.formData.banner = state.imageList.map(item => item.url);
-                const params: any = { ...state.formData }
+                const params: any = { ...state.formData, ...state.activityRules }
                 if (!state.externalContact.length) {
                     state.errorPeople = true;
                     return;
@@ -186,10 +192,12 @@ export default defineComponent({
                 params.activityEffectiveFlag = state.formData.activityEffectiveFlag ? 0 : 1; // 是否长期有效
                 params.externalData = state.formData.externalData ? 1 : 0; // 对外数据 
                 params.activityExplain = params.activityExplain || activityExplain.value;
+
                 console.log('提交表单的参数------', params);
 
                 state.submitBtn.disabled = true;
                 state.submitBtn.loading = true;
+
                 // 提交创建活动
                 ServSaveActivity(params).then(res => {
                     console.log('创建活动结果 ----- ', res)
@@ -292,7 +300,16 @@ export default defineComponent({
         onMounted(() => {
             ServAgentSinge(); // 应用签名
             const activityId = router.currentRoute.value.query.activityId as string;
-            activityId && getActivityData(activityId);
+            if (activityId) {
+                getActivityData(activityId);
+                ServeGetActivityRule(activityId).then(rules => {
+                    // 获取活动的规则（高级设置）
+                    if( JSON.stringify(rules) !=='{}') {
+                        state.activityRules = rules
+                    } 
+                })
+            }
+
         })
         return { ...toRefs(methods), ...toRefs(state), validator, activityExplain }
     }

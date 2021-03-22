@@ -6,10 +6,10 @@
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build -mode production",
     "lint": "vue-cli-service lint",
-    "upload:prod": "set NODE_ENV=prod && node upload.js",
-    "upload": "set NODE_ENV=dev && node upload.js",
-    "deploy": "npm run build && npm run upload",
-    "deploy:prod": "npm run build && npm run upload:prod"
+    "upload:prod": "set NODE_ENV=prod && node upload.js",
+    "upload": "set NODE_ENV=dev && node upload.js",
+    "deploy": "npm run build && npm run upload",
+    "deploy:prod": "npm run build && npm run upload:prod"
   },
   "dependencies": {
     "@types/lodash": "^4.14.168",
