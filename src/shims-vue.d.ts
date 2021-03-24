@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-13 20:16:41
- * @LastEditTime: 2021-03-14 12:41:25
+ * @LastEditTime: 2021-03-24 14:51:24
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -17,4 +17,8 @@ declare interface Window {
   vConsole: any,
   AMap:any,
   initAMap: Function
+}
+declare module 'jsonp' {
+  
+  export default (url, opts, fn)=>{}
 }

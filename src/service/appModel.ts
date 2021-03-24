@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-17 00:46:00
- * @LastEditTime: 2021-02-03 01:21:14
+ * @LastEditTime: 2021-03-23 15:30:18
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -25,7 +25,14 @@ export interface DTOActivity {
     activityExplain: string;
     externalData: number;
     statusLabel: string;
-    undertaker?: Iundertaker
+    undertaker?: Iundertaker;
+    activityEffectiveFlag: number;
+    initMemberCount: number;
+    initRedCount: number;
+    invitationNumber: number;
+    needPosition: number;
+    newFlag: number;
+    useAmount: number;
 
 }
 
@@ -132,3 +139,6 @@ export interface ITabs {
     key: number,
     badge: string
 }
+
+// 经纬度模型
+export interface Ilnglat { q?: number; r?: number; lng: number; lat: number }

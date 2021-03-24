@@ -1,12 +1,12 @@
 /*
  * @Author: 侯兴章
  * @Date: 2020-10-24 14:49:06
- * @LastEditTime: 2021-03-22 02:37:09
+ * @LastEditTime: 2021-03-24 19:38:44
  * @LastEditors: 侯兴章
  * @Description: 
  */
 export const APP_NAME: string = 'VUE3.0大型系统前端框架'; // 系统应用名
-export const ROUTER_WIHITELIST: string[] = ['/login','http://localhost:8080/customer/sharePoster']; // 路由白名单
+export const ROUTER_WIHITELIST: string[] = ['/login', 'http://localhost:8080/customer/sharePoster']; // 路由白名单
 export const BASET_LAYOUT: string = 'default'; // 默认的布局
 export const OPEN_KEEPALIVE: boolean = false; // 是否开启KeepAlive缓存  开发时候最好关闭,不然每次都需要清除缓存
 export const ENABLED_ROUTER_TRANSTION: boolean = false; // 是否启用路由转场动画？
@@ -17,10 +17,19 @@ export const COMPONENT_SETTING: any = { // 全局组件配置
     drawerPlacement: 'right', // 弹窗出现的位置  top \ left \ right \ bottom
 }
 export const ROUTER_MODEL = 'history'; // 路由模式 hash 或是  history
-// export const AMAP_KEY = 'dd9f86ff46ec547f04a5b1e371717e15'; // 高德地图
-export const AMAP_KEY = '14fec93a1bb3ed124e6be1c5d994a033';
+export const AMAP_WEB_KEY = 'dd9f86ff46ec547f04a5b1e371717e15'; // 高德地图 web服务
+export const AMAP_KEY = '14fec93a1bb3ed124e6be1c5d994a033';  // 高德地图 JS SDK
 export const RETENTION_STORE: boolean = true; // 刷新页面时是否保留状态
 // form-data  upload
 export const FORM_DATA = 'multipart/form-data;charset=UTF-8';
 
 export const REQUEST_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=UTF-8'; // 请求参数类型  'application/json;charset=UTF-8'
+
+// 企业微信的jsApi 列表
+export const WX_SDK_API = ['getLocation', 'updateAppMessageShareData', 'updateTimelineShareData', 'selectEnterpriseContact', 'selectExternalContact', 'getCurExternalContact', 'openUserProfile', 'chooseImage'];
+
+// 微信公众号JS API列表
+export const WECHAT_SDK_API = ['getLocation', 'updateAppMessageShareData', 'updateTimelineShareData', 'onMenuShareTimeline'];
+
+// 企业微信应用JS API 列表
+export const WX_AGENT_API = ['selectExternalContact', 'selectEnterpriseContact']

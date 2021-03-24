@@ -1,19 +1,20 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-03-22 22:12:39
+ * @LastEditTime: 2021-03-24 20:37:32
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
 
 import http from './http/index';
-import { DTOActivity, IAvaterModel, IcreateOrder, IuserInfo } from '@/service/appModel';
+import { DTOActivity, IAvaterModel, IcreateOrder, Ilnglat, IuserInfo } from '@/service/appModel';
 import { EApi } from './api';
 import { BaseRequestModel } from '@/service/baseModel';
 import { IUpdateActivityStatus } from '@/service/appModel';
 import { Irule, Irules } from '@/views/manage/newActive/Iadvanced';
 import _ from 'lodash';
-
+import { WX_SDK_API, WECHAT_SDK_API, WX_AGENT_API, AMAP_KEY, AMAP_WEB_KEY } from '@/config'
+import jsonp from 'jsonp'
 
 // 活动查询
 export const ServGetActivity = async (params: BaseRequestModel) => {
@@ -70,9 +71,8 @@ export const ServGetOrderHeader = async (orderCode: string) => {
 }
 
 // 应用签名
-export const ServAgentSinge = async (url: string = window.location.href.split('#')[0]) => {
+export const ServAgentSign = async (url: string = window.location.href.split('#')[0]) => {
     const res = await http.get(EApi.getAppJsapiTicket, { params: { url } });
-
     if (!res.data) {
         return null;
     }
@@ -82,7 +82,7 @@ export const ServAgentSinge = async (url: string = window.location.href.split('#
         timestamp: res.data.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
         signature: res.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['selectExternalContact', 'selectEnterpriseContact'], //必填
+        jsApiList: WX_AGENT_API, //必填
         success: function (res: any) {
             // 回调
             console.log('agentConfig 签名 成功 ')
@@ -97,35 +97,146 @@ export const ServAgentSinge = async (url: string = window.location.href.split('#
     return res
 
 }
-// 签名
-export const ServSinge = async (url: string = window.location.href.split('#')[0]) => {
-    const res = await http.get(EApi.getJssdkSign, { params: { url } });
-    if (!res.data) {
-        return null;
-    }
-    window.wx.config({
-        beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: res.data.appid, // 必填，企业微信的corpID
-        timestamp: res.data.timestamp, // 必填，生成签名的时间戳
-        nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
-        signature: res.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['getLocation', 'updateAppMessageShareData', 'updateTimelineShareData', 'selectEnterpriseContact', 'selectExternalContact', 'getCurExternalContact', 'openUserProfile', 'chooseImage'] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
-    });
-    window.wx.ready(function (res: any) {
-        console.log('wx.ready 完成')
-        // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-    });
 
-    window.wx.error(function (res: any) {
-        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        console.log('微信签名失败------------------------------------', res)
-    });
-    return {
-        singe: res.data,
-        wx: window.wx
-    }
+// 微信企业签名
+export const ServWxSign = async (url: string = window.location.href.split('#')[0]) => {
+
+    return new Promise(async (resolve, reject) => {
+        const res = await http.get(EApi.getWxSign, { params: { url } });
+        if (!res.data) {
+            return null;
+        }
+        window.wx.config({
+            beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: res.data.appid, // 必填，企业微信的corpID
+            timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+            signature: res.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
+            jsApiList: WX_SDK_API// 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        });
+        window.wx.ready(function (res: any) {
+            resolve({
+                singe: res.data,
+                wx: window.wx
+            })
+            console.log('wx.ready 完成')
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+        });
+
+        window.wx.error(function (res: any) {
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            console.log('微信签名失败------------------------------------', res)
+            reject('微信签名失败')
+        });
+
+    })
+
 }
+
+
+// 微信公众号签名
+export const ServWechatSign = async (url: string = window.location.href.split('#')[0]) => {
+
+    return new Promise(async (resolve, reject) => {
+        const sign = await http.get(EApi.getWechatSign, { params: { url } });
+        if (!sign.data) {
+            return null;
+        }
+        window.wx.config({
+            beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: sign.data.appid, // 必填，企业微信的corpID
+            timestamp: sign.data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: sign.data.nonceStr, // 必填，生成签名的随机串
+            signature: sign.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
+            jsApiList: WECHAT_SDK_API // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        });
+        window.wx.ready(function (res: any) {
+            resolve({
+                singe: sign.data,
+                wx: window.wx
+            })
+            console.log('wx.ready 完成')
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+        });
+
+        window.wx.error(function (res: any) {
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            console.log('微信签名失败------------------------------------', res)
+            reject('微信签名失败')
+        });
+
+    })
+
+}
+
+// 获取定位
+export const ServGetLoation = async () => {
+    return new Promise((resolve, reject) => {
+        window.wx.getLocation({
+            type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (info: any) {
+                console.log("微信定位成功", info);
+                resolve(info);
+            },
+            fail: function (err: any) {
+                console.log("微信定位失败", err);
+                reject(err);
+            },
+
+        })
+    })
+}
+
+// 根据经纬度获取城市信息
+export const ServGetCityInofByLnglat = (point: Ilnglat) => {
+    return new Promise((reslove, reject) => {
+        const apiUrl = 'https://restapi.amap.com/v3/geocode/regeo';
+        jsonp(apiUrl + '?key=' + AMAP_WEB_KEY + '&location=' + point.lng + ',' + point.lat + '&output=json', null, (err: any, data: any) => {
+            if (err) {
+                console.error(err.message);
+                reject(err)
+            } else {
+                reslove(data.regeocode)
+            }
+        });
+
+    })
+
+}
+
+/**
+ * @description: 获取当前定位城市信息，把微信经纬度自动转换后通过高德服务获城市信息
+ * @param {Ilnglat} point 微信经纬度
+ * @return {*}
+ */
+export const ServGetCityInfo = (point: Ilnglat) => {
+    return new Promise((reslove, reject) => {
+        SerTransformLnglat(point).then(lnglat => {
+            ServGetCityInofByLnglat(lnglat).then(cityInfo => reslove(cityInfo)).catch(err => reject(err));
+        })
+    })
+}
+// 坐标经纬度转化，微信经纬度转为高德经纬度
+export const SerTransformLnglat = (point: Ilnglat): Promise<Ilnglat> => {
+    const apiUrl = 'https://restapi.amap.com/v3/assistant/coordinate/convert?';
+    return new Promise((reslove, reject) => {
+        jsonp(apiUrl + 'key=' + AMAP_WEB_KEY + '&coordsys=gps&locations=' + point.lng + ',' + point.lat, null, (err: any, data: any) => {
+            console.log('坐标转换结果', data)
+            if (err) {
+                console.error(err.message);
+                reject(err)
+            } else {
+                const lnglat = data.locations.split(',')
+                reslove({ lng: lnglat[0], lat: lnglat[1] })
+            }
+        });
+
+    })
+}
+
+
 
 // 创建订单
 export const ServcreateOrder = async (params: IcreateOrder) => {
@@ -265,7 +376,7 @@ export const ServUpdateClick = async (activityId: number) => {
 }
 
 // 获取微信服务
-export const ServeGetCityList = (params: BaseRequestModel<{ adcode?: string, level?: number }>) => http.get(EApi.getCityList, params,
+export const ServeGetCityList = (params: BaseRequestModel<{ adcode?: string, level?: number, levels?: number }>) => http.get(EApi.getCityList, params,
     ['cityId', 'parentId', 'center', { text: 'name', id: 'adcode' }])
 
 // 获取活动规则（高级设置）

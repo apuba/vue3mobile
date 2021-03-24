@@ -13,8 +13,6 @@
 // import html2canvas from './html2canvas.js'
 
 const html2canvas = require('./html2canvas');
-
-
 function DPR() {
     if (window.devicePixelRatio && window.devicePixelRatio > 1) {
         return window.devicePixelRatio;
@@ -33,7 +31,6 @@ function parseValue(value: string) {
  */
 function convertCanvasToImage(canvas: HTMLCanvasElement, imgContainer: string, x: number, y: number) {
     const newImage = new Image();
-
     newImage.width = x;
     newImage.height = y;
     newImage.src = canvas.toDataURL("image/png");
@@ -43,8 +40,6 @@ function convertCanvasToImage(canvas: HTMLCanvasElement, imgContainer: string, x
 
     let _container = document.querySelector(imgContainer);
     _container && (_container.innerHTML = '');
-
-
     console.log('img    ----', newImage)
 
     if (_container) {
@@ -92,11 +87,7 @@ export const saveToImage = async (selector: string, imgContainer: string) => {
     }) */
 
     await html2canvas(dom, { canvas, scale: scaleBy, useCORS: true, allowTaint: false });
-
-
-
     const image = convertCanvasToImage(canvas, imgContainer, width, height) // 返回业务逻辑，自行处理。
-
     return {
         image,
         canvas,

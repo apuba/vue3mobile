@@ -1,12 +1,10 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-01-23 20:00:16
- * @LastEditTime: 2021-01-23 20:00:18
+ * @LastEditTime: 2021-03-24 21:02:58
  * @LastEditors: 侯兴章
  * @Description: 
  */
-
-
 
 export const loadScript = (url: string, callback: Function, params: any) => {
     let script = document.createElement('script')
@@ -56,3 +54,24 @@ export const getURLParams = (name: string) => {
     r = null;
     return context == null || context == "" || context == "undefined" ? "" : context;
 }
+
+
+/**
+ * @description:  计算两经纬度点之间的距离(单位：米)
+ * @param {number} lng1
+ * @param {number} lat1
+ * @param {number} lng2
+ * @param {number} lat2
+ * @return {*}
+ */
+export const lnglatDistance = (lng1: number, lat1: number, lng2: number, lat2: number) => {
+    const radLat1 = lat1 * Math.PI / 180.0;
+    const radLat2 = lat2 * Math.PI / 180.0;
+    const a = radLat1 - radLat2;
+    const b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+    let s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+    s = s * 6378.137;
+    s = Math.round(s * 10000) / 10;
+    return s
+}
+

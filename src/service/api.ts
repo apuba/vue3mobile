@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-22 03:14:17
- * @LastEditTime: 2021-03-22 21:50:24
+ * @LastEditTime: 2021-03-24 20:52:31
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -18,7 +18,7 @@ export enum EApi {
     getUndertaker = '/wxServer/member/getUndertaker', // 查询活动承接人
     fileUpload = '/wxServer/fileUpload/imgUpload', // 上传文件
     getFollowUserList = '/wxServer/sc/getFollowUserList', // 查询所有承接人
-    getJssdkSign = '/wxServer/sign/getJssdkSign',// 微信签名
+    getWxSign = '/wxServer/sign/getJssdkSign',// 微信签名
     createOrder = '/wxServer/order/createOrder', // 充值
     findCapitalFlow = '/wxServer/capitalFlow/findCapitalFlow', // 资金流水
     getOrderHeader = '/wxServer/order/getOrderHeader', // 订单查询
@@ -44,4 +44,5 @@ export enum EApi {
     updateClick='/wxServer/activity/updateClickNumber', // 红包点击次数
     getCityList = '/wxServer/sysCity/getCity', // 获取城市
     getActivityRules = '/wxServer/activity/getActivityRule', // 获取活动规则（高级设置）
+    getWechatSign = '/wxServer/sign/getShareSign', // 微信公众号签名
 }

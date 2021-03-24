@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-29 23:30:25
- * @LastEditTime: 2021-03-07 15:26:37
+ * @LastEditTime: 2021-03-24 10:38:07
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -10,7 +10,7 @@ import Header from './Header.vue';
 import Total from './Total.vue';
 import Admin from './Admin.vue';
 import ActiveList from './ActiveList.vue';
-import { ServSinge, ServGetEnteInfo, ServAgentSinge, ServGetMemberInfo } from '@/service/appService';
+import { ServWxSign, ServGetEnteInfo, ServAgentSign, ServGetMemberInfo } from '@/service/appService';
 import router from '@/router';
 import { useStore } from 'vuex';
 
@@ -23,13 +23,9 @@ export default defineComponent({
     },
     setup(props, content) {
         const store = useStore();
-
-        // const userInfo = store.state.userInfo;
         const userInfo = window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {};
-        
         if (!userInfo.memberId) {
             ServGetMemberInfo().then(res => {
-                debugger
                 store.commit('setUserInfo', res.data);
             })
         }
@@ -39,8 +35,8 @@ export default defineComponent({
         })
         onMounted(() => {
             // 微信配置签名
-            ServSinge().then(res => {
-                ServAgentSinge(); // 应用签名
+            ServWxSign().then(res => {
+                ServAgentSign(); // 应用签名
             }); // 签名
         })
 

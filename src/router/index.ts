@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-03-22 18:25:03
+ * @LastEditTime: 2021-03-23 14:08:13
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -72,10 +72,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'advanced',
     component: () => import('../views/manage/newActive/Advanced.vue')
   },
+
   {
     path: '/login',
     name: 'login',
     component: () => import('../views/login/Login.vue')
+  },
+  {
+    path: '/noPermission',
+    name: 'noPermission',
+    component: () => import('../views/customer/common/NoPermission.vue')
   },
   {
     path: '/customer',
@@ -83,6 +89,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/customer/hongbao',
     component: () => import('../views/customer/Index.vue'),
     children: [
+
       {
         path: 'poster',
         name: 'poster',
@@ -109,7 +116,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = window.sessionStorage.token ||  window.localStorage.token;
+  const token = window.sessionStorage.token || window.localStorage.token;
 
   // 判断是否登录
   if (token) {

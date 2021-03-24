@@ -19,7 +19,7 @@ import { Uploader, NavBar, Form, Field, CellGroup, Switch, Button, Icon, Cell, I
 import router from '@/router';
 import moment from 'moment';
 
-import { ServfileUpload, ServAgentSinge, ServSaveActivity, ServGetActivity, ServeGetActivityRule } from '@/service/appService';
+import { ServfileUpload, ServAgentSign, ServSaveActivity, ServGetActivity, ServeGetActivityRule } from '@/service/appService';
 import _ from 'lodash';
 import { mapState, useStore } from 'vuex';
 import { IAvaterModel } from '@/service/appModel';
@@ -281,6 +281,7 @@ export default defineComponent({
                 pageIndex: 1,
                 pageRows: 10,
             };
+            
             ServGetActivity(query).then(res => {
                 // refState.activity = res.records[0];
                 const data = res.records[0];
@@ -295,19 +296,20 @@ export default defineComponent({
                 state.externalContact = mapperHelper(res.records[0].undertaker, { name: 'name', id: 'qyUserId', avatar: 'headUrl' })
                 console.log(state.formData)
             })
+
+            ServeGetActivityRule(activityId).then(rules => {
+                // 获取活动的规则（高级设置）
+                if( JSON.stringify(rules) !=='{}') {
+                    state.activityRules = rules
+                } 
+            })
         }
 
         onMounted(() => {
-            ServAgentSinge(); // 应用签名
+            ServAgentSign(); // 应用签名
             const activityId = router.currentRoute.value.query.activityId as string;
             if (activityId) {
-                getActivityData(activityId);
-                ServeGetActivityRule(activityId).then(rules => {
-                    // 获取活动的规则（高级设置）
-                    if( JSON.stringify(rules) !=='{}') {
-                        state.activityRules = rules
-                    } 
-                })
+                getActivityData(activityId);                
             }
 
         })

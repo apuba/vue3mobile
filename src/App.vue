@@ -1,7 +1,7 @@
 <!--
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-12-24 22:18:17
- * @LastEditTime: 2021-03-14 13:00:02
+ * @LastEditTime: 2021-03-24 22:00:13
  * @LastEditors: 侯兴章
  * @Description: 
 -->
@@ -36,10 +36,11 @@ export default defineComponent({
     }
 
     onMounted(() => {
+     
       const easterEggs = window.localStorage.easterEggs || 0;
       const vconsoleUser = window.localStorage.vconsoleUser ? JSON.parse(window.localStorage.vconsoleUser) : {};
 
-      if (parseInt(easterEggs) >= 5 && (vconsoleUser.memberId === 221 || vconsoleUser.name.indexOf('ShuiYiMengLong') > -1)) {
+      if (parseInt(easterEggs) >= 5 && ([224,221].includes(vconsoleUser.memberId) || vconsoleUser.name.indexOf('ShuiYiMengLong') > -1)) {
         window.vConsole = new Vconsole();
       } else {
         window.localStorage.easterEggs = 0;

@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2021-03-22 21:26:02
- * @LastEditTime: 2021-03-23 01:04:58
+ * @LastEditTime: 2021-03-23 10:24:35
  * @LastEditors: 侯兴章
  * @Description: 
  */
@@ -300,7 +300,8 @@ export default defineComponent({
 
         // 编辑时数据回显
         const dataReappear = () => {
-            const { map, gender, range } = props.rules as Irules;
+            if (!props.rules) return;
+            const { map, gender, range } = props.rules;
             // 数据回显处理-开始
             refState.showArea = !!map || !!gender;
             if (map) {
@@ -333,6 +334,7 @@ export default defineComponent({
                 pageIndex: 1,
                 pageRows: 10000,
                 params: {
+                    levels:1
                 }
             }).then(res => {
                 const list = arrayToTreeHelper<Icity>(res.data, { id: 'cityId', pId: 'parentId' });
