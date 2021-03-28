@@ -1,7 +1,7 @@
 /*
  * @Author: 侯兴章 3603317@qq.com
  * @Date: 2020-11-16 22:54:42
- * @LastEditTime: 2021-03-24 20:37:32
+ * @LastEditTime: 2021-03-26 16:22:53
  * @LastEditors: 侯兴章
  * @Description:  基础的API 服务，各业务层的服务请在业务模块里编写。
  */
@@ -106,6 +106,7 @@ export const ServWxSign = async (url: string = window.location.href.split('#')[0
         if (!res.data) {
             return null;
         }
+        debugger
         window.wx.config({
             beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -115,7 +116,7 @@ export const ServWxSign = async (url: string = window.location.href.split('#')[0
             signature: res.data.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
             jsApiList: WX_SDK_API// 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
         });
-        window.wx.ready(function (res: any) {
+        window.wx.ready(function (data: any) {
             resolve({
                 singe: res.data,
                 wx: window.wx
@@ -164,7 +165,7 @@ export const ServWechatSign = async (url: string = window.location.href.split('#
         window.wx.error(function (res: any) {
             // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
             console.log('微信签名失败------------------------------------', res)
-            reject('微信签名失败')
+            reject(res)
         });
 
     })

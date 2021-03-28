@@ -80,7 +80,6 @@ export default defineComponent({
         const initData = () => {
             console.log('当前用户信息-刚进来-initData', userInfo);
             const result = router.currentRoute.value.query.result as string;
-            debugger
             if (!result) return console.error('缺少海报参数');
             const queryParams = JSON.parse(decodeURIComponent(result));
             // const id = queryParams.activityId
@@ -96,7 +95,7 @@ export default defineComponent({
                     router.push(`/customer/hongbao?result=${result}`)
                 } else {
                     if (!userInfo.memberId) {
-                        ServGetMemberInfo().then(res => {
+                        ServGetMemberInfo({ activityId }).then(res => {
                             store.commit('setUserInfo', res.data);
 
                             getActivityData(queryParams);

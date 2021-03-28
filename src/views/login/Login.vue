@@ -115,7 +115,7 @@ export default defineComponent({
           }
         }
       }
-
+debugger;
       if (rulesRes.gender && rulesRes.gender.value != userInfo.gender) {
         router.push(`/noPermission?error=活动限制了只有${rulesRes.gender.value == 1 ? '男性' : '女性'}可以参与`);
         return
